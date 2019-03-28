@@ -1,9 +1,11 @@
-\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
+\documentclass[USenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
 \usepackage[utf8]{inputenc}           %% ... or latin1
 \usepackage[T1]{fontenc,url}
+\usepackage{todonotes}
 \urlstyle{sf}
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
+\usepackage{acronym}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
 
@@ -23,20 +25,120 @@
 \listoffigures{}
 \listoftables{}
 
-\chapter*{Preface}                    %% ... or Forord
+\chapter*{Preface}
+%\addcontentsline{toc}{chapter}{Abbreviations} \noindent
+%--- Acronyms -----------------------------------------------------------------%
+% \acrodef{label}[acronym]{written out form} % acronym syntax
+%\acrodef{etacar}[$\eta$ Car]{Eta Carinae}   % acronym example
+%--- Acronyms -----------------------------------------------------------------%
+% how to use acronyms:
+% \ac = use acronym, first time write both, full name and acronym
+% \acf = use full name (text + acronym)
+% \acs = only use acronym
+% \acl = only use long text
+% \acp, acfp, acsp, aclp = use plural form for acronym (append 's')
+% \acsu, aclu = write + mark as used
+% \acfi = write full name in italics and acronym in normal style
+% \acused = mark acronym as used
+% \acfip = full, emphasized, plural, used
+%--- Acronyms -----------------------------------------------------------------%
+\chapter*{Abbreviations}
+\begin{acronym}
+        \acro{ai}[AI]{Artificial intelligence}
+        \acro{ann}[ANN]{Artificial Neural Network}
+        \acro{dl}[DL]{Deep learning}
+        \acro{ml}[ML]{Machine learning}
+        \acro{cpu}[CPU]{Central Processing Unit}
+        \acro{gpu}[GPU]{Graphics Processing Unit}
+        \acro{rgb}[RGB]{Red-Green-Blue}
+\end{acronym}
+
 
 \mainmatter{}
-\chapter{Introduction}                   %% ... or Innledning or Innleiing
-Figure\cite{HanDerreToby} 
-\section{test}
+\chapter{Introduction}                  
+\section{Motivation}
+\section{Background}
+\section{Problem description}
+\section{Thesis outline}
 
-\chapter{Background}                  %% ... or Bakgrunn
-\section{test}
+\chapter{Theoretical Background}
+% Write about 3 things: General info on deep learning and computer vision, other persons work, mathematical background
+This chapter will provide an overview of the basics of \ac{ai}, \ac{ml}, and \ac{dl}. These fields and techniques are the basis for this thesis. Then cover the necessary remaining theory and mathematics related to the thesis, and lastly go over related works.
+\section{Artificial Intelligence}
+\ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. It has the ability to tackle many complex problems that are intellectually difficult or impossible to solve for a human being with natural intelligence. Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for us, like recognizing a cat or a dog in an image or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture\cite{The_holy_grail_of_DL}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/AI_ML_DL.png}
+    \caption{The history of AI, ML, and DL
+    \protect\cite{website:AI}}
+    \label{fig:AI}
+\end{figure}
+\subsection{Machine Learning}
+Figure \ref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. Instead of solve the task with explicit instructions, \ac{ml} learns from experience.
+\todo{mere juice}
+\subsection{Deep Learning}
+Instead of learning from specific tasks like in \ac{ml}, \ac{dl} learns data representations from data sets. Both \ac{ml} and \ac{dl} learns from unsupervised-, semi-supervised- or supervised learning. \todo{mere juice}
+\subsubsection{Supervised learning}
+Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets. \todo{sett inn formel og forklar}
+\subsubsection{Keras}
+Keras is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. Keras has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that Keras can run with the same code seamlessly on \ac{cpu} or \ac{gpu}\cite{Francois_Deep_learning_with_python}.
+\subsection{Benefits Using Deep Learning VS Traditional Methods}
+\section{Computer Vision}
+Computer vision is a field which main purpose is to make machines be able to interpret and understand features from images or video. Or easier said, "Teaching computers
+how to see"\cite{website:maskinsyn-intro}.  
+\section{Data preprocessing}
+This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, would it in the most cases be inevitable to perform several preprocesses. This is necessary in order to make it ready for training. 
+\newline
+A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}. The down scaling will help the algorithm to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to try different scales, to find the perfect fit between keeping enough features and have an effective algorithm.
+\newline
+A \ac{rgb} image contains integer values in the range from 0-255. Because the values of the weights in an \ac{ann} is relatively small, it is recommended to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing the array would increase the accuracy even further.  
+\newline
+\newline
+Another process is to check whether the data set has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the data set, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
+\newline
+\newline
+(height, width, channels)
+\newline
+\newline
+Where height and width refers to the x and y coordinates in the image, and channels refers to if the image is binary (channels=1) or \ac{rgb} (channels=3).
 
+\subsection{Data Augmentation}
+\subsubsection{Random Cropping}
+\subsubsection{Flipping Images}
+\subsubsection{Color Changes}
+\section{Training, Validation And Testing Data}
+\section{Tensorboard}
+\section{Convolutional Neural Networks}
+\subsection{Kernels}
+\subsection{Relu}
+\subsection{Layers}
+\subsection{Activation Layers}
+\subsection{Loss}
+\subsection{Optimizers}
+\section{Active Learning}
+\subsection{Predictions}
+\subsection{Threshold}
+\subsection{Morphological Operations}
+The most common binary image operations are called \textit{morphological operations}, since
+they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images, and two of the standard binary morphological operations used in our project are: 
+\begin{itemize}
+    \item \textbf{Erosion}
+    \item \textbf{Dilation}
+\end{itemize}
 
-\chapter{Planning the project}        %% ... or ??
+Where \textit{erosion} thins the object and \textit{dilation} thickens the object. As one may notice, there is some noise in the thresholded image in figure \todo{fig:seg}, which is a consequence of thresholding an image by color. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to close large regions, smooth boundaries, while removing the noise (white dots) as shown in the figure \todo{fig:morph}. The program erodes twice to remove white dots, then do five dilations to fill the contours, making them more visible in the segmented image. The structuring element used is a 3x3 rectangular kernel.
 
-\chapter{Results}                     %% ... or ??
+\subsection{Connected Component Analysis}
+\subsection{Annotating The Data Set}
+\subsection{Choosing The Right Images For Further Training}
+\subsection{Train Again}
+\section{Related Works}
+
+\chapter{Method}
+
+\chapter{Results}                     
+
+\chapter{Discussion}
 
 
 
