@@ -61,10 +61,10 @@
 \section{Problem description}
 \section{Thesis outline}
 
-\chapter{Theoretical Background}
+\chapter{Theoretical background}
 % Write about 3 things: General info on deep learning and computer vision, other persons work, mathematical background
 This chapter will provide an overview of the basics of \ac{ai}, \ac{ml}, and \ac{dl}. These fields and techniques are the basis for this thesis. Then cover the necessary remaining theory and mathematics related to the thesis, and lastly go over related works.
-\section{Artificial Intelligence}
+\section{Artificial intelligence}
 \ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. It has the ability to tackle many complex problems that are intellectually difficult or impossible to solve for a human being with natural intelligence. Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for us, like recognizing a cat or a dog in an image or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture\cite{The_holy_grail_of_DL}.
 \begin{figure}[ht]
     \centering
@@ -73,25 +73,25 @@ This chapter will provide an overview of the basics of \ac{ai}, \ac{ml}, and \ac
     \protect\cite{website:AI}}
     \label{fig:AI}
 \end{figure}
-\subsection{Machine Learning}
+\subsection{Machine learning}
 Figure \ref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. Instead of solve the task with explicit instructions, \ac{ml} learns from experience.
 \todo{mere juice}
-\subsection{Deep Learning}
+\subsection{Deep learning}
 Instead of learning from specific tasks like in \ac{ml}, \ac{dl} learns data representations from data sets. Both \ac{ml} and \ac{dl} learns from unsupervised-, semi-supervised- or supervised learning. \todo{mere juice}
 \subsubsection{Supervised learning}
 Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets. \todo{sett inn formel og forklar}
 \subsubsection{Keras}
 Keras is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. Keras has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that Keras can run with the same code seamlessly on \ac{cpu} or \ac{gpu}\cite{Francois_Deep_learning_with_python}.
-\subsection{Benefits Using Deep Learning VS Traditional Methods}
-\section{Computer Vision}
+\subsection{Benefits using deep learning vs traditional methods}
+\section{Computer vision}
 Computer vision is a field which main purpose is to make machines be able to interpret and understand features from images or video. Or easier said, "Teaching computers
 how to see"\cite{website:maskinsyn-intro}.  
 \section{Data preprocessing}
 This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, would it in the most cases be inevitable to perform several preprocesses. This is necessary in order to make it ready for training. 
 \newline
-A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}. The down scaling will help the algorithm to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to try different scales, to find the perfect fit between keeping enough features and have an effective algorithm.
+A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
 \newline
-A \ac{rgb} image contains integer values in the range from 0-255. Because the values of the weights in an \ac{ann} is relatively small, it is recommended to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing the array would increase the accuracy even further.  
+A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in an \ac{ann} is relatively small, it is normal practice to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller ligning med forklaring} 
 \newline
 \newline
 Another process is to check whether the data set has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the data set, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
@@ -101,13 +101,18 @@ Another process is to check whether the data set has the correct shape or not. T
 \newline
 \newline
 Where height and width refers to the x and y coordinates in the image, and channels refers to if the image is binary (channels=1) or \ac{rgb} (channels=3).
-
-\subsection{Data Augmentation}
-\subsubsection{Random Cropping}
-\subsubsection{Flipping Images}
-\subsubsection{Color Changes}
-\section{Training, Validation And Testing Data}
+\subsection{Data augmentation}
+Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are preproccessed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has less chance of overfitting.  
+\subsubsection{Random cropping}
+\subsubsection{Flipping images}
+When both the images and its targets are flipped vertically or horizontally, it is still recognizable for the model.  
+\subsubsection{Color changes}
+\subsubsection{L2 regularization}
+\section{Training, validation and testing data}
+In order to have a successful implementation, the data set must be split into different parts. Either splitting the data set in training and test, or training, validation and test. The network should only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test set should be data that the network never has seen before. There is a rule of thumb to split the data in training, validation and test set 60/20/20.  
+\todo{skriv om sklearn biblioteket(i metode kap), og hvorfor det er viktig å splitte datasettet korrekt}
 \section{Tensorboard}
+Tensorboard is a visual tool to have full overview of the training, while training. It is easy to set up in the terminal.\todo{sett inn bilde av tensorboard i anaconda prompt} As illustrated in figure \todo{referer til bilde} Tensorboard is up and running with one command. When using Tensorboard with Keras, there is necessary to use callbacks. As stated by the Keras documentation on their website: \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. \todo{skriv om hvordan tensorboard fungerer sammen med callbacks i keras} 
 \section{Convolutional Neural Networks}
 \subsection{Kernels}
 \subsection{Relu}
