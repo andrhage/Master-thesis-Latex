@@ -6,6 +6,7 @@
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{acronym}
+%\setcounter{tocdepth}{5}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
 
@@ -50,7 +51,7 @@
         \acro{ml}[ML]{Machine learning}
         \acro{cpu}[CPU]{Central Processing Unit}
         \acro{gpu}[GPU]{Graphics Processing Unit}
-        \acro{rgb}[RGB]{Red-Green-Blue}
+        \acro{rgb}[RGB]{Red,Green,Blue}
 \end{acronym}
 
 
@@ -63,7 +64,7 @@
 
 \chapter{Theoretical background}
 % Write about 3 things: General info on deep learning and computer vision, other persons work, mathematical background
-This chapter will provide an overview of the basics of \ac{ai}, \ac{ml}, and \ac{dl}. These fields and techniques are the basis for this thesis. Then cover the necessary remaining theory and mathematics related to the thesis, and lastly go over related works.
+This chapter will provide an overview of the basics of \ac{ai}, \ac{ml}, and \ac{dl}. These fields and techniques are the basis for this thesis. Then cover the necessary remaining theory and mathematics related to the thesis, and lastly go over related works. \todo{gjør om etter kapittelet er ferdigskrevet}
 \section{Artificial intelligence}
 \ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. It has the ability to tackle many complex problems that are intellectually difficult or impossible to solve for a human being with natural intelligence. Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for us, like recognizing a cat or a dog in an image or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture\cite{The_holy_grail_of_DL}.
 \begin{figure}[ht]
@@ -102,28 +103,71 @@ Another process is to check whether the data set has the correct shape or not. T
 \newline
 Where height and width refers to the x and y coordinates in the image, and channels refers to if the image is binary (channels=1) or \ac{rgb} (channels=3).
 \subsection{Data augmentation}
-Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are preproccessed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has less chance of overfitting.  
+Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are pre-proccessed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has lower chance of overfitting. This sub-section will only cover the most used augmentation techniques.  
 \subsubsection{Random cropping}
+A popular method in augmentation is random cropping. Which means sampling a random chosen square box from the original image, and then resize to the original size.\todo{sett inn bilde} As seen in figure \todo{referer til bildet} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
 \subsubsection{Flipping images}
-When both the images and its targets are flipped vertically or horizontally, it is still recognizable for the model.  
+Another method is to flip the images in either vertical or horizontal order. Even when the images are flipped, they are still recognizable for the model. The ground truth must also go through the same operation. \todo{sett inn bilde av flipped}Figure \todo{referer til figur} illustrates images with targets being flipped both vertically and horizontally.  
 \subsubsection{Color changes}
-\subsubsection{L2 regularization}
+The idea behind color changes is to make the the model more robust and generalized for new unseen data. Since the geometry in the images are the same after applying color changes, there is not necessary to anything with the ground truth images.
 \section{Training, validation and testing data}
+\todo{dobbeltsjekk alt fra cs231n, skriv mer ryddig/forståelig}
 In order to have a successful implementation, the data set must be split into different parts. Either splitting the data set in training and test, or training, validation and test. The network should only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test set should be data that the network never has seen before. There is a rule of thumb to split the data in training, validation and test set 60/20/20.  
 \todo{skriv om sklearn biblioteket(i metode kap), og hvorfor det er viktig å splitte datasettet korrekt}
 \section{Tensorboard}
-Tensorboard is a visual tool to have full overview of the training, while training. It is easy to set up in the terminal.\todo{sett inn bilde av tensorboard i anaconda prompt} As illustrated in figure \todo{referer til bilde} Tensorboard is up and running with one command. When using Tensorboard with Keras, there is necessary to use callbacks. As stated by the Keras documentation on their website: \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. \todo{skriv om hvordan tensorboard fungerer sammen med callbacks i keras} 
-\section{Convolutional Neural Networks}
-\subsection{Kernels}
+A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is using Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/tensorboard_anaconda_prompt.PNG}
+    \caption{Initializing Tensorboard from terminal}
+    \label{fig:tensorboard_anaconda_prompt}
+\end{figure}
+\newline
+As illustrated in figure \ref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the command \textit{< tensorboard --logdir=<log> >}. 
+\newline
+When using Tensorboard with Keras, there is necessary to use callbacks in the code. As stated by the Keras documentation on their website.
+\newline
+\newline
+\textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. 
+\newline
+\newline
+It is therefore possible with callbacks to decide by own specifications what to include and when to gain information during the training process.  
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{bilder/tensorboard_acc_loss.PNG}
+    \caption{Accuracy and loss for both training and validation visualized in Tensorboard}
+    \label{fig:accuracy_loss}
+\end{figure}
+\newline
+Two popular graphs used to check the quality of the \ac{dl} model is \textit{"accuracy"} and \textit{"loss"}, which are found under the section \textit{"SCALARS"}. 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{bilder/overfitting_underfitting.png}
+    \caption{Underfitting, perfect sampling and overfitting \cite{website:overfitting_underfitting}}
+    \label{fig:overfitting_underfitting}
+\end{figure}
+To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{"overfitting"} or \textit{"underfitting"}, and if the accuracy in the model is fulfilling user expectations. Examples of underfitting from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in figure \ref{fig:overfitting_underfitting}. As seen in figure \ref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
+By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{"overfitting"} nor \textit{"underfitting"} in the model.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/tensorboard_graph.PNG}
+    \caption{The model graph visualized in Tensorboard}
+    \label{fig:graph}
+\end{figure}
+The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
+\section{Convolutional neural networks}
+\subsection{Filters}
 \subsection{Relu}
 \subsection{Layers}
-\subsection{Activation Layers}
+\subsection{Activation layers}
 \subsection{Loss}
 \subsection{Optimizers}
-\section{Active Learning}
+\subsubsection{Regularization}
+\section{Active learning}
 \subsection{Predictions}
 \subsection{Threshold}
-\subsection{Morphological Operations}
+\subsection{Morphological operations}
 The most common binary image operations are called \textit{morphological operations}, since
 they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images, and two of the standard binary morphological operations used in our project are: 
 \begin{itemize}
@@ -133,13 +177,16 @@ they change the shape of the underlying binary objects \cite{Ritter}. This is do
 
 Where \textit{erosion} thins the object and \textit{dilation} thickens the object. As one may notice, there is some noise in the thresholded image in figure \todo{fig:seg}, which is a consequence of thresholding an image by color. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to close large regions, smooth boundaries, while removing the noise (white dots) as shown in the figure \todo{fig:morph}. The program erodes twice to remove white dots, then do five dilations to fill the contours, making them more visible in the segmented image. The structuring element used is a 3x3 rectangular kernel.
 
-\subsection{Connected Component Analysis}
-\subsection{Annotating The Data Set}
-\subsection{Choosing The Right Images For Further Training}
-\subsection{Train Again}
-\section{Related Works}
-
+\subsection{Connected component analysis}
+\subsection{Annotating the data set}
+When the training set needs to labeled, there is quite a few options to choose a suitable program. Most of them is online driven, meaning the data set needs to be uploaded to a website, and the annotation can further be done from there. A program which offer offline annotation is called \textit{"labelme"}\cite{website:labelme}. 
+\subsection{Choosing the right images for further training}
+\subsection{Train again}
+\section{Related works}
+\newpage
 \chapter{Method}
+\section{Annotation the training set}
+
 
 \chapter{Results}                     
 
