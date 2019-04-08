@@ -6,6 +6,8 @@
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{acronym}
+\usepackage{amsmath , amssymb , amsthm}
+
 %\setcounter{tocdepth}{5}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
@@ -46,11 +48,12 @@
 \chapter*{Abbreviations}
 \begin{acronym}
         \acro{ai}[AI]{Artificial intelligence}
-        \acro{ann}[ANN]{Artificial Neural Network}
+        \acro{ann}[ANN]{Artificial neural network}
+        \acro{cnn}[CNN]{Convolutional neural network}
         \acro{dl}[DL]{Deep learning}
         \acro{ml}[ML]{Machine learning}
-        \acro{cpu}[CPU]{Central Processing Unit}
-        \acro{gpu}[GPU]{Graphics Processing Unit}
+        \acro{cpu}[CPU]{Central processing unit}
+        \acro{gpu}[GPU]{Graphics processing unit}
         \acro{rgb}[RGB]{Red,Green,Blue}
 \end{acronym}
 
@@ -149,14 +152,44 @@ Two popular graphs used to check the quality of the \ac{dl} model is \textit{"ac
 To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{"overfitting"} or \textit{"underfitting"}, and if the accuracy in the model is fulfilling user expectations. Examples of underfitting from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in figure \ref{fig:overfitting_underfitting}. As seen in figure \ref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
 By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{"overfitting"} nor \textit{"underfitting"} in the model.
 
-\begin{figure}[ht]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/tensorboard_graph.PNG}
     \caption{The model graph visualized in Tensorboard}
     \label{fig:graph}
 \end{figure}
-The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
-\section{Convolutional neural networks}
+The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. \newpage
+\section{Artificial neural networks}
+%Mostly of the theory in this section is based on the course notes from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}.
+To fully understand the concept, the basics of a neural network is divided into different parts and further described.
+\newline
+\newline
+In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons\cite{mcculloch_pitts}. With their design, they are known as the inventors of the first \ac{ann}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/mcculloch_and_pitts.png}
+    \caption{Illustrates the McCulloch \& Pitts design of a neuron \cite{website:mcCulloch_img}}
+    \label{fig:mcculoch_and_pitts}
+\end{figure}
+The illustrating of the neuron and its activation function in figure \ref{fig:mcculoch_and_pitts} can be mathematically explained with equation \ref{eq:mcCulloch}.
+\begin{equation}\label{eq:mcCulloch}
+\begin{aligned}
+    {h = \sum_{i=1}^{n} x_i \omega_i \quad , \quad\quad o = 
+\begin{cases}
+    1 & \text{ h $\geq$ $\theta$ }  \\
+    0 & \text{ h < $\theta$ }
+\end{cases}}
+\end{aligned}
+\end{equation}
+
+% McCulloch & Pitts (1943) are generally recognised as the designers of the first artificial neural network. • Many of their ideas still used today (e.g.many simple units combine to give increased computational power and the idea of a threshold).
+
+Parts of an \ac{ann} is build up by neurons, weights, biases and activation functions. The neurons in the first hidden layer will receive the networks input layer as numbers between zero and one. Each neuron has a weight and a bias connected to itself. As the networks learns during the training, the internal state will update, meaning the weight will adjust itself in order to learn the data being fed to the network. The process from the input layer to the first hidden layer in the network can be illustrated mathematically
+
+After the network has updated the internal state well enough and learned the input and output, it can be fed new data it has never seen before. It will predict an output given the input of the new data, given the networks internal state.  
+
+A \ac{cnn} can be compared to an \ac{ann} in many ways. It is made up of neurons. They have learnable weights in each layer, and contain biases. The neurons get their inputs, then executes dot-product and produces an output which is used as the next layers input. The last layer (output layer), is an output function which computes the output of the network based on the activation.     
+\subsection{History of CNNs}
 \subsection{Filters}
 \subsection{Relu}
 \subsection{Layers}
