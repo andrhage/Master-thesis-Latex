@@ -160,18 +160,20 @@ By observing that the loss function steadily decreases into a smooth curve indic
 \end{figure}
 The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. \newpage
 \section{Artificial neural networks}
-%Mostly of the theory in this section is based on the course notes from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}.
-To fully understand the concept, the basics of a neural network is divided into different parts and further described.
+Mostly of the theory in this section is based on the theory from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"}\cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
 \newline
 \newline
-In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons\cite{mcculloch_pitts}. With their design, they are known as the inventors of the first \ac{ann}.
+An \ac{ann} is a computing system which is vaguely based on the same principle as biological neurons in a human brain. It has the ability to learn different tasks and data representations. To fully understand the concept, the basics of a neural network is divided into different parts and further described.
+\newline
+\newline
+In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons\cite{mcculloch_pitts}. With their design, they are widely known as the inventors of the first \ac{ann}. Their ideas of a threshold in the activation function and combining many basic units in order to increase computational power are still being used nowadays.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/mcculloch_and_pitts.png}
-    \caption{Illustrates the McCulloch \& Pitts design of a neuron \cite{website:mcCulloch_img}}
+    \caption{Illustrates the McCulloch \& Pitts design of a simplified neuron \cite{website:mcCulloch_img}}
     \label{fig:mcculoch_and_pitts}
 \end{figure}
-The illustrating of the neuron and its activation function in figure \ref{fig:mcculoch_and_pitts} can be mathematically explained with equation \ref{eq:mcCulloch}.
+The illustration of the neuron and its activation function in figure \ref{fig:mcculoch_and_pitts} can be mathematically explained with equation \ref{eq:mcCulloch}.
 \begin{equation}\label{eq:mcCulloch}
 \begin{aligned}
     {h = \sum_{i=1}^{n} x_i \omega_i \quad , \quad\quad o = 
@@ -181,13 +183,56 @@ The illustrating of the neuron and its activation function in figure \ref{fig:mc
 \end{cases}}
 \end{aligned}
 \end{equation}
+Where the neurons transfer function ($h$) is denoted in the form of a dot product between the inputs ($x_i$) and the weights ($\omega_i$). The neurons activation function \textit{"fires"} when the dot product of the input and its weight respectively are higher than a given threshold $\theta$. Meaning the output ($o$) becomes 1 when $h$ is equal to or higher than the threshold, and 0 when $h$ is lower than the threshold value.
+\newline
+If many McCulloch \& Pitts neurons are put together, the structure of a single-layer neural network appears. A single-layer perceptron like that are able to learn linear problems. When the task is to learning non-linear problems, the solution is to add one or more hidden layers as done in multi-layer perceptron.   
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/slp_&_mlp.jpeg}
+    \caption{Single-layer perceptron to the left, and multi-layer perceptron to the right \cite{website:slp_mlp}}
+    \label{fig:slp_mlp}
+\end{figure}
+The difference can be seen visually by figure \ref{fig:slp_mlp}, where the single-layer perceptron only has an input and an output layer, while the multi-layer perceptron includes at least one hidden layer.
+\newline
+\newline
+In order for the neural network to learn, it has to adjust the weights accordingly. This is were the perceptron learning rule comes into the picture.
 
-% McCulloch & Pitts (1943) are generally recognised as the designers of the first artificial neural network. • Many of their ideas still used today (e.g.many simple units combine to give increased computational power and the idea of a threshold).
+\begin{equation}\label{eq:learning_rule}
+\begin{aligned}
+\omega_{ij} \longleftarrow \omega_{ij} + \Delta\omega_{ij}
+\end{aligned}
+\end{equation}
+Equation \ref{eq:learning_rule} shows how the weight ($\omega_{ij}$) updates. The goal of the learning rule is to minimize the error at the output, such that $\Delta\omega_{ij} = 0 $. When the weights reach that state, they are tuned correctly. The weights can be both positive and negative, and how they adjust can be explained with the next equation. 
 
+\begin{equation}\label{eq:delta_learning_rule}
+\begin{aligned}
+\Delta\omega_{ij} = \eta * (t_j - y_j) * x_i 
+\end{aligned}
+\end{equation}
+
+In equation \ref{eq:delta_learning_rule} $\eta$ is referred to as the learning rate. It is a scalar which decide how much the weight value in each iteration will change. Finding the right balance in the choice of learning rate is therefore crucial. A high value (e.g. 1) can create an unstable net. With a high learning rate will the weights change a lot every time they updates. %The reason is that the weight will change a lot every time it updates with a high learning rate. 
+Choosing a low value will make a stable network, but will require much more learning time, because the weights uses more time to tune into correct values.
+\newline
+\newline
+$\eta$ is further being multiplied with the error ($(t_j - y_j)$, where $t_j$ is the target output and $y_j$ is the actual output). Before finally being multiplied with the inputs ($x_i$). As stated above, the goal is to minimize this error. Which is done during training where the weights are adjusted with equation \ref{eq:delta_learning_rule}.
+\newline
+\newline
+In the case where all inputs are zero, the weights will have no effect since they are multiplied with the inputs. The solution for that particular case is to have an adjustable threshold, which can be applied with a bias node. The bias node should be added to each neuron. Then equation \ref{eq:mcCulloch} will become equation \ref{eq:bias}, where $b$ is the bias.
+\begin{equation}\label{eq:bias}
+\begin{aligned}
+    {h = \sum_{i=1}^{n} x_i \omega_i + b \quad , \quad\quad o = 
+\begin{cases}
+    1 & \text{ h $\geq$ $\theta$ }  \\
+    0 & \text{ h < $\theta$ }
+\end{cases}}
+\end{aligned}
+\end{equation}
+
+% Er de neste linjene bs?
 Parts of an \ac{ann} is build up by neurons, weights, biases and activation functions. The neurons in the first hidden layer will receive the networks input layer as numbers between zero and one. Each neuron has a weight and a bias connected to itself. As the networks learns during the training, the internal state will update, meaning the weight will adjust itself in order to learn the data being fed to the network. The process from the input layer to the first hidden layer in the network can be illustrated mathematically
 
 After the network has updated the internal state well enough and learned the input and output, it can be fed new data it has never seen before. It will predict an output given the input of the new data, given the networks internal state.  
-
+\subsection{Convolutional neural network}
 A \ac{cnn} can be compared to an \ac{ann} in many ways. It is made up of neurons. They have learnable weights in each layer, and contain biases. The neurons get their inputs, then executes dot-product and produces an output which is used as the next layers input. The last layer (output layer), is an output function which computes the output of the network based on the activation.     
 \subsection{History of CNNs}
 \subsection{Filters}
@@ -201,7 +246,7 @@ A \ac{cnn} can be compared to an \ac{ann} in many ways. It is made up of neurons
 \subsection{Predictions}
 \subsection{Threshold}
 \subsection{Morphological operations}
-The most common binary image operations are called \textit{morphological operations}, since
+A common binary image operations are called \textit{morphological operations}, since
 they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images, and two of the standard binary morphological operations used in our project are: 
 \begin{itemize}
     \item \textbf{Erosion}
