@@ -83,12 +83,12 @@ Figure \ref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. Instead o
 Instead of learning from specific tasks like in \ac{ml}, \ac{dl} learns data representations from data sets. Both \ac{ml} and \ac{dl} learns from unsupervised-, semi-supervised- or supervised learning. \todo{mere juice}
 \subsubsection{Supervised learning}
 Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets. \todo{sett inn formel og forklar}
-\subsubsection{Keras}
-Keras is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. Keras has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that Keras can run with the same code seamlessly on \ac{cpu} or \ac{gpu}\cite{Francois_Deep_learning_with_python}.
 \subsection{Benefits using deep learning vs traditional methods}
+Even though both \ac{ml} and \ac{dl} is popular concepts, \ac{dl} has been increasingly more popular during the last few years. Some of the reason for that has been its ability to provide higher accuracy when trained with large amounts of data.       
 \section{Computer vision}
 Computer vision is a field which main purpose is to make machines be able to interpret and understand features from images or video. In other words, "Teaching computers how to see"\cite{website:maskinsyn-intro}. Computer vision has many sub categories. This section will go through the ones being used in the thesis.
 \subsection{Semantic segmentation}
+Segmentation is a concept where the input is in the form of an image, and the output consists of regions and structures based on the input. Normal segmentation will in most cases only provide a basic scene understanding. If we want to understand what is in the image more thoroughly, semantic segmentation is the next step. The idea behind semantic segmentation is that instead of regions, every pixel in the image gets classified. Which means there will be possible to gain a broader scene understanding of the environment in the image, making it easier to recognize different elements. 
 \subsection{Morphological operations}
 A common binary image operations are called \textit{morphological operations}, since
 they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images, and two of the standard binary morphological operations used in our project are: 
@@ -133,7 +133,7 @@ In order to have a successful implementation, the data set must be split into di
 Mostly of the theory in this section is based on the theory from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"}\cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
 \newline
 \newline
-An \ac{ann} is a computing system which is vaguely based on the same principle as biological neurons in a human brain. It has the ability to learn different tasks and data representations. To fully understand the concept, the basics of a neural network is divided into different parts and further described.
+An \ac{ann} is a computing system which is vaguely based on the same principle as biological neurons in a human brain. It has the ability to learn different tasks and data representations. To fully understand the concept, the basics of a neural network is divided into different parts and further described in this section.
 \newline
 \newline
 \subsection{Single- and multi-layer neural network}
@@ -254,38 +254,69 @@ w_{ij} \longleftarrow w_{ij} - \eta\Delta_j z_i+\alpha\Delta w^{t-1}_{ij}
 \end{equation}
 
 \subsection{Activation functions}
-To decide if a neuron should \textit{"fire"} or not, an activation function is used. In other words, the activation function takes a number and performs a mathematically operation on it. There exist several different activations functions, and the one being used in this thesis will be covered here.
+The task of an activation function is to decide whether a neuron should \textit{"fire"} or not. In other words, the activation function takes a number and performs a mathematically operation on it. There exist several activations functions, all with different pros and cons. The ones being used in this thesis will be covered here.
 \subsubsection{The sigmoid function}
-The sigmoid function is a popular activation function.
-
+The sigmoid function was a historically often used activation function. It is mathematically described with equation \ref{eq:sigmoid}.
 \begin{equation}\label{eq:sigmoid}
 \begin{aligned}
 \sigma(x) = \frac{1}{(1 + e^{-x})}
 \end{aligned}
 \end{equation}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{bilder/sigmoid_function.png}
-    \caption{Sigmoid activation \cite{website:cs231n_activation_functions}}
-    \label{fig:sigmoid}
-\end{figure}
+The function transforms the input numbers into a range between 0-1 as shown in figure \ref{fig:sigmoid}. This means large negative numbers become 0, while large positive number become 1.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{bilder/relu_function.png}
-    \caption{Relu activation \cite{website:cs231n_activation_functions}}
+    \includegraphics[width=0.8\textwidth]{bilder/sigmoid_function.png}
+    \caption{Sigmoid activation function \cite{website:cs231n_activation_functions}}
+    \label{fig:sigmoid}
+\end{figure}
+
+Nowadays the popularity of the the sigmoid function has decreased due to the following drawbacks:
+\begin{itemize}
+    \item \textbf{Vanishing gradients at values close to 0 or 1}
+    \item \textbf{The neurons can be saturated if the initial weights are too large}
+    \item \textbf{The outputs are not zero-centered}
+\end{itemize}
+
+\subsubsection{The ReLu function}
+The ReLu function (Rectified Linear Unit) has become increasingly more popular in the last few years. It is proven much faster than the sigmoid or tanh (which is a scaled sigmoid function) functions in a paper, due to its linear, non-saturating form \cite{website:relu}. 
+
+\begin{equation}\label{eq:reLu}
+\begin{aligned}
+f(x) = max(0,x)
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:reLu_2}
+\begin{aligned}
+{f(x) = 
+\begin{cases}
+    0 & \text{for x < 0}  \\
+    x & \text{for x $\geq$ 0}
+\end{cases}}
+\end{aligned}
+\end{equation}
+
+The ReLu function is described mathematically in two ways in this thesis, and both are illustrated in equation \ref{eq:reLu} and equation \ref{eq:reLu_2} for a better understanding of the function.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/relu_activation.png}
+    \caption{Relu activation function \cite{website:cs231n_activation_functions}}
     \label{fig:relu}
 \end{figure}
+
+As illustrated in figure \ref{fig:relu} the ReLu activation is thresholded at zero. This makes ReLu a favored choice over the sigmoid/tanh functions. It is a less computational heavy method, because it does not have the exponential implementation. There is however one disadvantage using ReLu. The units can be fragile during training and as much as 40\% of the network may end up \textit{"dead"}. This can happen if a large gradient is flowing through the ReLu neuron. It may cause the neuron to update in such a way that the neuron never will activate on a data point again and end up \textit{"dead"}. With a proper learning rate (not too high), the problem tends to be avoided in most cases.
 
 \subsection{Loss}
 \subsection{Optimizers}
 \subsection{Regularization}
+\todo{skriv om dropout, og l2 hvis det blir implementert}
 \subsection{Predictions}
 After the network has updated the internal state well enough and learned the input and output, it can be fed new data it has never seen before. It will predict an output given the input of the new data, given the networks internal state.  
 \subsection{Convolutional neural network}
 A \ac{cnn} is a sub category of \ac{ann}. The main difference between a \ac{cnn} and an ordinary neural network is how the input is interpret. \todo{snakk om at cnn bruker færre parametre pga konvolusjon enn et ordinært nett, f.eks fcn}
-\subsubsection{History of CNNs}
 \subsubsection{Convolution}
 \subsubsection{Layers}
 \subsubsection{U-net}
@@ -295,11 +326,10 @@ When the training set needs to labeled, there is quite a few options to choose a
 \section{Related works}
 \newpage
 \chapter{Method}
-\section{Active learning}
-\subsection{Annotation the training set}
-\subsection{Choosing the right images for further training}
-\subsection{Train again with auto-labeled data}
-\section{Tensorboard}
+\section{Implementation}
+\subsection{Keras}
+Keras is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. Keras has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that Keras can run with the same code seamlessly on \ac{cpu} or \ac{gpu}\cite{Francois_Deep_learning_with_python}.
+\subsection{Tensorboard}
 A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is using Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
 \begin{figure}[ht]
     \centering
@@ -341,6 +371,10 @@ By observing that the loss function steadily decreases into a smooth curve indic
     \label{fig:graph}
 \end{figure}
 The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
+\section{Active learning}
+\subsection{Annotation the training set}
+\subsection{Choosing the right images for further training}
+\subsection{Train again with auto-labeled data}
 \section{Predictions}
 \subsection{Thresholding}
 
@@ -348,6 +382,8 @@ The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph.
 \chapter{Results}                     
 
 \chapter{Discussion}
+
+\chapter{Conclusion}
 
 
 
