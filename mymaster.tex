@@ -7,7 +7,7 @@
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{acronym}
 \usepackage{amsmath , amssymb , amsthm}
-
+\usepackage[margin=1.5in, footskip=0.25in]{geometry}
 %\setcounter{tocdepth}{5}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
@@ -15,6 +15,8 @@
 \author{Andreas Hagen}                      %% ... or whoever 
 
 \bibliography{references.bib}                  %% ... or whatever
+
+
 
 \begin{document}
 \duoforside[dept={Department of Technology Systems},   %% ... or your department
@@ -48,8 +50,8 @@
 %--- Acronyms -----------------------------------------------------------------%
 \begin{acronym}
         \acro{ai}[AI]{artificial intelligence}
-        \acro{ann}[ANN]{artificial neural network}
-        \acro{cnn}[CNN]{convolutional neural network}
+        \acro{ann}[ANN]{artificial neural networks}
+        \acro{cnn}[CNN]{convolutional neural networks}
         \acro{dl}[DL]{deep learning}
         \acro{ml}[ML]{machine learning}
         \acro{cpu}[CPU]{central processing unit}
@@ -67,7 +69,7 @@
 \section{Thesis outline}
 
 \chapter{Theoretical background}
-This chapter will begin providing an short overview of the basics of \ac{ai}, \ac{ml}, computer vision, and \acf{dl}. The \ac{dl} framework are being used for implementing the network in the thesis, while a few computer vision techniques is being used for processing the images further after the predictions. The reasoning behind choosing \ac{dl} is shortly discussed. Further is the necessary data preprocessing described, before the basics of different \ac{ann} is covered. Lastly this section will go through the theory of generating ground truth labels and the ideas behind the field of active learning. 
+This chapter will begin providing an short overview of the basics of \ac{ai}, \ac{ml}, computer vision, and \acf{dl}. There is a \ac{dl} framework being used for implementing the network in the thesis, while a few computer vision techniques is being used for processing the images further after the predictions. The reasoning behind choosing \ac{dl} is shortly discussed. Further is the necessary data preprocessing described, before the basics of different \ac{ann} is covered. Lastly this section will go through the theory of generating ground truth labels with a suitable program.
 
 \section{Artificial intelligence}
 \ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. It has the ability to tackle many complex problems which are intellectually difficult or impossible to solve for a human being with natural intelligence. Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for us like recognize a cat or a dog in an image, or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture \cite{The_holy_grail_of_DL}.
@@ -92,7 +94,7 @@ Instead of being explicitly programmed to improve their performance on a task li
 As visualized in figure \ref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl},  is that \ac{dl} is able to learn data representations from data sets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. 
 
 \subsubsection{Supervised learning}
-Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets. 
+Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets.
 
 \subsection{Benefits using \ac{dl} with \ac{cnn} vs traditional methods}
 \ac{dl} has been increasingly more popular during the last few years. Some of the reason for that has been its ability to provide higher accuracy when trained with large amounts of data. It tends also to provide better results in network with smaller data sets, as being the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
@@ -122,11 +124,11 @@ The structuring element used is a normally a square rectangular kernel of desire
 The connected component analysis is a tool which can be used to filtering out noise from a predicted image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with an binary object filler. If both operations is implemented successfully, the improvement from the original prediction will be significantly better.
 
 \section{Data preprocessing}
-This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, would it in the most cases be inevitable to perform several preprocesses. This is necessary in order to make it ready for training. 
+This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, would it in the most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
 \newline
 A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
 \newline
-A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in an \ac{ann} is relatively small, it is normal practice to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller ligning med forklaring} 
+A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network is relatively small, it is normal practice to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller ligning med forklaring} 
 \newline
 \newline
 Another process is to check whether the data set has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the data set, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
@@ -141,9 +143,9 @@ Data augmentation is a helpful tool in order to maintain a more generalized mode
 \subsubsection{Random cropping}
 A popular method in augmentation is random cropping. Which means sampling a random chosen square box from the original image, and then resize to the original size.\todo{sett inn bilde} As seen in figure \todo{referer til bildet} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
 \subsubsection{Flipping images}
-Another method is to flip the images in either vertical or horizontal order. Even when the images are flipped, they are still recognizable for the model. The ground truth must also go through the same operation. \todo{sett inn bilde av flipped}Figure \todo{referer til figur} illustrates images with targets being flipped both vertically and horizontally.  
+Another method is to flip the images in either vertical or horizontal order. Even when the images are flipped, are they recognizable for the model. The ground truth must also go through the same operation in order to keep the correct geometry in both images. 
 \subsubsection{Color changes}
-The idea behind color changes is to make the the model more robust and generalized for new unseen data. Since the geometry in the images are the same after applying color changes, there is not necessary to anything with the ground truth images.
+The idea behind color changes is to make the the model more robust and generalized for new unseen data. Since the geometry in the images are the same after applying color changes, is it not necessary to do any operation on the ground truth images.
 \section{Artificial neural networks}
 Mostly of the theory in this section is based on the theory from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"}\cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
 \newline
@@ -324,12 +326,37 @@ The ReLu function is described mathematically in two ways in this thesis, both b
 
 As illustrated in figure \ref{fig:relu} the ReLu activation is thresholded at zero. This makes ReLu a favored choice over the sigmoid/tanh functions. It is a less computational heavy method, because it does not have the exponential implementation. There is however one disadvantage using ReLu. The units can be fragile during training and as much as 40\% of the network may end up \textit{"dead"}. This can happen if a large gradient is flowing through the ReLu neuron. It may cause the neuron to update in such a way that the neuron never will activate on a data point again and end up \textit{"dead"}. With a proper learning rate (not too high), the problem tends to be avoided in most cases.
 
-\subsection{Loss}
+\subsection{Loss and optimizers}
+The task of a loss function is to measure the distance between the predictions being made by the network and the actual ground truth. In this manner there can be computed a distance score, controlling how well the network did with its prediction \cite{Francois_Deep_learning_with_python}. This is illustrated in figure \ref{fig:loss_function}.
 
-\subsection{Optimizers}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{bilder/loss_function.png}
+    \caption{Loss function \cite{Francois_Deep_learning_with_python}}
+    \label{fig:loss_function}
+\end{figure}
+
+The loss score computed by the loss function, is further being used as a feedback signal for adjusting the weights slightly. The weights are updated in a direction which lower the loss score, in order to make better future predictions. This is shown in figure \ref{fig:optimizers}. The job of adjusting the weights is executed by what is called an optimizer. The optimizer implements the backpropagation algorithm earlier described in this section \cite{Francois_Deep_learning_with_python}. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{bilder/optimizers.png}
+    \caption{The visualization of an optimizer \cite{Francois_Deep_learning_with_python}}
+    \label{fig:optimizers}
+\end{figure}
+
 
 \subsection{Regularization}
+To avoid the term overfitting (explained in page 95 \& 96 \cite{Francois_Deep_learning_with_python}), the implementation of regularization will be helpful. Regularization refers to regulating the weights, by constraining them to only accept small values. It is implemented by adding a \textit{cost} to the loss function if it has too large weights. The cost comes in two different forms:
 
+\begin{itemize}
+    \item \textit{\textbf{L1 regularization}}
+    \item \textit{\textbf{L2 regularization}}
+\end{itemize}
+Where \textit{L1 regularization} adds the costs proportionally to the absolute value of the weights coefficients, and \textit{L2 regularization} adds the costs proportionally to the square of the absolute value of the weights coefficients \cite{Francois_Deep_learning_with_python}. 
+\newline
+\newline
+Another popular regularization method is \textit{dropout}, developed by Hinton and his students at the University of Toronto \cite{website:dropout}. It consists of randomly zeroing out (dropping out) a number of output features of the layer during training. The term \textit{"dropout rate"} refers to the fraction of the features which is being dropped out, and is usually put to a number between 0.2-0.5. When the algorithm is ready for testing, the output values are scaled down with a factor equal to the dropout rate instead of being dropped out. This is done in order to balance for the amount of more active units during testing. To use dropout as a regularization method is both very common and efficient \cite{Francois_Deep_learning_with_python}.   
 
 \subsection{Convolutional neural networks}
 A \ac{cnn} is a sub class of \ac{ann}. The main difference between a \ac{cnn} and an ordinary neural network is how the input is interpreted. In a \ac{cnn} the inputs is assumed to be images. 
@@ -412,7 +439,7 @@ There exist several good programs for generating labels for data sets. All with 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/annotating.png}
-    \caption{Annotating an image with labelme}
+    \caption{Manually annotating an image with labelme}
     \label{fig:annotate}
 \end{figure}
 
