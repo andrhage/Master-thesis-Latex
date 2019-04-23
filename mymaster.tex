@@ -8,6 +8,7 @@
 \usepackage{acronym}
 \usepackage{amsmath , amssymb , amsthm}
 \usepackage[margin=1.5in, footskip=0.25in]{geometry}
+\usepackage{float}
 %\setcounter{tocdepth}{5}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
@@ -69,10 +70,10 @@
 \section{Thesis outline}
 
 \chapter{Theoretical background}
-This chapter will begin providing an short overview of the basics of \ac{ai}, \ac{ml}, computer vision, and \acf{dl}. There is a \ac{dl} framework being used for implementing the network in the thesis, while a few computer vision techniques is being used for processing the images further after the predictions. The reasoning behind choosing \ac{dl} is shortly discussed. Further is the necessary data preprocessing described, before the basics of different \ac{ann} is covered. Lastly this section will go through the theory of generating ground truth labels with a suitable program.
+This chapter will initially provide a short overview of the basics of \ac{ai}, \ac{ml}, computer vision, and \acf{dl}. A \ac{dl} framework is used for implementing the network in the thesis, while a few computer vision techniques is used for processing the images further after the predictions. The reasoning behind choosing \ac{dl} will be briefly discussed. Further is the necessary data preprocessing described, before the basics of different \ac{ann} is covered. Lastly, this section will go through the theory of generating ground truth labels with a suitable program.
 
 \section{Artificial intelligence}
-\ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. It has the ability to tackle many complex problems which are intellectually difficult or impossible to solve for a human being with natural intelligence. Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for us like recognize a cat or a dog in an image, or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture \cite{The_holy_grail_of_DL}.
+\ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. \ac{ai} has the ability to tackle many complex problems, which are intellectually difficult or impossible to solve for a human being (with natural intelligence). Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for humans, such as recognizing a cat or a dog in an image, or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture \cite{The_holy_grail_of_DL}.
 
 \begin{figure}[ht]
     \centering
@@ -88,47 +89,59 @@ Figure \ref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. The term 
 \textit{“Machine learning is the study of computer algorithms that allow computer programs to automatically improve through experience.”} \cite{tom_mitchell}.
 \newline
 \newline
-Instead of being explicitly programmed to improve their performance on a task like algorithms in \ac{ai}, \ac{ml} learns through experience. Even though \ac{ml} techniques is not used in this thesis, it is combined with \ac{ai} the foundation for \ac{dl}.
+Instead of being explicitly programmed to improve their performance on a task like algorithms in \ac{ai}, \ac{ml} learns through experience. This means \ac{ml} will search for the correct \textit{rules} as visualized in figure \ref{fig:ml}\cite{Francois_Deep_learning_with_python}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/ml.png}
+    \caption{The difference between \ac{ai} and \ac{ml} \cite{Francois_Deep_learning_with_python}}
+    \label{fig:ml}
+\end{figure}
+
+Even though \ac{ml} techniques is not used explicitly in this thesis, it is combined with \ac{ai} the foundation for \ac{dl}.
 
 \subsection{Deep learning}
-As visualized in figure \ref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl},  is that \ac{dl} is able to learn data representations from data sets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. 
+As visualized in figure \ref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl} is that \ac{dl} is able to learn data representations from data sets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. This thesis will use \ac{dl} as foundation for solving the task of automatically produce ground truth images. 
 
 \subsubsection{Supervised learning}
 Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets.
 
 \subsection{Benefits using \ac{dl} with \ac{cnn} vs traditional methods}
-\ac{dl} has been increasingly more popular during the last few years. Some of the reason for that has been its ability to provide higher accuracy when trained with large amounts of data. It tends also to provide better results in network with smaller data sets, as being the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
+\ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \ac{dl}’s ability to provide higher accuracy when trained with large amounts of data. \ac{dl} tends to provide better results in network with smaller data sets, as is the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
 \newline
 \newline
-Another benefit using \ac{dl} over traditional methods is the features extraction from images. While the traditional algorithms needs to manually implement different computer vision techniques in order to extract the desired features before classification, this is not the case in \ac{dl}. With the use of convolution layers from \ac{cnn} the features are extracted automatically from the layers.
-The first layer will detect and learn small edges. Then the second layer will learn larger patterns made from the features from the first layer, and this concept will repeat itself in the further layers. The patterns being learned are translation-invariant, which means it can recognize the learned pattern if it appears anywhere else in the image \cite{Francois_Deep_learning_with_python}. This advantage is exclusively for the \ac{cnn}, and make the networks able to generalize better with less training samples than other networks.
+Another argument for employing \ac{dl} over traditional methods is the features extraction from images. While the traditional algorithms needs to manually implement different computer vision techniques in order to extract the desired features before classification, this is not the case with \ac{dl}. With the use of convolution layers from \ac{cnn} the features are extracted automatically from the layers.
+The first layer will detect and learn small edges. Then the second layer will learn larger patterns made from the features from the first layer, and this concept will repeat itself in the further layers. The patterns learned are translation-invariant, which means it can recognize the learned pattern if it appears anywhere else in the image. This advantage is exclusively for the \ac{cnn}, and makes the networks able to generalize better with less training samples than other networks  \cite{Francois_Deep_learning_with_python}.
 
 \section{Computer vision}
-Computer vision is a field which main purpose is to make machines be able to interpret and understand features from images or video. In other words, "Teaching computers how to see"\cite{website:maskinsyn-intro}. This section will only go through a small number of computer vision concepts, as they are being used in the thesis.
+Computer vision is a field which main purpose is to make machines able to interpret and understand features from images or video. In other words, "Teaching computers how to see"\cite{website:maskinsyn-intro}. This section will only go through a small number of computer vision concepts, as they are used in the thesis.
+
 \subsection{Semantic segmentation}
-Segmentation is a concept where the input is in the form of an image, and the output consists of regions and structures based on the input. Normal segmentation will in most cases only provide a basic scene understanding. If we want to understand what is in the image more thoroughly, semantic segmentation is the next step. The idea behind semantic segmentation is that instead of regions, every pixel in the image gets classified. Which means there will be possible to gain a broader scene understanding of the environment in the image, making it easier to recognize different elements.
+Segmentation is a concept where the input is in the form of an image, and the output consists of regions and structures based on the input. Normal segmentation will in most cases only provide a basic scene understanding. If we want to understand what is in the image more thoroughly, semantic segmentation is the next step. The idea behind semantic segmentation is that instead of regions, every pixel in the image gets classified. This means that it will be possible to gain a broader scene understanding of the environment in the image, making it easier to recognize different elements \cite{website:semantic_segmentation}.
+
 \subsection{Morphological operations}
-A common binary image operations are called \textit{morphological operations}, since
-they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images, and two of the standard binary morphological operations used in the thesis are: 
+A common binary image operations is called \textit{morphological operations}, since
+they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images. Two of the standard binary morphological operations used in the thesis are: 
 \newline
 \begin{itemize}
     \item \textbf{Erosion}
     \item \textbf{Dilation}
 \end{itemize}
 
-Where \textit{erosion} thins the object and \textit{dilation} thickens the object. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to close large regions, smooth boundaries, while also removing some noise from the image. There is common to experiment how many iterations there should be implemented in each the erosion and the dilation operation.
+\textit{erosion} thins the object and \textit{dilation} thickens the object. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to close large regions, smooth boundaries, while also removing some noise from the image. It is common to experiment on how much iteration that should be implemented in each the erosion and the dilation operation.
 \newline
 \newline
-The structuring element used is a normally a square rectangular kernel of desired size. It can also take the shape of an circle if necessary. This depends on what the regions in the image looks like. Sometimes a circle shaped kernel may be a better option to smooth the curves than the normal rectangular kernel.
+The structuring element used is normally a square rectangular kernel of desired size. It can also take the shape of an circle if necessary. This depends on what the regions in the image looks like. Sometimes a circle shaped kernel may be a better option to smooth the curves than the normal rectangular kernel.
+
 \subsection{Connected component analysis}
-The connected component analysis is a tool which can be used to filtering out noise from a predicted image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with an binary object filler. If both operations is implemented successfully, the improvement from the original prediction will be significantly better.
+The connected component analysis is a tool, which can be used to filter out noise from a predicted image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with an binary object filler. If both operations is implemented successfully, the improvement from the original prediction will be significantly better.
 
 \section{Data preprocessing}
-This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, would it in the most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
+This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, it would in most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
 \newline
 A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
 \newline
-A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network is relatively small, it is normal practice to normalize the image-array to values between 0-1. This can be done by divide the array with 255. Doing so will prevent to slow down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller ligning med forklaring} 
+A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network is relatively small, it is common practice to normalize the image-array to values between 0-1. Dividing the array with 255 can do this. Doing so will prevent slowing down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller tabell med forklaring/regneeksempel} 
 \newline
 \newline
 Another process is to check whether the data set has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the data set, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
@@ -138,10 +151,20 @@ Another process is to check whether the data set has the correct shape or not. T
 \newline
 \newline
 Where height and width refers to the x- and y-coordinates in the image, and channels refers to if the image is binary (channels=1) or \ac{rgb} (channels=3).
+
 \subsection{Data augmentation}
 Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are pre-processed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has lower chance of overfitting. This sub-section will only cover the most used augmentation techniques.  
 \subsubsection{Random cropping}
-A popular method in augmentation is random cropping. Which means sampling a random chosen square box from the original image, and then resize to the original size.\todo{sett inn bilde} As seen in figure \todo{referer til bildet} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
+A popular method in augmentation is random cropping. Which means sampling a random chosen square box from the original image, and then resize to the original size.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/random_cropping.png}
+    \caption{Random cropping \cite{website:random_cropping}}
+    \label{fig:random_cropping}
+\end{figure}
+
+As seen in figure \ref{fig:random_cropping} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
 \subsubsection{Flipping images}
 Another method is to flip the images in either vertical or horizontal order. Even when the images are flipped, are they recognizable for the model. The ground truth must also go through the same operation in order to keep the correct geometry in both images. 
 \subsubsection{Color changes}
@@ -175,7 +198,7 @@ Where the neurons function ($h$) is denoted in the form of a dot product between
 \newline
 \newline
 If many McCulloch \& Pitts neurons are put together, the structure of a single-layer neural network appears. A single-layer perceptron like that are able to learn linear problems. When the task is to learn non-linear problems, the solution is to add one or more hidden layers as done in multi-layer perceptron.   
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/slp_&_mlp.jpeg}
     \caption{Single-layer perceptron to the left, and multi-layer perceptron to the right \cite{website:slp_mlp}}
@@ -329,7 +352,7 @@ As illustrated in figure \ref{fig:relu} the ReLu activation is thresholded at ze
 \subsection{Loss and optimizers}
 The task of a loss function is to measure the distance between the predictions being made by the network and the actual ground truth. In this manner there can be computed a distance score, controlling how well the network did with its prediction \cite{Francois_Deep_learning_with_python}. This is illustrated in figure \ref{fig:loss_function}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/loss_function.png}
     \caption{Loss function \cite{Francois_Deep_learning_with_python}}
@@ -338,7 +361,7 @@ The task of a loss function is to measure the distance between the predictions b
 
 The loss score computed by the loss function, is further being used as a feedback signal for adjusting the weights slightly. The weights are updated in a direction which lower the loss score, in order to make better future predictions. This is shown in figure \ref{fig:optimizers}. The job of adjusting the weights is executed by what is called an optimizer. The optimizer implements the backpropagation algorithm earlier described in this section \cite{Francois_Deep_learning_with_python}. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/optimizers.png}
     \caption{The visualization of an optimizer \cite{Francois_Deep_learning_with_python}}
@@ -379,7 +402,7 @@ g(x,y) = \omega * f(x,y) = \sum_{s=-a}^{a}\sum_{t=-b}^{b}\omega(s,t)f(x-s,y-t)
 \end{aligned}
 \end{equation}
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/conv2.png}
     \caption{3D Convolution step by step \cite{website:cs231n}}
@@ -448,7 +471,7 @@ When the polygon is finished being drawn, another script is run, and the complet
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/label_viz.png}
-    \caption{A complete annotation}
+    \caption{A complete annotation superimposed on the original image}
     \label{fig:finished_annotation}
 \end{figure}
 
@@ -465,15 +488,33 @@ When the polygon is finished being drawn, another script is run, and the complet
 \section{DeepLab}
 
 \chapter{Method}
+This chapter will cover the implementation of the program in the thesis and reasoning the choices of methods. It will initially describe how the ground truth labeling is made. Then cover which framework is used, before describing the algorithm's training-, validation- and test-set. The advantage of using Tensorboard will be discussed. Further will both implementations of \ac{cnn} be described, with pros and cons. And lastly, this chapter will cover predictions made from the network, and some computer vision techniques used in order to maintain a clean output with minimal noise. 
 \section{Implementation}
 \subsection{Annotation the training set}
+Before the work with the network can start, there must exist a prepared data set. As supervised learning is the method used, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the data set, and continues in an iterative manner every 10'th image. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/label_method.png}
+    \caption{The structure from the U-Net \cite{website:u_net}}
+    \label{fig:gt_method}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/label_viz_method.png}
+    \caption{The structure from the U-Net \cite{website:u_net}}
+    \label{fig:superimposed_method}
+\end{figure}
+
+
 When the images in this thesis has been annotated, only two classes were assigned each image. Class 0 to background, and class 1 to road.
 \subsection{Keras}
 Keras is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. Keras has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that Keras can run with the same code seamlessly on \ac{cpu} or \ac{gpu}\cite{Francois_Deep_learning_with_python}.
 \subsection{Training, validation and testing data}
 
 In order to have a successful implementation, the data set must be split into different parts. Either splitting the data set in training and test, or training, validation and test. The network should only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test set should be data that the network never has seen before. There is a rule of thumb to split the data in training, validation and test set 60/20/20.  
-\todo{skriv om sklearn biblioteket(i metode kap), og hvorfor det er viktig å splitte datasettet korrekt}
+
 \subsection{The residual network}
 \subsection{The sequential network}
 \subsection{Tensorboard}
