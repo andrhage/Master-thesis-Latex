@@ -9,6 +9,18 @@
 \usepackage{amsmath , amssymb , amsthm}
 \usepackage[margin=1.5in, footskip=0.25in]{geometry}
 \usepackage{float}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{xcolor}
+
+\definecolor{LightGray}{gray}{0.95}
+
+\lstset{
+  language=bash,
+  basicstyle=\ttfamily
+}
+
+% Den kommandoen under bestemmer hvor mye som skal være inkuldert i table of contents
 %\setcounter{tocdepth}{5}
 
 \title{Image-based terrain characterization for autonomous vehicles, based on deep learning}        %% ... or whatever
@@ -475,6 +487,8 @@ When the polygon is finished being drawn, another script is run, and the complet
     \label{fig:finished_annotation}
 \end{figure}
 
+\section{Transfer learning}
+
 \chapter{Related works}
 \section{U-net}
 
@@ -491,19 +505,33 @@ When the polygon is finished being drawn, another script is run, and the complet
 This chapter will cover the implementation of the program in the thesis and reasoning the choices of methods. It will initially describe how the ground truth labeling is made. Then cover which framework is used, before describing the algorithm's training-, validation- and test-set. The advantage of using Tensorboard will be discussed. Further will both implementations of \ac{cnn} be described, with pros and cons. And lastly, this chapter will cover predictions made from the network, and some computer vision techniques used in order to maintain a clean output with minimal noise. 
 \section{Implementation}
 \subsection{Annotation the training set}
-Before the work with the network can start, there must exist a prepared data set. As supervised learning is the method used, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the data set, and continues in an iterative manner every 10'th image. 
+Before the work with the network can start, there must exist a prepared data set. As supervised learning is the method used, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the data set, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
 
-\begin{figure}[ht]
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
+$ labelme <input_file.png> -O <output_file.json>
+$ labelme_json_to_dataset <input_file.json> -o <output_folder>
+\end{minted}
+
+When the first line is executed, the \ac{gui} for \textit{labelme} shows up in an external window. From there it is possible to start drawing the annotation by pressing the \textit{"Create Polygons"}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/labelme_gui.png}
+    \caption{The \ac{gui} for labelme}
+    \label{fig:gui}
+\end{figure}
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/label_method.png}
-    \caption{The structure from the U-Net \cite{website:u_net}}
+    \caption{The ground truth}
     \label{fig:gt_method}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/label_viz_method.png}
-    \caption{The structure from the U-Net \cite{website:u_net}}
+    \caption{The ground truth superimposed on the original image}
     \label{fig:superimposed_method}
 \end{figure}
 
