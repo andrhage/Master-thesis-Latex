@@ -23,7 +23,9 @@
 \usepackage{listings}
 \usepackage[wby]{callouts}
 \usepackage{subcaption}
+\usepackage{hyperref}
 \usepackage{cleveref}
+
 
 \graphicspath{ {Images/} } 
 %\setlength{\parskip}{1em}
@@ -138,13 +140,13 @@ Instead of being explicitly programmed to improve their performance on a task li
 Even though \ac{ml} techniques is not used explicitly in this thesis, it is combined with \ac{ai} the foundation for \ac{dl}.
 
 \subsection{Deep learning}
-As visualized in figure \cref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl} is that \ac{dl} is able to learn data representations from data sets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. This thesis will use \ac{dl} as foundation for solving the task of automatically produce ground truth images. 
+As visualized in figure \cref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl} is that \ac{dl} is able to learn data representations from datasets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. This thesis will use \ac{dl} as foundation for solving the task of automatically produce ground truth images. 
 
 \subsubsection{Supervised learning}
-Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled data set. With that knowledge a function can learn how to map input data to the targets.
+Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled dataset. With that knowledge a function can learn how to map input data to the targets.
 
 \subsection{Benefits using \ac{dl} with \ac{cnn} vs traditional methods}
-\ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \ac{dl}’s ability to provide higher accuracy when trained with large amounts of data. \ac{dl} tends to provide better results in network with smaller data sets, as is the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
+\ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \ac{dl}’s ability to provide higher accuracy when trained with large amounts of data. \ac{dl} tends to provide better results in network with smaller datasets, as is the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
 \newline
 \newline
 Another argument for employing \ac{dl} over traditional methods is the features extraction from images. While the traditional algorithms needs to manually implement different computer vision techniques in order to extract the desired features before classification, this is not the case with \ac{dl}. With the use of convolution layers from \ac{cnn} the features are extracted automatically from the layers.
@@ -174,14 +176,14 @@ The structuring element used is normally a square rectangular kernel of desired 
 The connected component analysis is a tool, which can be used to filter out noise from a predicted image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with a binary object filler. If both operations are implemented successfully, the improvement from the original prediction will be significantly better.
 
 \section{Data preprocessing}
-This section will cover data processing from an image-based point of view. Before the data set can be fed into the network, it would in most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
+This section will cover data processing from an image-based point of view. Before the dataset can be fed into the network, it would in most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
 \newline
-A common thing to do with an image-based data set is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
+A common thing to do with an image-based dataset is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
 \newline
 A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network is relatively small, it is common practice to normalize the image-array to values between 0-1. Dividing the array with 255 can do this. Doing so will prevent slowing down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller tabell med forklaring/regneeksempel} 
 \newline
 \newline
-Another process is to check whether the data set has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the data set, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
+Another process is to check whether the dataset has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the dataset, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
 \newline
 \newline
 (height, width, channels)
@@ -252,6 +254,7 @@ In order for the single-layer neural network to learn, it has to adjust the weig
 w_{ij} \longleftarrow w_{ij} + \Delta w_{ij}
 \end{aligned}
 \end{equation}
+
 Equation \cref{eq:learning_rule} shows how the weight ($w_{ij}$) updates. The goal of the learning rule is to minimize the error at the output, such that $\Delta w_{ij} = 0 $. When the weights reach that state, they are tuned correctly. The weights can be both positive and negative, and how they adjust can be explained with the next equation. 
 
 \begin{equation}\label{eq:delta_learning_rule}
@@ -494,7 +497,7 @@ Another method to reduce parameters is to add a max pool layer. Similarly to the
 But as seen in figure \cref{fig:max_pooling}, the filter takes the max value in each frame instead of convolving through the input like the convolution layer does. The most common values in the max pooling layer is $F=$2 or 3, and $S=2$. Increasing those values will result in a destructive layer. It is a common practice to implement a max pool layer periodically between convolutional layers.
 
 \section{Generating the ground truth labels}
-There exist several good programs for generating labels for data sets. All with different pros and cons. The one being used for this thesis is a free program which offer offline annotation. It is called \textit{"labelme"}, and it can be installed directly from GitHub \cite{website:labelme}. The program is easy to learn and contains annotation examples in the GitHub folder. \textit{Labelme} has a clean programmed \ac{gui} regarding the working space, which is illustrated in figure \cref{fig:annotate}. 
+There exist several good programs for generating labels for datasets. All with different pros and cons. The one being used for this thesis is a free program which offer offline annotation. It is called \textit{"labelme"}, and it can be installed directly from GitHub \cite{website:labelme}. The program is easy to learn and contains annotation examples in the GitHub folder. \textit{Labelme} has a clean programmed \ac{gui} regarding the working space, which is illustrated in figure \cref{fig:annotate}. 
 
 \begin{figure}[ht]
 \centering
@@ -508,6 +511,7 @@ There exist several good programs for generating labels for data sets. All with 
 \captionof{figure}{The annotation superimposed on the original image}
 \label{fig:finished_annotation}
 \end{subfigure}
+\caption{Road annotation}
 \end{figure}
 
 When the polygon is finished being drawn, another script is run, and the complete annotation ends up like in figure \cref{fig:finished_annotation}.  
@@ -528,10 +532,10 @@ When the polygon is finished being drawn, another script is run, and the complet
 \section{DeepLab}
 
 \chapter{Method}
-This chapter will cover the implementation of the program in the thesis and reasoning the choices of methods. It will initially describe how the ground truth labeling is made. Then cover which framework is used, before describing the algorithm's training-, validation- and test-set. The advantage of using Tensorboard will be discussed. Further will both implementations of \ac{cnn} be described, with pros and cons. And lastly, this chapter will cover predictions made from the network, and some computer vision techniques used in order to maintain a clean output with minimal noise. 
 \section{Implementation}
+This chapter will cover the implementation of the program in the thesis and reasoning the choices of methods. It will initially describe how the ground truth is made. Then cover which framework is used, before describing the the structure of the training-, validation- and test-set. Both implementations of \ac{cnn} will be described, with pros and cons. Further will the advantage of using Tensorboard be discussed. And lastly, this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise.
 \subsection{Annotation the training set}
-Before the work with the network can start, there must exist a prepared data set. As supervised learning is the method used, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the data set, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
+Before the work with the network can start, there must exist a prepared dataset. As supervised learning is the used method, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the dataset, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
 $ labelme <input_file.png> -O <output_file.json>
@@ -546,39 +550,43 @@ When the first line is executed, the \ac{gui} for \textit{labelme} shows up in a
 \captionof{figure}{The \ac{gui} for labelme}
 \label{fig:gui}
 \end{subfigure}
+\hspace*{\fill} % separation between the subfigures
 \begin{subfigure}{.6\textwidth}
 \includegraphics[width=.75\linewidth]{bilder/annotating.png}
 \captionof{figure}{Drawing a polygon}
 \label{fig:polygon}
 \end{subfigure}
+\caption{The labelme \ac{gui}}
 \end{figure}
 
 \begin{figure}[ht]
 \begin{subfigure}{.6\textwidth}
-\includegraphics[width=.7\linewidth]{bilder/label_method.png}
-\captionof{figure}{The ground truth}
+\includegraphics[width=.6\linewidth]{bilder/label_method.png}
+\captionof{figure}{}
 \label{fig:gt_method}
 \end{subfigure}
+\hspace*{\fill} % separation between the subfigures
 \begin{subfigure}{.6\textwidth}
-\includegraphics[width=.7\linewidth]{bilder/label_viz_method.png}
-\captionof{figure}{The ground truth superimposed on the original image}
+\includegraphics[width=.6\linewidth]{bilder/label_viz_method.png}
+\captionof{figure}{}
 \label{fig:superimposed_method}
 \end{subfigure}
+\caption{Ground truths in its original form in \cref{fig:gt_method}, and superimposed into original image in \cref{fig:superimposed_method}}
 \end{figure}
 
-The finished ground truth image consists of two classes. Where class 0 is assigned to the background, and class 1 to the road. 
-
-\subsection{Structuring the data set}
-The next step after the ground truths is finished is to structure all the data. The data set needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in figure \cref{fig:dataset_structure}.
+The finished ground truth image consists of two classes. Where class 0 is assigned to the background, and class 1 to the road. The program \textit{labelme} was chosen due to its quick setup, its possibility to annotate data offline, and a clean \ac{gui} making it easy to draw polygons. 
+ 
+\subsection{Structuring the dataset}
+The next step after the ground truths is finished is to structure all the data. The dataset needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in figure \cref{fig:dataset_structure}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.4\textwidth]{bilder/dataset_structure.PNG}
-    \caption{This thesis data set structure}
+    \caption{This thesis dataset structure}
     \label{fig:dataset_structure}
 \end{figure}
 
-Note that the only images containing ground truths is the training images. Optimally all the images included in the data set would have ground truths. In that way the algorithm can be able to measure accuracy and loss in predictions both during training and testing. The reason why the ground truth's only are included in the training set is as earlier described due to the high cost of manually label a image. To check how good the predictions provided by the network are, this can only be done visually by comparing the road predictions to where the road actually is in the original image.
+Note that the only images containing ground truths is the training images. Optimally all the images included in the dataset would have ground truths. In that way the algorithm can be able to measure accuracy and loss in predictions both during training and testing. The reason why the ground truth's only are included in the training set is as earlier described due to the high cost of manually label a image. To check how good the predictions provided by the network are, this can only be done visually by comparing the road predictions to where the road actually is in the original image.
 \newline
 \newline
 The training directory is further split into following list variables:
@@ -588,94 +596,13 @@ The training directory is further split into following list variables:
     \item \textit{x\_val}
     \item \textit{y\_val}
 \end{itemize}
-Where \textit{x\_train} and \textit{y\_train} refers to the training images and its ground truth's respectively. \textit{x\_val} refers to validation images, and \textit{y\_val} is the ground truth's for the validation images. The network will only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test-set should on a generally basis be data that the network never has seen before.  
+Where \textit{x\_train} and \textit{y\_train} refers to the training images and its ground truth's respectively. \textit{x\_val} refers to validation images, and \textit{y\_val} is the ground truth's for the validation images. The network will only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test-set should on a generally basis be data that the network never has seen before. As described in the section above, only a few of the images were manually annotated. This means the dataset only has a small number of images to train on. Hence, the percentage of images split into the validation-set is put to 10\%. Optimally should this number be higher, but being able to train on most available images got a higher priority.
 
 \subsection{Keras}
 \textit{Keras} is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. \textit{Keras} has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that \textit{Keras} can run with the same code seamlessly on \ac{cpu} or \ac{gpu} \cite{Francois_Deep_learning_with_python}. Both implementations of \ac{cnn} in this thesis is done in \textit{Keras}, and became the chosen framework due to its easy implementation of networks and powerful tools.
 
-\subsection{The residual network}
-\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
-# U-Net model
-inputs = Input((int(config['data_processing']['x_pic']), 
-int(config['data_processing']['y_pic']), 3))
-
-# Layers
-c1 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(inputs)
-c1 = Dropout(0.1)(c1)
-c1 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c1)
-p1 = MaxPooling2D((2, 2))(c1)
-c2 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(p1)
-c2 = Dropout(0.1)(c2)
-c2 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal',
-padding='same')(c2)
-p2 = MaxPooling2D((2, 2))(c2)
-
-c3 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(p2)
-c3 = Dropout(0.2)(c3)
-c3 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c3)
-p3 = MaxPooling2D((2, 2))(c3)
-
-c4 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(p3)
-c4 = Dropout(0.2)(c4)
-c4 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c4)
-p4 = MaxPooling2D(pool_size=(2, 2))(c4)
-
-c5 = Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(p4)
-c5 = Dropout(0.3)(c5)
-c5 = Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c5)
-
-u6 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')(c5)
-u6 = concatenate([u6, c4])
-c6 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(u6)
-c6 = Dropout(0.2)(c6)
-c6 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c6)
-
-u7 = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same') (c6)
-u7 = concatenate([u7, c3])
-c7 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(u7)
-c7 = Dropout(0.2)(c7)
-c7 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c7)
-
-u8 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(c7)
-u8 = concatenate([u8, c2])
-c8 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(u8)
-c8 = Dropout(0.1)(c8)
-c8 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c8)
-
-u9 = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same')(c8)
-u9 = concatenate([u9, c1], axis=3)
-c9 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(u9)
-c9 = Dropout(0.1)(c9)
-c9 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
-padding='same')(c9)
-
-outputs = Conv2D(1, (1, 1), activation='sigmoid')(c9)
-
-model = Model(inputs=[inputs], outputs=[outputs])
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-model.summary()
-
-\end{minted}
-
-
 \subsection{The sequential network}
-The sequential network implemented in this thesis is made as a basic \ac{fcn}. This means the network is composed without using any fully connected layers at all. The \ac{fcn} has therefore learning filters placed everywhere, even in the decision making layers at the end of the network. This will save computation time and reduces the number of parameters compared to using dense layers.
+The sequential network implemented is made as a basic \ac{fcn}. This means the network is composed without using any fully connected layers at all. The \ac{fcn} has therefore learning filters placed everywhere, even in the decision making layers at the end of the network. This will save computation time and reduce the number of parameters compared to using fully connected dense layers.
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
 # Initializing
@@ -701,19 +628,174 @@ activation='relu'))
 # Output layer
 model.add(layers.Conv2D(1, 1, strides=(1, 1), padding='same', activation='sigmoid'))
 
-# Compile loss and optimizer, and printing the network structure summary
+# Prints the network structure summary
 model.summary()
+# Adding loss and optimizer
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 \end{minted}
 
 As seen in the code snippet above, this is the implementation of the sequential network used in the thesis. The input tensor (which is (224x224x3)) goes from the input layer through each layer until the output layer is reached. 
-There is both a downsampling- and an upsampling-process in the network. In the downsampling process consisting of four downsampling layers, the height and width is reduced from (224x224) to (14x14). Then the upsampling process also with four layers continues sampling from (14x14) to (224x224) in the height and width size of the tensor.
+There is both a downsampling- and an upsampling-process in the network. In the downsampling-process consisting of four downsampling layers, the height and width is reduced from (224x224) to (14x14). Each step in the following list represents a layers downsampling and has the depth included:
+\begin{itemize}
+    \item \textit{(112x112x16)}
+    \item \textit{(56x56x16)}
+    \item \textit{(28x28x32)}
+    \item \textit{(14x14x32)}
+\end{itemize}
+Then the upsampling process also with four layers continues sampling from (14x14) to (224x224) in the height- and width-size of the tensor. Every step in the list represents a layers upsampling and the depth is included here as well:
+\begin{itemize}
+    \item \textit{(28x28x32)}
+    \item \textit{(56x56x32)}
+    \item \textit{(112x112x16)}
+    \item \textit{(224x224x16)}
+\end{itemize}
+The last layer is the output layer containing sigmoid activation. It has the shape (224x224x1).
 \newline
 \newline
-The sequential network is included in order to be compared against the state-of-the-art residual network (U-Net). In that way it will be possible to compare the differences between a sequential- and a residual-network trained on the same data. 
+The sequential network is included as the baseline in the thesis. It is done in order to benchmark it against the state-of-the-art implementation of the residual network (U-Net). In that way it will be possible to compare the differences between a basic sequential- and a state-of-the-art residual-network, trained on the same data.
+\subsubsection{Loss}
+There are simple guidelines which can be used for choosing the right loss. If there is a two-class classification problem, a loss called \textit{"binary\_crossentropy"} will be a natural choice \cite{Francois_Deep_learning_with_python}. This is therefore the loss used in the sequential network, and it is described mathematically in the equation \cref{eq:binary_cross_entropy}.
+
+\begin{equation}\label{eq:sigmoid_function_4}
+\begin{aligned}
+f(s_i)= \frac{1}{1 + e^{s_i}}
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:binary_cross_entropy}
+\begin{aligned}
+L_{BCE} = -\sum_{i=1}^{C=2}t_{i} log (f(s_{i})) = -t_{1} log(f(s_{1})) - (1 - t_{1}) log(1 - f(s_{1}))
+\end{aligned}
+\end{equation}
+
+Where $BCE$ is short for binary cross entropy. $C_i$ is the classes, $t_i$ and $s_i$ is the target and the score respectively. The score goes first through an sigmoid activation described in equation \cref{eq:sigmoid_function_4}, before the loss is further computed with a cross-entropy loss.
+
+\subsection{The residual network}
+The residual network in this thesis is loosely based on the state-of-the-art U-Net, which is further described in the paper \cite{RFB15a_u-net}. The actual implementation is as stated in the code, based on a tutorial from Kjetil Åmdal-Sævik \cite{website:u-net_implementation}, and is illustrated in the following code snippet. 
+
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+# U-Net model
+# The implementation is based on: 
+# "https://www.kaggle.com/keegil/keras-u-net-starter-lb-0-277"
+
+inputs = Input((int(config['data_processing']['x_pic']), 
+int(config['data_processing']['y_pic']), 3))
+
+# Layers
+conv_1 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(inputs)
+conv_1 = Dropout(0.1)(conv_1)
+conv_1 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_1)
+pool_1 = MaxPooling2D((2, 2))(conv_1)
+conv_2 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(pool_1)
+conv_2 = Dropout(0.1)(conv_2)
+conv_2 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal',
+padding='same')(conv_2)
+pool_2 = MaxPooling2D((2, 2))(conv_2)
+
+conv_3 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(pool_2)
+conv_3 = Dropout(0.2)(conv_3)
+conv_3 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_3)
+pool_3 = MaxPooling2D((2, 2))(conv_3)
+
+conv_4 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(pool_3)
+conv_4 = Dropout(0.2)(conv_4)
+conv_4 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_4)
+pool_4 = MaxPooling2D(pool_size=(2, 2))(conv_4)
+
+conv_5 = Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(pool_4)
+conv_5 = Dropout(0.3)(conv_5)
+conv_5 = Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_5)
+
+up_6 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')(conv_5)
+up_6 = concatenate([up_6, conv_4])
+conv_6 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(up_6)
+conv_6 = Dropout(0.2)(conv_6)
+conv_6 = Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_6)
+
+up_7 = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same') (conv_6)
+up_7 = concatenate([up_7, conv_3])
+conv_7 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(up_7)
+conv_7 = Dropout(0.2)(conv_7)
+conv_7 = Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_7)
+
+up_8 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv_7)
+up_8 = concatenate([up_8, conv_2])
+conv_8 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(up_8)
+conv_8 = Dropout(0.1)(conv_8)
+conv_8 = Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_8)
+
+up_9 = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same')(conv_8)
+up_9 = concatenate([up_9, conv_1], axis=3)
+conv_9 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(up_9)
+conv_9 = Dropout(0.1)(conv_9)
+conv_9 = Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', 
+padding='same')(conv_9)
+
+outputs = Conv2D(1, (1, 1), activation='sigmoid')(conv_9)
+
+model = Model(inputs=[inputs], outputs=[outputs])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.summary()
+
+\end{minted}
+
+The U-Net with its skipping connection features is already briefly described in the related work chapter. When implementing the network, the choice of loss and optimizer are set to be the same as for the sequential network. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/u-net_architecture_method.png}
+    \caption{The U-Net architecture illustrated with skip connections \cite{website:u-net_method}}
+    \label{fig:u_net_method_chapter}
+\end{figure}
+
+When testing the performance in the residual network, it proved to be able to provide quite accurate predictions from few training samples. Gaining accurate predictions with few training images are the main priorities when implementing the network architecture. Having it successfully implemented will save a lot of time because it is sufficient to only manually annotate a few images. To have accurate predictions means the network performs well, and can be able to provide better results in the form of good predictions. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bilder/layers_features.png}
+    \caption{The features extracted from different layers in \ac{cnn} \cite{Francois_Deep_learning_with_python}}
+    \label{fig:layers_features}
+\end{figure}
+
+An important difference between the sequential and the residual network, its the residual networks capability to provide skipping connections. These skipping connections transfers information from each downsampling layer, directly to its upsampling layer respectively, as illustrated with the gray arrows in figure \cref{fig:u_net_method_chapter}. The upsampling layers concatenates its existing information with the information from the skipping connections. As seen in figure \cref{fig:layers_features}, each layer in a \ac{cnn} extracts different types of features. When the U-Net architecture concatenates the local information provided from the skipping connections, with the global information from the upsampling layers; this results in an improved and efficient feature extraction.  
+
+\subsection{Transfer learning}
+Before the transfer learning can start, the network needs to train on a dataset and save the weights respectively. This is done by training on the \textit{Freiburg Forest dataset} \cite{freiburg_dataset_valada16iser}. When the training is finished the weights are saved and the fine-tuning can begin after one last step. The last step is to change the training set to the original dataset used in this thesis.
+
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+# Transfer learning
+if config['train/test/debug'].getboolean('transfer') is True:
+model_res = load_model('models/freiburg/weights.45-0.99.hdf5')
+for layer in model_res.layers[:32]:
+layer.trainable = False 
+
+# Train model
+model_res.fit(x_train, y_train, batch_size=10,
+epochs=int(config['train/test/debug']['epochs']),
+shuffle=True, validation_data=(x_val, y_val),
+callbacks=callbacks_model_res)
+\end{minted}
+
+As seen in the code snippet above, the model retrieves the saved weights from the training with the \textit{Freiburg Forest dataset} in line three. From there it freezes all the layers up to layer 32, which means when the training starts again the weights from those layers will not change. Then the network starts training with the original dataset in line eight. Since all the layers up to layer 32 are frozen, only the last layer will change its weights during this training. This is called fine-tuning. 
 
 \subsection{Tensorboard}
-A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is using Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
+A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is to use Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/tensorboard_anaconda_prompt.PNG}
@@ -721,15 +803,21 @@ A handy way to gain control over the training, in order to tweak parameters and 
     \label{fig:tensorboard_anaconda_prompt}
 \end{figure}
 \newline
-As illustrated in figure \cref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the command \textit{< tensorboard --logdir=<log> >}. 
+As illustrated in figure \cref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the following command: 
+
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
+tensorboard --logdir=<log> 
+\end{minted}
+
+Where all you need to enter is the address to the log folder the algorithm provides. 
 \newline
-When using Tensorboard with Keras, there is necessary to use callbacks in the code. As stated by the Keras documentation on their website.
+When using Tensorboard with Keras, there is necessary to use callbacks in the code. As stated by the Keras documentation on their website:
 \newline
 \newline
 \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. 
 \newline
 \newline
-It is therefore possible with callbacks to decide by own specifications what to include and when to gain information during the training process.  
+Using callbacks it is possible to decide which information/process to include and when it should be executed during the training process.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\textwidth]{bilder/tensorboard_acc_loss.PNG}
@@ -747,19 +835,41 @@ Two popular graphs used to check the quality of the \ac{dl} model is \textit{"ac
 To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{"overfitting"} or \textit{"underfitting"}, and if the accuracy in the model is fulfilling user expectations. Examples of underfitting from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in figure \cref{fig:overfitting_underfitting}. As seen in figure \cref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
 By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{"overfitting"} nor \textit{"underfitting"} in the model.
 
-\begin{figure}[t!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/tensorboard_graph.PNG}
-    \caption{The model graph visualized in Tensorboard}
+    \caption{The sequential network architecture visualized in Tensorboard}
     \label{fig:graph}
 \end{figure}
-The other section in Tensorboard called \textit{"GRAPHS"} shows the model graph. Being able to see the layers, optimizer function and connections, helps the user see the whole model in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
+Another section in Tensorboard called \textit{"GRAPHS"} shows the networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
 \section{Predictions}
-After the network has updated the internal state well enough and learned the input and output, it can be fed new data it has never seen before. It will predict an output given the input of the new data, given the networks internal state.  
-\subsection{Techniques from computer vision}
-\subsubsection{Thresholding}
-\subsubsection{CCA}
-\subsubsection{Binary hole filling}
+A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of features several techniques from computer vision can be applied. 
+\subsection{Thresholding}
+The first tool used for removing uncertain predicted pixels in the image is thresholding. When the networks predicts pixel values, this happens in the range between 0-1. The thresholding will convert that fuzzy logic to values which are either 0 or 1. Where class 0 is background and class 1 is road.
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+# Filter out values with less certainty than 65 %
+prediction = np.where(prediction > 0.65, np.ones_like(prediction), 
+np.zeros_like(prediction))
+\end{minted}
+
+\begin{equation}\label{eq:thresholding}
+\begin{aligned}
+{f(x_i)=
+\begin{cases}
+    1 & \text{ $x_i$ > 0.65 }  \\
+    0 & \text{ $x_i$ $\leq$ 0.65 }
+\end{cases}}
+\end{aligned}
+\end{equation}
+What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in equation \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.  
+\subsection{Connected component analysis}
+The next operation used in order to remove larger sections of noise predicted in the image is called connected component analysis. When implemented in this thesis it removes all sections in the images which contains less than 5000 pixels. This means in the most cases that all of the remaining noise in the image will be removed. The connected component analysis has one disadvantage. Which is when the road predicted is less than the threshold value of 5000 pixels. Then the whole prediction will consists of only background. This only happens in a very limited amount of the images.
+\subsection{Binary hole filling}
+The last computer vision technique used in this thesis is to fill all the holes in the remaining predicted road. It is done by the following line of code:
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+prediction = ndi.binary_fill_holes(prediction)
+\end{minted}
+
 
 \chapter{Results}                     
 
