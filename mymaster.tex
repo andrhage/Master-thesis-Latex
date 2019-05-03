@@ -122,68 +122,67 @@ This chapter will initially provide a short overview of the basics of \ac{ai}, \
 \end{figure}
 
 \subsection{Machine learning}
-Figure \cref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. The term is further well defined by \ac{ml} pioneer Tom M. Mitchell:
+\Cref{fig:AI} illustrates that \ac{ml} is a subset from \ac{ai}. The term is further well defined by \ac{ml} pioneer Tom M. Mitchell:
 \newline
 \newline
 \textit{“Machine learning is the study of computer algorithms that allow computer programs to automatically improve through experience.”} \cite{tom_mitchell}.
 \newline
 \newline
-Instead of being explicitly programmed to improve their performance on a task like algorithms in \ac{ai}, \ac{ml} learns through experience. This means \ac{ml} will search for the correct \textit{rules} as visualized in figure \cref{fig:ml}\cite{Francois_Deep_learning_with_python}.
-
+\ac{ml} algorithms will explicitly be programmed to improve their performance on a task. Humans would provide the data, along with the answers in order to search for and produce the rules. This is visualized in \cref{fig:ml} \cite{Francois_Deep_learning_with_python}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/ml.png}
-    \caption{The difference between \ac{ai} and \ac{ml} \cite{Francois_Deep_learning_with_python}}
+    \caption{Classical \ac{ai} illustrated on the top and \ac{ml} illustrated on the bottom part of the image \cite{Francois_Deep_learning_with_python}}
     \label{fig:ml}
 \end{figure}
 
 Even though \ac{ml} techniques is not used explicitly in this thesis, it is combined with \ac{ai} the foundation for \ac{dl}.
 
 \subsection{Deep learning}
-As visualized in figure \cref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl} is that \ac{dl} is able to learn data representations from datasets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. This thesis will use \ac{dl} as foundation for solving the task of automatically produce ground truth images. 
+As visualized in \cref{fig:AI}, \ac{dl} is a subset of both \ac{ai} and \ac{ml}. The main difference between \ac{ml} and \ac{dl} is that \ac{dl} is able to learn data representations from datasets instead. The whole network is in other words able to solve the problem from start to end without using external methods as in \ac{ml}. \ac{dl} has its networks (called \ac{ann}) loosely based on the same principle as the neuron system from a human brain. This thesis will use \ac{dl} as foundation for solving the task of automatically predict ground truth images. 
 
 \subsubsection{Supervised learning}
 Supervised learning is the most commonly used technique in \ac{dl} \cite{Francois_Deep_learning_with_python}. The word supervised refers to known targets or annotations in the form of a labelled dataset. With that knowledge a function can learn how to map input data to the targets.
 
 \subsection{Benefits using \ac{dl} with \ac{cnn} vs traditional methods}
-\ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \ac{dl}’s ability to provide higher accuracy when trained with large amounts of data. \ac{dl} tends to provide better results in network with smaller datasets, as is the case in this thesis. This benefit over traditional methods alone would be enough to consider taking \ac{dl} as preferred method.
+\ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \acp{dl} ability to provide higher accuracy when trained with large amounts of data. Even though \ac{dl} is usually known for predicting good results from large datasets, it does also contain methods for providing good results from networks trained with smaller datasets as well. As is the case in this thesis. This benefit over traditional \ac{ml} methods alone would be enough to consider taking \ac{dl} as preferred method.
 \newline
 \newline
 Another argument for employing \ac{dl} over traditional methods is the features extraction from images. While the traditional algorithms needs to manually implement different computer vision techniques in order to extract the desired features before classification, this is not the case with \ac{dl}. With the use of convolution layers from \ac{cnn} the features are extracted automatically from the layers.
 The first layer will detect and learn small edges. Then the second layer will learn larger patterns made from the features from the first layer, and this concept will repeat itself in the further layers. The patterns learned are translation-invariant, which means it can recognize the learned pattern if it appears anywhere else in the image. This advantage is exclusively for the \ac{cnn}, and makes the networks able to generalize better with less training samples than other networks  \cite{Francois_Deep_learning_with_python}.
 
 \section{Computer vision}
-Computer vision is a field which main purpose is to make machines able to interpret and understand features from images or video. In other words, "Teaching computers how to see"\cite{website:maskinsyn-intro}. This section will only go through a small number of computer vision concepts, as they are used in the thesis.
+Computer vision is a field whose main purpose is to make machines able to interpret and understand features from images or video. In other words, "Teaching computers how to see"\cite{website:maskinsyn-intro}. This section will only go through a small number of computer vision concepts, as they are used in the thesis.
 
 \subsection{Semantic segmentation}
-Segmentation is a concept where the input is in the form of an image, and the output consists of regions and structures based on the input. Normal segmentation will in most cases only provide a basic scene understanding. If we want to understand what is in the image more thoroughly, semantic segmentation is the next step. The idea behind semantic segmentation is that instead of regions, every pixel in the image gets classified. This means that it will be possible to gain a broader scene understanding of the environment in the image, making it easier to recognize different elements \cite{website:semantic_segmentation}.
+Segmentation is a concept where the input is in the form of an image, and the output consists of regions and structures based on the input. Normal segmentation will in most cases only provide a basic scene understanding. If we want to understand what is in the image more thoroughly, semantic segmentation is the next step. The idea behind semantic segmentation is that instead of regions, every pixel in the image are classified. This means that it will be possible to gain a broader scene understanding of the environment in the image, making it easier to recognize different elements \cite{website:semantic_segmentation}.
 
 \subsection{Morphological operations}
 A common binary image operations is called \textit{morphological operations}, since
-they change the shape of the underlying binary objects \cite{Ritter}. This is done by convolving a binary \textit{structuring element} on the binary image, where the structuring element can be any chosen shape. These operations are typically used to clean up binary images. Two of the standard binary morphological operations used in the thesis are: 
+they change the shape of the underlying binary objects \cite{Ritter}. These operations are typically used to clean up binary images. Two of the standard binary morphological operations used in the thesis are: 
 \newline
 \begin{itemize}
     \item \textbf{Erosion}
     \item \textbf{Dilation}
 \end{itemize}
 
-\textit{erosion} thins the object and \textit{dilation} thickens the object. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to close large regions, smooth boundaries, while also removing some noise from the image. It is common to experiment on how much iteration that should be implemented in each the erosion and the dilation operation.
+\textit{erosion} thins the object and \textit{dilation} thickens the object. Using these operations in this specific order (erosion + dilation) results in \textit{opening}. This operation tends to smooth boundaries, while also removing some noise from the image. It is common to experiment on how much iteration that should be implemented in each the erosion and the dilation operation.
 \newline
 \newline
 The structuring element used is normally a square rectangular kernel of desired size. It can also take the shape of an circle if necessary. This depends on what the regions in the image looks like. Sometimes a circle shaped kernel may be a better option to smooth the curves than the normal rectangular kernel.
 
 \subsection{Connected component analysis}
-The connected component analysis is a tool, which can be used to filter out noise from a predicted image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with a binary object filler. If both operations are implemented successfully, the improvement from the original prediction will be significantly better.
+The connected component analysis is a tool, which can be used to filter out noise from a binary image. It labels all the connected regions in the image automatically in an iterative manner. That way it is possible to mask out every label which contains less pixels than a given threshold. If the region after the noise filtering contain holes surrounded by a complete polygon, these can be sealed with a binary object filler. If both operations are implemented successfully, the improvement from the original prediction will be significantly better.
 
 \section{Data preprocessing}
 This section will cover data processing from an image-based point of view. Before the dataset can be fed into the network, it would in most cases be inevitable to perform several preprocesses. This is necessary in order to make the data prepared for training. 
 \newline
 A common thing to do with an image-based dataset is to resize the images to a slightly lower resolution. This is especially necessary if the computer does not have a state-of-art \ac{gpu}, as the model otherwise might be very slow. The down scaling will help the model to be more effective and less time consuming, at the prize of loosing some features from the original resolution. It is therefore important to test different scales, to find the perfect fit between keeping enough key features and have an effective model.
 \newline
-A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network is relatively small, it is common practice to normalize the image-array to values between 0-1. Dividing the array with 255 can do this. Doing so will prevent slowing down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division results in a more accurate number than int division.\todo{legg til bilde eller tabell med forklaring/regneeksempel} 
+A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network are relatively small, it is common practice to normalize the image-array to values between 0-1. Dividing the array with 255 will make that happen. Doing so will prevent slowing down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division resulting in a more accurate number than int division.
 \newline
 \newline
-Another process is to check whether the dataset has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which are passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the dataset, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
+Another process is to check whether the dataset has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which is passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the dataset, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
 \newline
 \newline
 (height, width, channels)
@@ -192,38 +191,36 @@ Another process is to check whether the dataset has the correct shape or not. Th
 Where height and width refers to the x- and y-coordinates in the image, and channels refers to if the image is binary (channels=1) or \ac{rgb} (channels=3).
 
 \subsection{Data augmentation}
-Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are pre-processed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has lower chance of overfitting. This sub-section will only cover the most used augmentation techniques.  
+Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are pre-processed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has lower risk of overfitting. This sub-section will only cover the most used augmentation techniques.  
 \subsubsection{Random cropping}
-A popular method in augmentation is random cropping. Which means sampling a random chosen square box from the original image, and then resize to the original size.
-
+A popular method in augmentation is random cropping. Random cropping is sampling a random chosen square box from the original image, and then resize to the original size.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/random_cropping.png}
     \caption{Random cropping \cite{website:random_cropping}}
     \label{fig:random_cropping}
 \end{figure}
-
-As seen in figure \cref{fig:random_cropping} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
+As seen in \cref{fig:random_cropping} the image focus on different areas from the original image, due to the random chosen box. This operation must be included with the ground truth images. When an operation changes the geometry in the image, the same operation must be done in the ground truth image in order to still be a valid target. 
 \subsubsection{Flipping images}
 Another method is to flip the images in either vertical or horizontal order. Even when the images are flipped, are they recognizable for the model. The ground truth must also go through the same operation in order to keep the correct geometry in both images. 
 \subsubsection{Color changes}
 The idea behind color changes is to make the the model more robust and generalized for new unseen data. Since the geometry in the images are the same after applying color changes, is it not necessary to do any operation on the ground truth images.
 \section{Artificial neural networks}
-Mostly of the theory in this section is based on the theory from the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"}\cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
+Most of the theory in this section is based on the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"}\cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"}\cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
 \newline
 \newline
 An \ac{ann} is a computing system which is vaguely based on the same principle as biological neurons in a human brain. It has the ability to learn different tasks and data representations. To fully understand the concept, the basics of a neural network is divided into different parts and further described in this section.
 \newline
 \newline
 \subsection{Single- and multi-layer neural network}
-In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons\cite{mcculloch_pitts}. With their design, they are widely known as the inventors of the first \ac{ann}. Their ideas of a threshold in the activation function and combining many basic units in order to increase computational power are still being used nowadays.
+In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons \cite{mcculloch_pitts}. With their design, they are widely known as the inventors of the first \ac{ann}. Their ideas of a threshold in the activation function and combining many basic units in order to increase computational power are still being used today.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/mcculloch_and_pitts.png}
     \caption{Illustrates the McCulloch \& Pitts design of a simplified neuron \cite{website:mcCulloch_img}}
     \label{fig:mcculoch_and_pitts}
 \end{figure}
-The illustration of the neuron and its activation function in figure \cref{fig:mcculoch_and_pitts} can be mathematically explained with equation \cref{eq:mcCulloch}.
+The illustration of the neuron and its activation function in \cref{fig:mcculoch_and_pitts} can be mathematically explained with \cref{eq:mcCulloch}.
 \begin{equation}\label{eq:mcCulloch}
 \begin{aligned}
     {h = \sum_{i=1}^{n} x_i w_i \quad , \quad\quad o =
@@ -236,40 +233,36 @@ The illustration of the neuron and its activation function in figure \cref{fig:m
 Where the neurons function ($h$) is denoted in the form of a dot product between the inputs ($x_i$) and the weights ($w_i$). The neurons activation function \textit{"fires"} when the dot product of the input and its weight respectively are higher than a given threshold $\theta$. Meaning the output ($o$) becomes 1 when $h$ is equal to or higher than the threshold, and 0 when $h$ is lower than the threshold value.
 \newline
 \newline
-If many McCulloch \& Pitts neurons are put together, the structure of a single-layer neural network appears. A single-layer perceptron like that are able to learn linear problems. When the task is to learn non-linear problems, the solution is to add one or more hidden layers as done in multi-layer perceptron.   
+If many McCulloch \& Pitts neurons are put together, the structure of a single-layer neural network appears. A single-layer perceptron are able to learn linear problems. When the task is to learn non-linear problems, the solution is to add one or more hidden layers, as done in multi-layer perceptron.   
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/slp_&_mlp.jpeg}
     \caption{Single-layer perceptron to the left, and multi-layer perceptron to the right \cite{website:slp_mlp}}
     \label{fig:slp_mlp}
 \end{figure}
-The difference can be seen visually by figure \cref{fig:slp_mlp}, where the single-layer perceptron only has an input and an output layer, while the multi-layer perceptron includes at least one hidden layer.
+The difference can be seen visually by \cref{fig:slp_mlp}, where the single-layer perceptron only has an input and an output layer, while the multi-layer perceptron includes at least one hidden layer.
 \newline
 \newline
 \subsection{The learning rule}
-In order for the single-layer neural network to learn, it has to adjust the weights accordingly. This is were the perceptron learning rule comes into the picture.
-
+In order for the single-layer neural network to learn, it has to adjust the weights accordingly. This is where the perceptron learning rule become relevant.
 \begin{equation}\label{eq:learning_rule}
 \begin{aligned}
 w_{ij} \longleftarrow w_{ij} + \Delta w_{ij}
 \end{aligned}
 \end{equation}
-
-Equation \cref{eq:learning_rule} shows how the weight ($w_{ij}$) updates. The goal of the learning rule is to minimize the error at the output, such that $\Delta w_{ij} = 0 $. When the weights reach that state, they are tuned correctly. The weights can be both positive and negative, and how they adjust can be explained with the next equation. 
-
+\Cref{eq:learning_rule} shows how the weight ($w_{ij}$) updates. The goal of the learning rule is to minimize the error at the output, such that $\Delta w_{ij} = 0 $. When the weights reach that state, they are tuned correctly. The weights can be both positive and negative, and how they adjust can be explained with the next equation. 
 \begin{equation}\label{eq:delta_learning_rule}
 \begin{aligned}
 \Delta w_{ij} = \eta * (t_j - y_j) * x_i 
 \end{aligned}
 \end{equation}
-
-In equation \cref{eq:delta_learning_rule} $\eta$ is referred to as the learning rate. It is a scalar which decide how much the weight value in each iteration will change. Finding the right balance in the choice of learning rate is therefore crucial. A high value (e.g. 1) can create an unstable net. With a high learning rate will the weights change a lot every time they updates. %The reason is that the weight will change a lot every time it updates with a high learning rate. 
+In \cref{eq:delta_learning_rule} $\eta$ is referred to as the learning rate. It is a scalar which decide how much the weight value in each iteration will change. Finding the right balance in the choice of learning rate is therefore crucial. A high value (e.g. 1) can create an unstable net. With a high learning rate will the weights change a lot every time they updates. %The reason is that the weight will change a lot every time it updates with a high learning rate. 
 Choosing a low value will make a stable network, but will require much more learning time, because the weights uses more time to tune into correct values.
 \newline
 \newline
-$\eta$ is further being multiplied with the error ($(t_j - y_j)$, where $t_j$ is the target output and $y_j$ is the actual output). Before finally being multiplied with the inputs ($x_i$). As stated above, the goal is to minimize this error. Which is done during training where the weights are adjusted with equation \cref{eq:delta_learning_rule}.
+$\eta$ is further being multiplied with the error ($(t_j - y_j)$, where $t_j$ is the target output and $y_j$ is the actual output). Before finally being multiplied with the inputs ($x_i$). As stated above, the goal is to minimize this error. Which is done during training where the weights are adjusted with \cref{eq:delta_learning_rule}.
 \subsection{Bias}
-In the case where all inputs are zero, the weights will have no effect since they are multiplied with the inputs. The solution for that particular case is to have an adjustable threshold, which can be applied with a bias node. The bias node should be added to each neuron. Then equation \cref{eq:mcCulloch} will become equation \cref{eq:bias}, where $b$ is the bias.
+In the case where all inputs are zero, the weights will have no effect since they are multiplied with the inputs. The solution for that particular case is to have an adjustable threshold, which can be applied with a bias node. The bias node should be added to each neuron. Then \cref{eq:mcCulloch} will become \cref{eq:bias}, where $b$ is the bias.
 \begin{equation}\label{eq:bias}
 \begin{aligned}
     {h = \sum_{i=1}^{n} x_i w_i + b \quad , \quad\quad o = 
@@ -280,79 +273,64 @@ In the case where all inputs are zero, the weights will have no effect since the
 \end{aligned}
 \end{equation}
 \subsection{Backpropagation in multi-layer neural networks}
-When learning in a single-layer neural network, there is possible to gain knowledge over which weight is correct or not, as described with the learning rule. In multi-layer perceptron there is at least one hidden layer between the input and the output. Hence, it is impossible to know which weights are correct, and which activations being correct for the neurons in the hidden layer. Without knowing which weight or activation is correct, there is not possible to learn the weights or train the network. The problem of not being able to train a multi-layer neural network was solved in 1986 with an algorithm called backpropagation \cite{Rumelhart:1986:LIR:104279.104293}.
-
+When learning in a single-layer neural network, it is possible to gain knowledge about which weight is correct and which is not, as described with the learning rule. In multi-layer perceptron there is at least one hidden layer between the input and the output. Hence, it is impossible to know which weights are correct, and which activations being correct for the neurons in the hidden layer. Without knowing which weight or activation is correct, it is impossible to learn the weights or train the network. The problem of not being able to train a multi-layer neural network was solved in 1986 with an algorithm called backpropagation \cite{Rumelhart:1986:LIR:104279.104293}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/forward_prop.png}
     \caption{The forward pass in backpropagation \cite{website:inf_4490_mlp}}
     \label{fig:forward_step}
 \end{figure}
-
-The backpropagation algorithm consists of two main steps. The first being the forward pass, which has the following structure illustrated in figure \cref{fig:forward_step}. After the input layer has received its inputs, the activations of the hidden nodes in the middle layer is calculated. Lastly the activations of the output nodes in the last layer is being calculated. 
-
+The backpropagation algorithm consists of two main steps. The first is the forward pass, which has the following structure illustrated in \cref{fig:forward_step}. After the input layer has received its inputs, the activations of the hidden nodes in the middle layer is calculated. Lastly the activations of the output nodes in the last layer are calculated. 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/backward_prop.png}
     \caption{The backward pass in backpropagation \cite{website:inf_4490_mlp}}
     \label{fig:backward_step}
 \end{figure}
-
-The second step in the backpropagation is called the backward pass, and is illustrated in figure \cref{fig:backward_step}. This step starts by calculating the output errors in the last layer, before it update the same layers weights. Then the error is being propagated backwards, and the hidden weights in the middle layer is updated. This process is repeated until the first layer is reached.
+The second step in the backpropagation is called the backward pass, and is illustrated in \cref{fig:backward_step}. This step starts by calculating the output errors in the last layer, before it updates the same layers weights. Then the error is being propagated backwards, and the hidden weights in the middle layer are updated. This process is repeated until the first layer is reached.
 \subsection{Gradient descent learning and momentum}
-When training the network with backpropagation, the goal is to minimizing the errors in the network. As described with the backward pass, after being calculated, the errors from the output layer are propagated backwards in the network. The tool being used is a form of gradient descent. 
-
+When training the network with backpropagation, the goal is to minimize the errors in the network. As described with the backward pass, after being calculated, the errors from the output layer are propagated backwards in the network. The tool used is a form of gradient descent. 
 \begin{equation}\label{eq:sum_of_error}
 \begin{aligned}
 E(w) = \frac{1}{2} \sum_{k}(t_k - y_k)^2 = \frac{1}{2}\sum_{k}(t_k - \sum_{i} w_{ik}x_i)^2
 \end{aligned}
 \end{equation}
-
-It differentiate the sum-of squares error in equation \cref{eq:sum_of_error}, showed with the equation \cref{eq:gradient_descent}.  
-
+It differentiates the sum-of squares error in \cref{eq:sum_of_error}, showed with the \cref{eq:gradient_descent}.
 \begin{equation}\label{eq:gradient_descent}
 \begin{aligned}
 \Delta w_{ik} = -\eta\frac{\delta E}{\delta w_{ik}}
 \end{aligned}
 \end{equation}
-
-Even though gradient descent algorithm is a good method for finding the minimum value, it has a potential risk of getting stuck in a local minimum as visualized in figure \cref{fig:gradient_descent}.
-
+Even though gradient descent algorithm is a good method for finding the minimum value, it has a potential risk of getting stuck in a local minimum as visualized in \cref{fig:gradient_descent}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/gradient_descent.png}
     \caption{Gradient descent \cite{website:inf_4490_mlp}}
     \label{fig:gradient_descent}
 \end{figure}
-
-There is two alternatives to avoid being stuck in a local minimum. The first one is to initialize the training several times with random weights. The other method is to use momentum. If the gradient descent algorithm reaches a local minimum, the momentum keeps the algorithm going further uphill for a while, until the descending starts again and hopefully a global minimum will be found instead. Momentum is described mathematically in equation \cref{eq:momentum}. 
-
+There are two alternatives to avoid being stuck in a local minimum. The first one is to initialize the training several times with random weights. The other method is to use momentum. If the gradient descent algorithm reaches a local minimum, the momentum keeps the algorithm going further uphill for a while, until the descending starts again and hopefully a global minimum will be found instead. Momentum is described mathematically in \cref{eq:momentum}. 
 \begin{equation}\label{eq:momentum}
 \begin{aligned}
 w_{ij} \longleftarrow w_{ij} - \eta\Delta_j z_i+\alpha\Delta w^{t-1}_{ij}
 \end{aligned}
 \end{equation}
-
 \subsection{Activation functions}
 The task of an activation function is to decide whether a neuron should \textit{"fire"} or not. In other words, the activation function takes a number and performs a mathematically operation on it. There exist several activations functions, all with different pros and cons. The ones being used in this thesis will be covered here.
 \subsubsection{The sigmoid function}
-The sigmoid function was a historically often used activation function. It is mathematically described with equation \cref{eq:sigmoid}.
+The sigmoid function was a historically often used activation function. It is mathematically described with \cref{eq:sigmoid}.
 \begin{equation}\label{eq:sigmoid}
 \begin{aligned}
 \sigma(x) = \frac{1}{(1 + e^{-x})}
 \end{aligned}
 \end{equation}
-
-The function transforms the input numbers into a range between 0-1 as shown in figure \cref{fig:sigmoid}. This means large negative numbers become 0, while large positive number become 1.
-
+The function transforms the input numbers into a range between 0-1 as shown in \cref{fig:sigmoid}. This means large negative numbers become 0, while large positive numbers become 1.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/sigmoid_function.png}
     \caption{Sigmoid activation function \cite{website:cs231n_activation_functions}}
     \label{fig:sigmoid}
 \end{figure}
-
-Nowadays the popularity of the the sigmoid function has decreased due to the following drawbacks:
+Today, the popularity of the the sigmoid function has decreased due to the following drawbacks:
 \begin{itemize}
     \item \textit{Vanishing gradients at values close to 0 or 1}
     \item \textit{The neurons can be saturated if the initial weights are too large}
@@ -377,8 +355,7 @@ f(x) = max(0,x)
 \end{cases}}
 \end{aligned}
 \end{equation}
-
-The ReLu function is described mathematically in two ways in this thesis, both being illustrated in equation \cref{eq:reLu} and equation \cref{eq:reLu_2} for a better understanding of the function.
+The ReLu function is described mathematically in two ways in this thesis, both being illustrated in \cref{eq:reLu} and \cref{eq:reLu_2} for a better understanding of the function.
 
 \begin{figure}[ht]
     \centering
@@ -386,8 +363,7 @@ The ReLu function is described mathematically in two ways in this thesis, both b
     \caption{Relu activation function \cite{website:cs231n_activation_functions}}
     \label{fig:relu}
 \end{figure}
-
-As illustrated in figure \cref{fig:relu} the ReLu activation is thresholded at zero. This makes ReLu a favored choice over the sigmoid/tanh functions. It is a less computational heavy method, because it does not have the exponential implementation. There is however one disadvantage using ReLu. The units can be fragile during training and as much as 40\% of the network may end up \textit{"dead"}. This can happen if a large gradient is flowing through the ReLu neuron. It may cause the neuron to update in such a way that the neuron never will activate on a data point again and end up \textit{"dead"}. With a proper learning rate (not too high), the problem tends to be avoided in most cases.
+As illustrated in \cref{fig:relu} the ReLu activation is thresholded at zero. This makes ReLu a favored choice over the sigmoid/tanh functions. It is a less computationally expensive method, because it does not have the exponential implementation. There is, however, one disadvantage using ReLu. The units can be fragile during training and as much as 40\% of the network may end up \textit{"dead"}. This can happen if a large gradient is flowing through the ReLu neuron. It may cause the neuron to update in such a way that the neuron never will activate on a data point again and end up \textit{"dead"}. With a proper learning rate (not too high), the problem tends to be avoided in most cases.
 
 \subsection{Loss and optimizers}
 The task of a loss function is to measure the distance between the predictions being made by the network and the actual ground truth. In this manner there can be computed a distance score, controlling how well the network did with its prediction \cite{Francois_Deep_learning_with_python}. This is illustrated in figure \cref{fig:loss_function}.
@@ -398,8 +374,7 @@ The task of a loss function is to measure the distance between the predictions b
     \caption{Loss function \cite{Francois_Deep_learning_with_python}}
     \label{fig:loss_function}
 \end{figure}
-
-The loss score computed by the loss function, is further being used as a feedback signal for adjusting the weights slightly. The weights are updated in a direction which lower the loss score, in order to make better future predictions. This is shown in figure \cref{fig:optimizers}. The job of adjusting the weights is executed by what is called an optimizer. The optimizer implements the backpropagation algorithm earlier described in this section \cite{Francois_Deep_learning_with_python}. 
+The loss score computed by the loss function, is further being used as a feedback signal for adjusting the weights slightly. The weights are updated in a direction which lower the loss score, in order to make better future predictions. This is shown in \cref{fig:optimizers}. The job of adjusting the weights is executed by what is called an optimizer. The optimizer implements the backpropagation algorithm earlier described in this section \cite{Francois_Deep_learning_with_python}. 
 
 \begin{figure}[H]
     \centering
@@ -410,7 +385,7 @@ The loss score computed by the loss function, is further being used as a feedbac
 
 
 \subsection{Regularization}
-To avoid the term overfitting (explained in page 95 \& 96 \cite{Francois_Deep_learning_with_python}), the implementation of regularization will be helpful. Regularization refers to regulating the weights, by constraining them to only accept small values. It is implemented by adding a \textit{cost} to the loss function if it has too large weights. The cost comes in two different forms:
+To avoid overfitting (explained in page 95 \& 96 \cite{Francois_Deep_learning_with_python}), the implementation of regularization will be helpful. Regularization refers to regulating the weights, by constraining them to only accept small values. It is implemented by adding a \textit{cost} to the loss function if it has too large weights. The cost comes in two different forms:
 
 \begin{itemize}
     \item \textit{\textbf{L1 regularization}}
@@ -425,16 +400,16 @@ Another popular regularization method is \textit{dropout}, developed by Hinton a
 A \ac{cnn} is a sub class of \ac{ann}. The main difference between a \ac{cnn} and an ordinary neural network is how the input is interpreted. In a \ac{cnn} the inputs is assumed to be images. 
 \newline
 \newline
-Unlike a \ac{cnn}, an ordinary neural network with fully connected layers will keep all parameters connected from the input until the output. The \ac{cnn} with the use of convolutions, are able to reduce the numbers of parameters vastly from each layer while keeping the key features. This difference makes \ac{cnn} a much better tool for processing images, as images contains more parameters compared to most other form of inputs. 
+Unlike a \ac{cnn}, an ordinary neural network with fully connected layers will keep all parameters connected from the input until the output. The \ac{cnn}, with the use of convolutions, is able to reduce the numbers of parameters vastly from each layer while keeping the key features. This difference makes \ac{cnn} a better tool for processing images, as images often contains a huge amount of parameters. 
 \newline
 \newline
-The following example will demonstrate why it is necessary to reduce the parameters when processing images. Imagine an ordinary neural network with an image (width, height, depth) as an input. The size of the input is (200 x 200 x 3). This means the number of weights will become $224 * 224 * 3 = 150528$ weights. Adding more similar neurons, will escalate the number of parameters considerably, which then will result in an unnecessary overfitting and a poorly network.
+The following example will demonstrate why it is necessary to reduce the parameters when processing images. Imagine an ordinary neural network with an image (width, height, depth) as an input. If the size of the input is (224x224x3) this means the number of weights will become $224 * 224 * 3 = 150528$ weights. Adding more similar neurons will escalate the number of parameters considerably, which then will result in an unnecessary overfitting and a poor network.
 \newline
 \newline
-The characteristics of a \ac{cnn} is described below, providing a general understanding how the parameters are being reduced and its unique features.
+The characteristics of a \ac{cnn} is described below, providing a general understanding how the parameters are reduced and \acp{cnn} unique features.
+
 \subsubsection{Convolutional Layer}
-Being the core building block of a \ac{cnn}, the convolutional layer does mostly of the computational heavy work necessary for the network to perform well. 
-It is build up by learnable filters which slides through the whole input image bit by bit. Equation \cref{eq:conv} illustrates the general expression of a 1D convolution. Where $\omega$ is the filter being convolved with the input $f(x,y)$, providing the output $g(x,y)$. 
+Being the core building block of a \ac{cnn}, the convolutional layer does most of the computationally expensive work necessary for the network to perform well. It consists of learnable filters, which slides through the whole input image bit by bit. \Cref{eq:conv} illustrates the general expression of a 1D convolution. Where $\omega$ is the filter being convolved with the input $f(x,y)$, providing the output $g(x,y)$. 
 
 \begin{equation}\label{eq:conv}
 \begin{aligned}
@@ -448,8 +423,7 @@ g(x,y) = \omega * f(x,y) = \sum_{s=-a}^{a}\sum_{t=-b}^{b}\omega(s,t)f(x-s,y-t)
     \caption{3D Convolution step by step \cite{website:cs231n}}
     \label{fig:conv}
 \end{figure}
-
-To understand the process even better, the Stanford course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"} has provided a intuitive visual model showing a 3D convolution explicitly in figure \cref{fig:conv}. This illustration consists of following parameters and configurations:
+To understand the process even better, the Stanford course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"} has provided an intuitive visual model showing a 3D convolution explicitly in \cref{fig:conv}. This illustration consists of following parameters and configurations:
 
 \begin{itemize}
     \item \textit{Input volume = (7x7x3)}
@@ -459,9 +433,8 @@ To understand the process even better, the Stanford course \textit{"CS231n: Conv
     \item \textit{Two biases = (1x1x1)}
     \item \textit{Output volume = (3x3x2)}
 \end{itemize}
-
-Where the first weight filter $W0$ is sliding over each part of the input in its three channels. This gives the output volume O[:,:,0], while the convolving of weight filter $W1$ provides O[:,:,1]. The stride is set equal to two, which means the filter can slide in three positions both in $x$- and $y$-direction. This operation makes the output dimension into width and height equals to 3. The last dimension in the output volume is set by the amount of filters ($W0$ and $W1$) convolving over the input volume. The amount of chosen filters is a hyperparameter and decides the depth of the output. In this example there is two filters, which means the final output volume becomes (3x3x2). 
-The implementation of zero padding helps us to control the spatial size of the output. It is also a hyperparameter and in this example it is set equal to one, which gives us the pad (marked in grey in figure \cref{fig:conv}) around the input volume filled with zeros. 
+Where the first weight filter $W_0$ is sliding over each part of the input in its three channels. This gives the output volume O[:,:,0], while the convolving of weight filter $W_1$ provides O[:,:,1]. The stride is set equal to two, which means the filter can slide in three positions both in $x$- and $y$-direction. This operation makes the output dimension into width and height equals to 3. The last dimension in the output volume is set by the amount of filters ($W_0$ and $W_1$) convolving over the input volume. The amount of chosen filters is a hyperparameter and decides the depth of the output. In this example there are two filters, which means the final output volume becomes (3x3x2). 
+The implementation of zero padding helps us to control the spatial size of the output. It is also a hyperparameter, and in this example it is set equal to one, which gives us the pad (marked in grey in \cref{fig:conv}) around the input volume filled with zeros. 
 \newline
 \newline
 The equation to compute the spatial size of the output volume is illustrated in \cref{eq:output_conv}
@@ -471,17 +444,22 @@ The equation to compute the spatial size of the output volume is illustrated in 
 O = \frac{(W - F + 2P)}{S}+1
 \end{aligned}
 \end{equation}
-
 Where $O$ is the output volume. $W$ is the input volume, $F$ is the receptive field (the weight filter), $P$ being the amount of zero padding, and $S$ for the number of strides.
  
 \subsubsection{Parameter sharing and local connectivity}
-In contrary to ordinary neural networks, \ac{cnn} have neurons set up in three dimension. Width, height and depth. These neurons may have various levels of connectivity between the layers. The two concepts controlling and reducing the amount of connections between the neurons is called parameter sharing and local connectivity. As earlier described one of the main reason for the \ac{cnn} to out perform ordinary neural networks (when processing images), is its properties to reduce the amount of parameters while keeping key features. 
+In contrary to ordinary neural networks, \acp{cnn} have neurons set up in three dimensions:
+\begin{itemize}
+    \item \textit{Width}
+    \item \textit{Height}
+    \item \textit{Depth}
+\end{itemize}
+These neurons may have various levels of connectivity between the layers. The two concepts controlling and reducing the amount of connections between the neurons are called parameter sharing and local connectivity. As earlier described, one of the main reason for the \acp{cnn} to out perform ordinary neural networks (when processing images), are their properties to reduce the amount of parameters while keeping key features. 
 \newline
 \newline
-Parameter sharing means to share some weights and biases in order to control the number of parameters. This can be done with taking the assumption that if a feature is useful to calculate at a specific spatial location ($x_1$,$y_1$), it should be useful to compute it at a different location ($x_2$,$y_2$) as well. In practices that means constraining the neurons in each depth dimension to use same weights and bias. parameter sharing will greatly reduce the amount of total weights, and is an important contribute to make an efficient \ac{cnn}. 
+Parameter sharing means to share some weights and biases in order to control the number of parameters. This can be done by assuming that if a feature is useful to calculate at a specific spatial location ($x_1$,$y_1$), it should be useful to compute it at a different location ($x_2$,$y_2$) as well. In practice that means constraining the neurons in each depth dimension to use the same weights and bias. Parameter sharing will greatly reduce the amount of total weights, and is an important contribute to make an efficient \ac{cnn}. 
 \newline
 \newline
-Local connectivity connects each neuron only to a small region of the previous layers input. Unlike connecting the neurons to all the neurons from the previous layer as done in ordinary neural networks.
+Local connectivity connects each neuron only to a small region of the previous layers input, unlike connecting the neurons to all the neurons from the previous layer as done in ordinary neural networks.
 This small region is a hyperparameter, and is called the receptive field of the neuron. It is the same as the weight filter from the example above. The depth slice in the weight filter is always the same as the depth slice from the previous layers input. This means that we have local connections along width and height, and full connection along the depth of the input layer.
 
 \subsection{Pooling layer}
@@ -494,10 +472,10 @@ Another method to reduce parameters is to add a max pool layer. Similarly to the
     \label{fig:max_pooling}
 \end{figure}
 
-But as seen in figure \cref{fig:max_pooling}, the filter takes the max value in each frame instead of convolving through the input like the convolution layer does. The most common values in the max pooling layer is $F=$2 or 3, and $S=2$. Increasing those values will result in a destructive layer. It is a common practice to implement a max pool layer periodically between convolutional layers.
+But as seen in \cref{fig:max_pooling}, the filter takes the max value in each frame instead of convolving through the input like the convolution layer does. The most common values in the max pooling layer are $F=$2 or 3, and $S=2$. Increasing these values will result in a destructive layer. It is a common practice to implement a max pool layer periodically between convolutional layers.
 
 \section{Generating the ground truth labels}
-There exist several good programs for generating labels for datasets. All with different pros and cons. The one being used for this thesis is a free program which offer offline annotation. It is called \textit{"labelme"}, and it can be installed directly from GitHub \cite{website:labelme}. The program is easy to learn and contains annotation examples in the GitHub folder. \textit{Labelme} has a clean programmed \ac{gui} regarding the working space, which is illustrated in figure \cref{fig:annotate}. 
+There exist several good programs for generating labels for datasets, all with different benefits and shortcomings. The program used in this thesis is a free program, which offer offline annotation. It is called \textit{"labelme"}, and it can be installed directly from GitHub \cite{website:labelme}. The program is easy to learn and contains annotation examples in the GitHub folder. \textit{Labelme} has a clean programmed \ac{gui} regarding the working space, which is illustrated in \cref{fig:annotate}. 
 
 \begin{figure}[ht]
 \centering
@@ -514,10 +492,11 @@ There exist several good programs for generating labels for datasets. All with d
 \caption{Road annotation}
 \end{figure}
 
-When the polygon is finished being drawn, another script is run, and the complete annotation ends up like in figure \cref{fig:finished_annotation}.  
+When the polygon is drawn, another script is run, and the complete annotation ends up like in \cref{fig:finished_annotation}.  
 
 
 \section{Transfer learning}
+Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem because it may transfer essential knowledge from for example a professional made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
 
 \chapter{Related works}
 \section{U-net}
@@ -542,7 +521,7 @@ $ labelme <input_file.png> -O <output_file.json>
 $ labelme_json_to_dataset <input_file.json> -o <output_folder>
 \end{minted}
 
-When the first line is executed, the \ac{gui} for \textit{labelme} shows up in an external window. From there it is possible to start drawing the annotation by pressing the \textit{"Create Polygons"}. Figure \cref{fig:polygon} illustrates a finished drawn polygon. After the polygons are drawn and the save button is pressed, the second line is ready to be executed. This command will take all the polygon positions saved in the \textit{.json} file and convert the ground truth into the final \textit{.png} format. The second command will also make a directory which consist of the original image, the ground truth superimposed on the original image, and the ground truth image. 
+When the first line is executed, the \ac{gui} for \textit{labelme} shows up in an external window. From there it is possible to start drawing the annotation by pressing the \textit{"Create Polygons"}. \Cref{fig:polygon} illustrates a finished drawn polygon. After the polygons are drawn and the save button is pressed, the second line is ready to be executed. This command will take all the polygon positions saved in the \textit{.json} file and convert the ground truth into the final \textit{.png} format. The second command will also make a directory which consist of the original image, the ground truth superimposed on the original image, and the ground truth image. 
 
 \begin{figure}[ht]
 \begin{subfigure}{.6\textwidth}
@@ -577,7 +556,7 @@ When the first line is executed, the \ac{gui} for \textit{labelme} shows up in a
 The finished ground truth image consists of two classes. Where class 0 is assigned to the background, and class 1 to the road. The program \textit{labelme} was chosen due to its quick setup, its possibility to annotate data offline, and a clean \ac{gui} making it easy to draw polygons. 
  
 \subsection{Structuring the dataset}
-The next step after the ground truths is finished is to structure all the data. The dataset needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in figure \cref{fig:dataset_structure}.
+The next step after the ground truths is finished is to structure all the data. The dataset needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in \cref{fig:dataset_structure}.
 
 \begin{figure}[ht]
     \centering
@@ -654,7 +633,7 @@ The last layer is the output layer containing sigmoid activation. It has the sha
 \newline
 The sequential network is included as the baseline in the thesis. It is done in order to benchmark it against the state-of-the-art implementation of the residual network (U-Net). In that way it will be possible to compare the differences between a basic sequential- and a state-of-the-art residual-network, trained on the same data.
 \subsubsection{Loss}
-There are simple guidelines which can be used for choosing the right loss. If there is a two-class classification problem, a loss called \textit{"binary\_crossentropy"} will be a natural choice \cite{Francois_Deep_learning_with_python}. This is therefore the loss used in the sequential network, and it is described mathematically in the equation \cref{eq:binary_cross_entropy}.
+There are simple guidelines which can be used for choosing the right loss. If there is a two-class classification problem, a loss called \textit{"binary\_crossentropy"} will be a natural choice \cite{Francois_Deep_learning_with_python}. This is therefore the loss used in the sequential network, and it is described mathematically in the \cref{eq:binary_cross_entropy}.
 
 \begin{equation}\label{eq:sigmoid_function_4}
 \begin{aligned}
@@ -668,7 +647,7 @@ L_{BCE} = -\sum_{i=1}^{C=2}t_{i} log (f(s_{i})) = -t_{1} log(f(s_{1})) - (1 - t_
 \end{aligned}
 \end{equation}
 
-Where $BCE$ is short for binary cross entropy. $C_i$ is the classes, $t_i$ and $s_i$ is the target and the score respectively. The score goes first through an sigmoid activation described in equation \cref{eq:sigmoid_function_4}, before the loss is further computed with a cross-entropy loss.
+Where $BCE$ is short for binary cross entropy. $C_i$ is the classes, $t_i$ and $s_i$ is the target and the score respectively. The score goes first through an sigmoid activation described in \cref{eq:sigmoid_function_4}, before the loss is further computed with a cross-entropy loss.
 
 \subsection{The residual network}
 The residual network in this thesis is loosely based on the state-of-the-art U-Net, which is further described in the paper \cite{RFB15a_u-net}. The actual implementation is as stated in the code, based on a tutorial from Kjetil Åmdal-Sævik \cite{website:u-net_implementation}, and is illustrated in the following code snippet. 
@@ -773,7 +752,7 @@ When testing the performance in the residual network, it proved to be able to pr
     \label{fig:layers_features}
 \end{figure}
 
-An important difference between the sequential and the residual network, its the residual networks capability to provide skipping connections. These skipping connections transfers information from each downsampling layer, directly to its upsampling layer respectively, as illustrated with the gray arrows in figure \cref{fig:u_net_method_chapter}. The upsampling layers concatenates its existing information with the information from the skipping connections. As seen in figure \cref{fig:layers_features}, each layer in a \ac{cnn} extracts different types of features. When the U-Net architecture concatenates the local information provided from the skipping connections, with the global information from the upsampling layers; this results in an improved and efficient feature extraction.  
+An important difference between the sequential and the residual network, its the residual networks capability to provide skipping connections. These skipping connections transfers information from each downsampling layer, directly to its upsampling layer respectively, as illustrated with the gray arrows in \cref{fig:u_net_method_chapter}. The upsampling layers concatenates its existing information with the information from the skipping connections. As seen in \cref{fig:layers_features}, each layer in a \ac{cnn} extracts different types of features. When the U-Net architecture concatenates the local information provided from the skipping connections, with the global information from the upsampling layers; this results in an improved and efficient feature extraction.  
 
 \subsection{Transfer learning}
 Before the transfer learning can start, the network needs to train on a dataset and save the weights respectively. This is done by training on the \textit{Freiburg Forest dataset} \cite{freiburg_dataset_valada16iser}. When the training is finished the weights are saved and the fine-tuning can begin after one last step. The last step is to change the training set to the original dataset used in this thesis.
@@ -803,15 +782,14 @@ A handy way to gain control over the training, in order to tweak parameters and 
     \label{fig:tensorboard_anaconda_prompt}
 \end{figure}
 \newline
-As illustrated in figure \cref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the following command: 
+As illustrated in \cref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the following command: 
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
 tensorboard --logdir=<log> 
 \end{minted}
-
 Where all you need to enter is the address to the log folder the algorithm provides. 
 \newline
-When using Tensorboard with Keras, there is necessary to use callbacks in the code. As stated by the Keras documentation on their website:
+When using Tensorboard with Keras, there is necessary to use \textit{callbacks} in the code. As stated by the Keras documentation on their website:
 \newline
 \newline
 \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. 
@@ -825,15 +803,15 @@ Using callbacks it is possible to decide which information/process to include an
     \label{fig:accuracy_loss}
 \end{figure}
 \newline
-Two popular graphs used to check the quality of the \ac{dl} model is \textit{"accuracy"} and \textit{"loss"}, which are found under the section \textit{"SCALARS"}. 
+Two standard graphs used to check the quality of the \ac{dl} model is \textit{"accuracy"} and \textit{"loss"}, which are found under the tab \textit{"SCALARS"}. 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\textwidth]{bilder/overfitting_underfitting.png}
     \caption{Underfitting, perfect sampling and overfitting \cite{website:overfitting_underfitting}}
     \label{fig:overfitting_underfitting}
 \end{figure}
-To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{"overfitting"} or \textit{"underfitting"}, and if the accuracy in the model is fulfilling user expectations. Examples of underfitting from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in figure \cref{fig:overfitting_underfitting}. As seen in figure \cref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
-By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{"overfitting"} nor \textit{"underfitting"} in the model.
+To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{overfitting} or \textit{underfitting}, and if the accuracy in the model is fulfilling user expectations. Examples of \textit{underfitting} from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in \cref{fig:overfitting_underfitting}. As seen in \cref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
+By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{overfitting} nor \textit{underfitting} in the model.
 
 \begin{figure}[H]
     \centering
@@ -841,7 +819,7 @@ By observing that the loss function steadily decreases into a smooth curve indic
     \caption{The sequential network architecture visualized in Tensorboard}
     \label{fig:graph}
 \end{figure}
-Another section in Tensorboard called \textit{"GRAPHS"} shows the networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a better perspective. There is possible to rename each layer in the model according to the user's own request. 
+Another tab in Tensorboard called \textit{"GRAPHS"} shows the current networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a visualized perspective. There is possible to rename each layer in the model according to the user's own request. 
 \section{Predictions}
 A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of features several techniques from computer vision can be applied. 
 \subsection{Thresholding}
@@ -861,15 +839,20 @@ np.zeros_like(prediction))
 \end{cases}}
 \end{aligned}
 \end{equation}
-What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in equation \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.  
+
+What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.  
 \subsection{Connected component analysis}
 The next operation used in order to remove larger sections of noise predicted in the image is called connected component analysis. When implemented in this thesis it removes all sections in the images which contains less than 5000 pixels. This means in the most cases that all of the remaining noise in the image will be removed. The connected component analysis has one disadvantage. Which is when the road predicted is less than the threshold value of 5000 pixels. Then the whole prediction will consists of only background. This only happens in a very limited amount of the images.
 \subsection{Binary hole filling}
-The last computer vision technique used in this thesis is to fill all the holes in the remaining predicted road. It is done by the following line of code:
+The last computer vision technique used in this thesis is to fill all the holes in the remaining predicted road. That operation is simply done by the following line of code:
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
-prediction = ndi.binary_fill_holes(prediction)
+predictions = scipy.ndimage.morphology.binary_fill_holes(predictions)
 \end{minted}
 
+The operation is described in the Scipy-documentation and reads as follows:
+\newline
+\newline
+\textit{"The algorithm used in this function consists in invading the complementary of the shapes in input from the outer boundary of the image, using binary dilations. Holes are not connected to the boundary and are therefore not invaded. The result is the complementary subset of the invaded region." \cite{website:scipy}.} 
 
 \chapter{Results}                     
 
