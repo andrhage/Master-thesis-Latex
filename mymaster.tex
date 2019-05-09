@@ -26,7 +26,6 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 
-
 \graphicspath{ {Images/} } 
 %\setlength{\parskip}{1em}
 %\setlength{\parindent}{0em}
@@ -193,7 +192,7 @@ Where height and width refers to the x- and y-coordinates in the image, and chan
 \subsection{Data augmentation}
 Data augmentation is a helpful tool in order to maintain a more generalized model. It is a method for applying transformations to the training data. When the images are pre-processed with the methods described in this section, the network learns how to cope with slightly different images than the original training set. This is the reason the model have a higher chance of predicting the test images (images that the model never have seen before) with more accuracy. In addition to potentially higher accuracy, the model also has lower risk of overfitting. This sub-section will only cover the most used augmentation techniques.  
 \subsubsection{Random cropping}
-A popular method in augmentation is random cropping. Random cropping is sampling a random chosen square box from the original image, and then resize to the original size.
+A popular method in data augmentation is random cropping. Random cropping is sampling a random chosen square box from the original image, and then resize to the original size.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/random_cropping.png}
@@ -496,7 +495,7 @@ When the polygon is drawn, another script is run, and the complete annotation en
 
 
 \section{Transfer learning}
-Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem because it may transfer essential knowledge from for example a professional made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
+Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem the network was designed for, because it may transfer essential knowledge from for example a professional made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
 
 \chapter{Related works}
 \section{U-net}
@@ -504,7 +503,7 @@ Transfer learning applies already learned knowledge from saved weights and appli
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/u_net.png}
-    \caption{The structure from the U-Net \cite{website:u_net}}
+    \caption{The structure of the U-Net \cite{website:u_net}}
     \label{fig:u_net}
 \end{figure}
 
@@ -512,7 +511,7 @@ Transfer learning applies already learned knowledge from saved weights and appli
 
 \chapter{Method}
 \section{Implementation}
-This chapter will cover the implementation of the program in the thesis and reasoning the choices of methods. It will initially describe how the ground truth is made. Then cover which framework is used, before describing the the structure of the training-, validation- and test-set. Both implementations of \ac{cnn} will be described, with pros and cons. Further will the advantage of using Tensorboard be discussed. And lastly, this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise.
+This chapter will cover the implementation of the program in the thesis and discuss the choices of methods. It will initially describe how the ground truth is made. Then cover which framework is used, before describing both implementations of \ac{cnn}, with pros and cons. Furthermore the advantage of using Tensorboard will be discussed. The mid section in this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise. The last part of this section will cover the experiments done in this thesis, in the form of describing the structure of the datasets and the training configuration.
 \subsection{Annotation the training set}
 Before the work with the network can start, there must exist a prepared dataset. As supervised learning is the used method, some of the images needs a ground truth in order for the algorithm to maintain a reliable loss function. Only 10\% of the images are manually annotated. This is due to the intention of this thesis to automatically predict as many ground truths with as little manually annotated images as possible. The images picked out for manual annotation starts from image number 1 in the dataset, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
 
@@ -555,30 +554,8 @@ When the first line is executed, the \ac{gui} for \textit{labelme} shows up in a
 
 The finished ground truth image consists of two classes. Where class 0 is assigned to the background, and class 1 to the road. The program \textit{labelme} was chosen due to its quick setup, its possibility to annotate data offline, and a clean \ac{gui} making it easy to draw polygons. 
  
-\subsection{Structuring the dataset}
-The next step after the ground truths is finished is to structure all the data. The dataset needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in \cref{fig:dataset_structure}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.4\textwidth]{bilder/dataset_structure.PNG}
-    \caption{This thesis dataset structure}
-    \label{fig:dataset_structure}
-\end{figure}
-
-Note that the only images containing ground truths is the training images. Optimally all the images included in the dataset would have ground truths. In that way the algorithm can be able to measure accuracy and loss in predictions both during training and testing. The reason why the ground truth's only are included in the training set is as earlier described due to the high cost of manually label a image. To check how good the predictions provided by the network are, this can only be done visually by comparing the road predictions to where the road actually is in the original image.
-\newline
-\newline
-The training directory is further split into following list variables:
-\begin{itemize}
-    \item \textit{x\_train}
-    \item \textit{y\_train}
-    \item \textit{x\_val}
-    \item \textit{y\_val}
-\end{itemize}
-Where \textit{x\_train} and \textit{y\_train} refers to the training images and its ground truth's respectively. \textit{x\_val} refers to validation images, and \textit{y\_val} is the ground truth's for the validation images. The network will only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation- and test-set should on a generally basis be data that the network never has seen before. As described in the section above, only a few of the images were manually annotated. This means the dataset only has a small number of images to train on. Hence, the percentage of images split into the validation-set is put to 10\%. Optimally should this number be higher, but being able to train on most available images got a higher priority.
-
 \subsection{Keras}
-\textit{Keras} is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy implementation. \textit{Keras} has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that \textit{Keras} can run with the same code seamlessly on \ac{cpu} or \ac{gpu} \cite{Francois_Deep_learning_with_python}. Both implementations of \ac{cnn} in this thesis is done in \textit{Keras}, and became the chosen framework due to its easy implementation of networks and powerful tools.
+\textit{Keras} is a user-friendly \ac{dl} library developed in Python. It was originally made for researchers as way to do quick experimentation, with an easy to use implementation. \textit{Keras} has quickly gained popularity among its users and is one of the most popular framework in \ac{dl} projects nowadays. The main reasons for the popularity is the user-friendliness and that \textit{Keras} can run with the same code seamlessly on \ac{cpu} or \ac{gpu} \cite{Francois_Deep_learning_with_python}. Both implementations of \ac{cnn} in this thesis is done in \textit{Keras}, and became the chosen framework due to its easy implementation of networks and powerful tools.
 
 \subsection{The sequential network}
 The sequential network implemented is made as a basic \ac{fcn}. This means the network is composed without using any fully connected layers at all. The \ac{fcn} has therefore learning filters placed everywhere, even in the decision making layers at the end of the network. This will save computation time and reduce the number of parameters compared to using fully connected dense layers.
@@ -635,15 +612,15 @@ The sequential network is included as the baseline in the thesis. It is done in 
 \subsubsection{Loss}
 There are simple guidelines which can be used for choosing the right loss. If there is a two-class classification problem, a loss called \textit{"binary\_crossentropy"} will be a natural choice \cite{Francois_Deep_learning_with_python}. This is therefore the loss used in the sequential network, and it is described mathematically in the \cref{eq:binary_cross_entropy}.
 
-\begin{equation}\label{eq:sigmoid_function_4}
-\begin{aligned}
-f(s_i)= \frac{1}{1 + e^{s_i}}
-\end{aligned}
-\end{equation}
-
 \begin{equation}\label{eq:binary_cross_entropy}
 \begin{aligned}
 L_{BCE} = -\sum_{i=1}^{C=2}t_{i} log (f(s_{i})) = -t_{1} log(f(s_{1})) - (1 - t_{1}) log(1 - f(s_{1}))
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:sigmoid_function_4}
+\begin{aligned}
+f(s_i)= \frac{1}{1 + e^{s_i}}
 \end{aligned}
 \end{equation}
 
@@ -755,7 +732,10 @@ When testing the performance in the residual network, it proved to be able to pr
 An important difference between the sequential and the residual network, its the residual networks capability to provide skipping connections. These skipping connections transfers information from each downsampling layer, directly to its upsampling layer respectively, as illustrated with the gray arrows in \cref{fig:u_net_method_chapter}. The upsampling layers concatenates its existing information with the information from the skipping connections. As seen in \cref{fig:layers_features}, each layer in a \ac{cnn} extracts different types of features. When the U-Net architecture concatenates the local information provided from the skipping connections, with the global information from the upsampling layers; this results in an improved and efficient feature extraction.  
 
 \subsection{Transfer learning}
-Before the transfer learning can start, the network needs to train on a dataset and save the weights respectively. This is done by training on the \textit{Freiburg Forest dataset} \cite{freiburg_dataset_valada16iser}. When the training is finished the weights are saved and the fine-tuning can begin after one last step. The last step is to change the training set to the original dataset used in this thesis.
+Before the transfer learning can start, the network needs to train on a dataset and save the weights respectively. This is done by training on the \textit{Freiburg Forest} dataset \cite{freiburg_dataset_valada16iser}. The \textit{Freiburg Forest} dataset is developed in the University of Freiburg in Germany. It consists of images from off-road environments taken from the Black Forest area in Schwarzwald. The reason why this dataset is such a interesting choice to use, is its similarities to the custom made datasets used in this thesis. The custom made datasets does also have images from an off-road scene.
+\newline
+\newline
+When the training is finished the weights are saved and the fine-tuning can begin after one last step. The last step is to change the training set to the original dataset used in this thesis.
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
 # Transfer learning
@@ -771,7 +751,7 @@ shuffle=True, validation_data=(x_val, y_val),
 callbacks=callbacks_model_res)
 \end{minted}
 
-As seen in the code snippet above, the model retrieves the saved weights from the training with the \textit{Freiburg Forest dataset} in line three. From there it freezes all the layers up to layer 32, which means when the training starts again the weights from those layers will not change. Then the network starts training with the original dataset in line eight. Since all the layers up to layer 32 are frozen, only the last layer will change its weights during this training. This is called fine-tuning. 
+As seen in the code snippet above, the model retrieves the saved weights from the training with the \textit{Freiburg Forest} dataset in line three. From there it freezes all the layers up to layer 32, which means when the training starts again the weights from those layers will not change. Then the network starts training with the original dataset in line eight. Since all the layers up to layer 32 are frozen, only the last layer will change its weights during this training. This is called fine-tuning. 
 
 \subsection{Tensorboard}
 A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is to use Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
@@ -789,7 +769,7 @@ tensorboard --logdir=<log>
 \end{minted}
 Where all you need to enter is the address to the log folder the algorithm provides. 
 \newline
-When using Tensorboard with Keras, there is necessary to use \textit{callbacks} in the code. As stated by the Keras documentation on their website:
+When using Tensorboard with Keras, it is necessary to use \textit{callbacks} in the code. As stated by the Keras documentation on their website:
 \newline
 \newline
 \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. 
@@ -810,7 +790,7 @@ Two standard graphs used to check the quality of the \ac{dl} model is \textit{"a
     \caption{Underfitting, perfect sampling and overfitting \cite{website:overfitting_underfitting}}
     \label{fig:overfitting_underfitting}
 \end{figure}
-To have the opportunity to visually see these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{overfitting} or \textit{underfitting}, and if the accuracy in the model is fulfilling user expectations. Examples of \textit{underfitting} from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in \cref{fig:overfitting_underfitting}. As seen in \cref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
+To have the opportunity to visualize these graphs during training, is an advantage. This is due to the possibility of easily spotting errors like \textit{overfitting} or \textit{underfitting}, and if the accuracy in the model is fulfilling user expectations. Examples of \textit{underfitting} from the left image, perfect sampling in the middle and overfitting in the right image, can be seen in \cref{fig:overfitting_underfitting}. As seen in \cref{fig:accuracy_loss} the accuracy and loss in both training and validation fulfil expectations. 
 By observing that the loss function steadily decreases into a smooth curve indicates that there is neither \textit{overfitting} nor \textit{underfitting} in the model.
 
 \begin{figure}[H]
@@ -819,11 +799,11 @@ By observing that the loss function steadily decreases into a smooth curve indic
     \caption{The sequential network architecture visualized in Tensorboard}
     \label{fig:graph}
 \end{figure}
-Another tab in Tensorboard called \textit{"GRAPHS"} shows the current networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a visualized perspective. There is possible to rename each layer in the model according to the user's own request. 
+Another tab in Tensorboard called \textit{"GRAPHS"} shows the current networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a visualized perspective. There is possible to rename each layer in the model according to the user's own preference. 
 \section{Predictions}
-A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of features several techniques from computer vision can be applied. 
+A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of artifacts several techniques from computer vision can be applied. 
 \subsection{Thresholding}
-The first tool used for removing uncertain predicted pixels in the image is thresholding. When the networks predicts pixel values, this happens in the range between 0-1. The thresholding will convert that fuzzy logic to values which are either 0 or 1. Where class 0 is background and class 1 is road.
+The first tool used is called thresholding. It removed the predicted pixels in the image which has a value below the given threshold. When the networks predicts pixel values, this happens in the range between 0-1. The thresholding will convert that fuzzy logic to values which are either 0 or 1. Where class 0 is background and class 1 is road.
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
 # Filter out values with less certainty than 65 %
 prediction = np.where(prediction > 0.65, np.ones_like(prediction), 
@@ -842,7 +822,7 @@ np.zeros_like(prediction))
 
 What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.  
 \subsection{Connected component analysis}
-The next operation used in order to remove larger sections of noise predicted in the image is called connected component analysis. When implemented in this thesis it removes all sections in the images which contains less than 5000 pixels. This means in the most cases that all of the remaining noise in the image will be removed. The connected component analysis has one disadvantage. Which is when the road predicted is less than the threshold value of 5000 pixels. Then the whole prediction will consists of only background. This only happens in a very limited amount of the images.
+The next operation used in order to remove larger sections of noise predicted in the image is called connected component analysis. When implemented in this thesis it removes all sections in the images which contains less than 5000 pixels. This means in the most cases that all of the remaining noise in the image will be removed. The connected component analysis has one disadvantage which is when the road predicted is less than the threshold value of 5000 pixels. Then the whole prediction will consists of only background. This only happens in a very limited amount of the images. The reason for setting the pixel threshold to 5000 became clear after testing different values. Lower values did not remove all the noise in the image, while much larger values could remove the correct predicted road. 
 \subsection{Binary hole filling}
 The last computer vision technique used in this thesis is to fill all the holes in the remaining predicted road. That operation is simply done by the following line of code:
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
@@ -854,13 +834,367 @@ The operation is described in the Scipy-documentation and reads as follows:
 \newline
 \textit{"The algorithm used in this function consists in invading the complementary of the shapes in input from the outer boundary of the image, using binary dilations. Holes are not connected to the boundary and are therefore not invaded. The result is the complementary subset of the invaded region." \cite{website:scipy}.} 
 
-\chapter{Results}                     
+\section{Experiments}
+This last part of the method chapter will cover the experiments done in this thesis. In the form of describing the structure of the datasets, and the choices made regarding choosing the number of images in the train-, test- and validation sets. Further this last part of the section will go through the training configurations chosen during training.  
+\subsection{Datasets}
+This thesis uses three datasets. The first is the professional \textit{Freiburg Forest} dataset briefly described above. This dataset consists of several classes. Since this thesis want to investigate a two class problem containing road and background, the classes other than road will be masked as background. The second dataset is named Custom 1, and the last is named Custom 2. The dataset structure is illustrated in \cref{table:dataset}. In the table it is possible to see explicitly the numbers of images in each directory. As the \textit{Freiburg Forest} dataset is a professionally made dataset, one can notice the amount of training images is significantly higher than in both the custom made datasets. This means there is a higher probability that the \textit{Freiburg Forest} dataset will provide a more generalized network than with any of the two custom made datasets, even though the residual network is known to provide good results with few training samples \cite{website:u_net_article}. As discussed earlier , this thesis investigates if there is possible to retrieve many automatically annotations from few training samples. The experimentation will consist of using the more generalized features gained from the \textit{Freiburg Forest} dataset combined with the U-Net implementation. This is done in order to hopefully retrieve a certain percentage of automatically made annotations, with a decent accuracy. The process is partly described above in the transfer learning section in this chapter.
+\begin{table}[ht]
+\centering
+\begin{tabular}{lllll}
+\hline
+\textbf{Dataset} & \textbf{Training-}  & \textbf{Testing-}  & \textbf{Validation-images} \\ \hline
+Freiburg Forest dataset & \quad 207  & \quad 136  & \quad 23   \\ 
+Custom 1 dataset  & \quad 40  & \quad 394  & \quad 5   \\
+Custom 2 dataset  & \quad 147  & \quad 1472 + 404  & \quad 17    \\\hline
+\end{tabular}
+\caption{Dataset structures}
+\label{table:dataset}
+\end{table}
+
+To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. 
+\newline
+\newline
+The Custom 1 dataset is an off-road dataset contains 439 images. The scene consists of similar images as the one illustrated in \cref{fig:awesome_image2}. The 45 manually annotated training- and validation images are chosen as every 10'th image ranging from start to end in the dataset. This means that small fractions from the full sequence may be included in the training set. This way of choosing training images is not a normal method in \ac{dl}, but is used since the goal of this thesis is to mostly predict highly correlated data. The cost of choosing training data like this may reduce some of the network's generalization capability. The hypothesis is that since the data is very correlated, the network will still be able to predict the test images with satisfactorily high accuracy. 
+\newline
+\newline
+The last dataset used in the thesis is Custom 2. This dataset consists of 2040 images in total. It contains 164 manually annotated training- and validation images which are chosen every 10'th image ranging from start until number 1630 in the dataset. An example image from Custom 2 is illustrated in \cref{fig:awesome_image3}. The difference from Custom 1 a part from having a slightly different type of scene, consists of a second test set containing 404 images. This test set is taken from the last sequence in the dataset and nothing of its sequence has been included in either the training or the validation set. This is done in order to check if the network is able to generalize well on completely new unseen data, which in theory should be completely uncorrelated from the images in the training set.
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{bilder/freiburg.png}
+  \caption{An image from the \textit{Freiburg Forest} dataset}\label{fig:awesome_image1}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{bilder/custom_1.png}
+  \caption{An image from the Custom 1 dataset}\label{fig:awesome_image2}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{bilder/custom_2.png}
+  \caption{An image from the Custom 2 dataset}\label{fig:awesome_image3}
+\endminipage
+\end{figure}
+
+The datasets needs to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in \cref{fig:dataset_structure}. This structure is equal for all three datasets used in this thesis with one exception. The \textit{Freiburg Forest} dataset does also include ground truth images for the test set.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\textwidth]{bilder/dataset_structure.PNG}
+    \caption{This thesis dataset structure}
+    \label{fig:dataset_structure}
+\end{figure}
+
+Note that from both custom made datasets, the only images containing ground truths is the training images. Optimally all the images included in these datasets would have ground truths. In that way the algorithm can be able to measure accuracy and loss in predictions both during training and testing. The reason why the ground truth's only are included in the training set for both custom datasets is as earlier described due to the high cost of manually label a image. To check how good the predictions provided by the network are, this can only be done visually by comparing the road predictions to where the road actually is in the original image.
+\newline
+\newline
+The training directory is further split into following list variables:
+\begin{itemize}
+    \item \textit{x\_train}
+    \item \textit{y\_train}
+    \item \textit{x\_val}
+    \item \textit{y\_val}
+\end{itemize}
+Where \textit{x\_train} and \textit{y\_train} refers to the training images and its ground truth's respectively. \textit{x\_val} refers to validation images, and \textit{y\_val} is the ground truth's for the validation images. The network will only train on the training set, then check accuracy on the validate set and predict values on the testing set. The validation and test set should on a generally basis be data that the network never has seen before. As described in the section above, only a few of the images were manually annotated. This means the dataset only has a small number of images to train on. Hence, the percentage of images split into the validation set is put to 10\%. Optimally should this number be higher, but being able to train on most available images got a higher priority in this thesis. Another reason for experimenting with a low percentage of training images is to check how many images could be automatically annotated satisfactory with as few manually annotated training images as possible.
+
+\subsection{Training}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ll}
+\hline
+\textbf{Specification} & \textbf{Description} \\ \hline
+\ac{cpu} & i7-6700k \\
+\ac{gpu} & GeForce GTX 1070  \\
+\ac{gpu}-memory & 8 GB  \\
+RAM & 16 GB \\
+Operating system & Windows 10  \\ \hline
+\end{tabular}
+\caption{System specifications}
+\label{table:system_spec}
+\end{table}
+
+The computer used for the training has the following system specifications described in \cref{table:system_spec}.
+When the training is executed the different runs consists of a set of common parameters which are described in \cref{table:hyperparameters}. 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ll}
+\hline
+\textbf{Description} & \textbf{Value/Name}  \\ \hline
+Loss &  Binary cross entropy\\
+Optimizer &  adam \\
+Resolution & 224x224 \\
+Size of validation set & 10\%  \\
+Epochs &  5000 \\ 
+Batch size & 10\\
+Activation function & ReLu\\
+Output layer activation & Sigmoid \\ \hline
+\end{tabular}
+\caption{The hyperparameters used in training}
+\label{table:hyperparameters}
+\end{table}
+All the training cycles runs both the sequential and the residual network in order to compare the two different networks in the end. The first two runs is with the \textit{Freiburg Forest} dataset. After the training runs the best weights are saved as h5 files ready for the transfer learning. The next step is to load the weights, and fine tune them for both the Custom 1 and Custom 2 dataset respectively. After the fine tuning is finished, the final weights needs to be saved, and the networks are prepared for prediction of unseen data.    
+
+\chapter{Results} 
+This chapter will cover the results provided from the two networks implemented. Starting with an indication of how the quantitative results could be, before presenting the visual qualitative results in the form of predicted images next to the original images, inclusive x- and y-axis for visual comparing possibilities. 
+\section{Quantitative results}
+
+\begin{equation}\label{eq:accuracy}
+\begin{aligned}
+Acc = \frac{TP + TN}{TP + TN + FP + FN}
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:iou}
+\begin{aligned}
+IoU = \frac{TP}{TP + FP + FN}
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:confusion_matrix}
+\begin{aligned}
+\begin{bmatrix} 
+   c_{11} & c_{12} \\
+   c_{21} & c_{22} \\
+\end{bmatrix} 
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:iou_1}
+\begin{aligned}
+IoU_1 = \frac{c_{11}}{c_{11} + c_{12} + c_{21}}
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:iou_2}
+\begin{aligned}
+IoU_2 = \frac{c_{22}}{c_{22} + c_{21} + c_{12}}
+\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:miou}
+\begin{aligned}
+mIoU = \frac{IoU_1 + IoU_2}{2}
+\end{aligned}
+\end{equation}
+
+\begin{table}[ht]
+\begin{tabular}{lllll}
+\hline
+ & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
+Residual network & \quad 98.2\% & \quad 75.9 \% & \quad 98 \%  & 86.9 \%  \\
+Sequential network & \quad 89.4 \% & \quad 47\% & \quad 89\% & 67.9\%  \\ \hline
+\end{tabular}
+\caption{The test set result from the \textit{Freiburg Forest} dataset}
+\label{table:freiburg}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{lllll}
+\hline
+ & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
+Residual network & \quad 97.7\% & \quad 92.5\% & \quad  96.6\%  &  94.5\%  \\
+Sequential network & \quad 98\% & \quad 93.6\% & \quad 97.1\% & 95.3\% \\ \hline
+\end{tabular}
+\caption{The test set result from the Custom 1 dataset}
+\label{table:custom_1}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{lllll}
+\hline
+ & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
+Residual network & \quad 94.1\% & \quad  77.7\% & \quad 92.7\%  &  85.3\%  \\
+Sequential network & \quad 94\% & \quad 77.4\% & \quad 92.6\% & 85\% \\ \hline
+\end{tabular}
+\caption{The test set result from the Custom 2 dataset}
+\label{table:custom_2}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{lllll}
+\hline
+ & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
+Residual network & \quad 90.5\% & \quad  65.2\% & \quad 88.6\%  &  76.9\%  \\
+Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
+\end{tabular}
+\caption{The second test set result from the Custom 2 dataset}
+\label{table:custom_2_2}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/freiburg_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the \textit{Freiburg Forest} dataset}
+    \label{fig:freiburg_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/freiburg_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the \textit{Freiburg Forest} dataset}
+    \label{fig:freiburg_sequential_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the Custom 1 dataset}
+    \label{fig:custom_1_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the Custom 1 dataset}
+    \label{fig:custom_1_sequential_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the Custom 2 dataset}
+    \label{fig:custom_2_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the Custom 2 dataset}
+    \label{fig:custom_2_sequential_result}
+\end{figure}
+
+\section{Qualitative results}
+
+\iffalse
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth, height=3.5cm]{}
+  \caption{}\label{fig:}
+\endminipage
+\end{figure}
+
+\fi
+
 
 \chapter{Discussion}
 \section{two class semantic segmentation}
 This will only provide a two class semantic segmentation problem, which is not as robust to objects appearing in the road (humans, cars, etc.) 
 
-\chapter{Conclusion}
+\chapter{Conclusion and further work}
 
 
 
