@@ -495,7 +495,7 @@ When the polygon is drawn, another script is run, and the complete annotation en
 
 
 \section{Transfer learning}
-Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem the network was designed for, because it may transfer essential knowledge from for example a professional made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
+Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem the network was designed for, because it may transfer essential knowledge from for example a well made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
 
 \chapter{Related works}
 \section{U-net}
@@ -837,7 +837,13 @@ The operation is described in the Scipy-documentation and reads as follows:
 \section{Experiments}
 This last part of the method chapter will cover the experiments done in this thesis. In the form of describing the structure of the datasets, and the choices made regarding choosing the number of images in the train-, test- and validation sets. Further this last part of the section will go through the training configurations chosen during training.  
 \subsection{Datasets}
-This thesis uses three datasets. The first is the professional \textit{Freiburg Forest} dataset briefly described above. This dataset consists of several classes. Since this thesis want to investigate a two class problem containing road and background, the classes other than road will be masked as background. The second dataset is named Custom 1, and the last is named Custom 2. The dataset structure is illustrated in \cref{table:dataset}. In the table it is possible to see explicitly the numbers of images in each directory. As the \textit{Freiburg Forest} dataset is a professionally made dataset, one can notice the amount of training images is significantly higher than in both the custom made datasets. This means there is a higher probability that the \textit{Freiburg Forest} dataset will provide a more generalized network than with any of the two custom made datasets, even though the residual network is known to provide good results with few training samples \cite{website:u_net_article}. As discussed earlier , this thesis investigates if there is possible to retrieve many automatically annotations from few training samples. The experimentation will consist of using the more generalized features gained from the \textit{Freiburg Forest} dataset combined with the U-Net implementation. This is done in order to hopefully retrieve a certain percentage of automatically made annotations, with a decent accuracy. The process is partly described above in the transfer learning section in this chapter.
+This thesis uses three datasets. The first is the \textit{Freiburg Forest} dataset briefly described above. \textit{Freiburg Forest} is a public dataset, and suits this thesis due to its off-road environment. As described in their website:
+\newline
+\newline
+\textit{"The Freiburg Forest dataset was collected using our Viona autonomous mobile robot platform equipped with cameras for capturing multi-spectral and multi-modal images. The dataset may be used for evaluation of different perception algorithms for segmentation, detection, classification, etc. All scenes were recorded at 20 Hz with a camera resolution of 1024x768 pixels. The data was collected on three different days to have enough variability in lighting conditions as shadows and sun angles play a crucial role in the quality of acquired images. The robot traversed about 4.7 km each day. We provide manually annotated pixel-wise ground truth segmentation masks for 6 classes: Obstacle, Trail, Sky, Grass, Vegetation, and Void."} \cite{website:deepscene_freiburg_forest_website}. 
+\newline
+\newline
+As described in the website, the dataset consists of six classes. Since this thesis want to investigate a two class problem containing road and background, the classes other than road will be masked as background. The second dataset is named Custom 1, and the last is named Custom 2. The dataset structure is illustrated in \cref{table:dataset}. In the table it is possible to see explicitly the numbers of images in each directory. One can notice the amount of training images is significantly higher than in both the custom made datasets. This means there is a higher probability that the \textit{Freiburg Forest} dataset will provide a more generalized network than with any of the two custom made datasets, even though the residual network is known to provide good results with few training samples \cite{website:u_net_article}. As discussed earlier , this thesis investigates if there is possible to retrieve many automatically annotations from few training samples. The experimentation will consist of using the more generalized features gained from the \textit{Freiburg Forest} dataset combined with the U-Net implementation. This is done in order to hopefully retrieve a certain percentage of automatically made annotations, with a decent accuracy. The process is partly described above in the transfer learning section in this chapter.
 \begin{table}[ht]
 \centering
 \begin{tabular}{lllll}
@@ -850,7 +856,7 @@ Custom 2 dataset  & \quad 147  & \quad 1472 + 404  & \quad 17    \\\hline
 \caption{Dataset structures}
 \label{table:dataset}
 \end{table}
-
+\todo{Skriv her om hva oppgaven går ut på. Dvs At du har to custom datasett uten noen ground truths, og prøver å predikere automatiske ground truths til de tilhørende datasettene, det bør være en slags repitisjon fra innledningen}
 To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. 
 \newline
 \newline
@@ -935,7 +941,57 @@ Output layer activation & Sigmoid \\ \hline
 All the training cycles runs both the sequential and the residual network in order to compare the two different networks in the end. The first two runs is with the \textit{Freiburg Forest} dataset. After the training runs the best weights are saved as h5 files ready for the transfer learning. The next step is to load the weights, and fine tune them for both the Custom 1 and Custom 2 dataset respectively. After the fine tuning is finished, the final weights needs to be saved, and the networks are prepared for prediction of unseen data.    
 
 \chapter{Results} 
-This chapter will cover the results provided from the two networks implemented. Starting with an indication of how the quantitative results could be, before presenting the visual qualitative results in the form of predicted images next to the original images, inclusive x- and y-axis for visual comparing possibilities. 
+This chapter will cover the results provided from the two networks implemented. Starting with an indication of how the quantitative results could be, before presenting the visual qualitative results in the form of predicted images next to the original images, inclusive x- and y-axis for visual comparing possibilities. \todo{skriv om til slutt, så det passer}
+
+\section{Results from the training runs}
+This section will provide the accuracy and loss results from both the training- and the validation set. The presentation of these training results will be divided into three parts, covering each dataset at a time. 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/freiburg_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the \textit{Freiburg Forest} dataset}
+    \label{fig:freiburg_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/freiburg_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the \textit{Freiburg Forest} dataset}
+    \label{fig:freiburg_sequential_result}
+\end{figure}
+
+The \textit{Freiburg Forest} dataset is the first dataset which the two networks are trained on. As illustrated in \cref{table:dataset} this dataset consists of 230 images split into 207 training images, and 23 validation images. The training results from the residual network is visualized in \cref{fig:freiburg_residual_result}. Where \textit{acc} (accuracy) and \textit{loss} is associated with the training images, and \textit{val\_acc} (validation accuracy) and \textit{val\_loss} (validation loss) is connected the validation images. The \textit{acc} and \textit{loss}  
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the Custom 1 dataset}
+    \label{fig:custom_1_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the Custom 1 dataset}
+    \label{fig:custom_1_sequential_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_residual_training_results.png}
+    \captionof{figure}{The training set results from the residual network, trained on the Custom 2 dataset}
+    \label{fig:custom_2_residual_result}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_sequential_training_results.png}
+    \captionof{figure}{The training set results from the sequential network, trained on the Custom 2 dataset}
+    \label{fig:custom_2_sequential_result}
+\end{figure}
+
+\clearpage
+
 \section{Quantitative results}
 
 \begin{equation}\label{eq:accuracy}
@@ -978,6 +1034,7 @@ mIoU = \frac{IoU_1 + IoU_2}{2}
 \end{equation}
 
 \begin{table}[ht]
+\centering
 \begin{tabular}{lllll}
 \hline
  & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
@@ -989,6 +1046,7 @@ Sequential network & \quad 89.4 \% & \quad 47\% & \quad 89\% & 67.9\%  \\ \hline
 \end{table}
 
 \begin{table}[ht]
+\centering
 \begin{tabular}{lllll}
 \hline
  & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
@@ -1000,6 +1058,7 @@ Sequential network & \quad 98\% & \quad 93.6\% & \quad 97.1\% & 95.3\% \\ \hline
 \end{table}
 
 \begin{table}[ht]
+\centering
 \begin{tabular}{lllll}
 \hline
  & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
@@ -1011,6 +1070,7 @@ Sequential network & \quad 94\% & \quad 77.4\% & \quad 92.6\% & 85\% \\ \hline
 \end{table}
 
 \begin{table}[ht]
+\centering
 \begin{tabular}{lllll}
 \hline
  & Accuracy & $IoU_{road}$ & $IoU_{background}$ & mIoU  \\ \hline
@@ -1021,174 +1081,100 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \label{table:custom_2_2}
 \end{table}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/freiburg_residual_training_results.png}
-    \captionof{figure}{The training set results from the residual network, trained on the \textit{Freiburg Forest} dataset}
-    \label{fig:freiburg_residual_result}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/freiburg_sequential_training_results.png}
-    \captionof{figure}{The training set results from the sequential network, trained on the \textit{Freiburg Forest} dataset}
-    \label{fig:freiburg_sequential_result}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_residual_training_results.png}
-    \captionof{figure}{The training set results from the residual network, trained on the Custom 1 dataset}
-    \label{fig:custom_1_residual_result}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/Custom_1_sequential_training_results.png}
-    \captionof{figure}{The training set results from the sequential network, trained on the Custom 1 dataset}
-    \label{fig:custom_1_sequential_result}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_residual_training_results.png}
-    \captionof{figure}{The training set results from the residual network, trained on the Custom 2 dataset}
-    \label{fig:custom_2_residual_result}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=1.1\textwidth]{bilder/Custom_2_sequential_training_results.png}
-    \captionof{figure}{The training set results from the sequential network, trained on the Custom 2 dataset}
-    \label{fig:custom_2_sequential_result}
-\end{figure}
 
 \section{Qualitative results}
 
-\iffalse
 
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/freiburg/b57-8406_Clipped_res.png}
+\caption{Residual network}
+\label{fig:ff_res}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/freiburg/b57-8406_Clipped_seq.png}
+\caption{Sequential network}
+\label{fig:ff_seq}
+\end{subfigure}
+\caption{A test set prediction from the \textit{Freiburg Forest} dataset}
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_1/185_residual.png}
+\caption{Residual network}
+\label{fig:custom_1_res}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_1/185_sequential.png}
+\caption{Sequential network}
+\label{fig:custom_1_seq}
+\end{subfigure}
+\caption{A test set prediction from the Custom 1 dataset}
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2/474_res.png}
+\caption{Residual network}
+\label{fig:custom_2_res}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2/474_seq.png}
+\caption{Sequential network}
+\label{fig:custom_2_seq}
+\end{subfigure}
+\caption{A test set prediction from the Custom 2 dataset (The first test set with 1472 images)}
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2_exclusive/1938_res.png}
+\caption{Residual network}
+\label{fig:custom_2_2_res}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2_exclusive/1938_seq.png}
+\caption{Sequential network}
+\label{fig:custom_2_2_seq}
+\end{subfigure}
+\caption{A test set prediction from the Custom 2 dataset (The second test set with 404 images)}
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2/154_res_poor.png}
+\caption{Residual network}
+\label{fig:custom_2_poor_res}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{bilder/custom_2/154_seq_poor.png}
+\caption{Sequential network}
+\label{fig:custom_2_poor_seq}
+\end{subfigure}
+\caption{A poor test set prediction from the Custom 2 dataset (The first test set with 1472 images)}
 \end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage\hfill
-\minipage{0.32\textwidth}%
-  \includegraphics[width=\linewidth, height=3.5cm]{}
-  \caption{}\label{fig:}
-\endminipage
-\end{figure}
-
-\fi
-
 
 \chapter{Discussion}
 \section{two class semantic segmentation}
