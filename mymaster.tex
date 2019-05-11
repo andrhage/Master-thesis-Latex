@@ -23,8 +23,9 @@
 \usepackage{listings}
 \usepackage[wby]{callouts}
 \usepackage{subcaption}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
+
 
 \graphicspath{ {Images/} } 
 %\setlength{\parskip}{1em}
@@ -97,6 +98,8 @@
         \acro{gpu}[GPU]{graphics processing unit}
         \acro{gui}[GUI]{graphical user interface}
         \acro{rgb}[RGB]{red, green, blue}
+        \acro{iou}[IoU]{intersection over union}
+        \acro{miou}[mIoU]{mean intersection over union}
 \end{acronym}
 
 
@@ -113,7 +116,7 @@ This chapter will initially provide a short overview of the basics of \ac{ai}, \
 \section{Artificial intelligence}
 \ac{ai} is a field where machines are able to demonstrate intelligence through mathematics, statistics and logic. \ac{ai} has the ability to tackle many complex problems, which are intellectually difficult or impossible to solve for a human being (with natural intelligence). Even though \ac{ai} could solve complex problems, it still had a few challenges in the early days. Some intuitive tasks for humans, such as recognizing a cat or a dog in an image, or the context of a written text, proved to be a true challenge. A solution to these problems was to allow machines to learn from experience, which is where \ac{ml} and \ac{dl} comes into the picture \cite{The_holy_grail_of_DL}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/AI_ML_DL.png}
     \caption{The provisional timeline for AI, ML, and DL \cite{website:AI}}
@@ -128,7 +131,7 @@ This chapter will initially provide a short overview of the basics of \ac{ai}, \
 \newline
 \newline
 \ac{ml} algorithms will explicitly be programmed to improve their performance on a task. Humans would provide the data, along with the answers in order to search for and produce the rules. This is visualized in \cref{fig:ml} \cite{Francois_Deep_learning_with_python}.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/ml.png}
     \caption{Classical \ac{ai} illustrated on the top and \ac{ml} illustrated on the bottom part of the image \cite{Francois_Deep_learning_with_python}}
@@ -181,7 +184,7 @@ A common thing to do with an image-based dataset is to resize the images to a sl
 A \ac{rgb} image contains integer values in the range from 0-255 in each of its three channels. Because the values of the weights in a neural network are relatively small, it is common practice to normalize the image-array to values between 0-1. Dividing the array with 255 will make that happen. Doing so will prevent slowing down the learning process, as the values from the weights and the array now are in closer range. Casting the array from int to float before normalizing would increase the accuracy even further. This is due to the float division resulting in a more accurate number than int division.
 \newline
 \newline
-Another process is to check whether the dataset has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in Keras is a tensor which is passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the dataset, the network will not be able to execute. In the case where "Conv2D" layers are used in a Keras framework, an input array needs to have the following structure:
+Another process is to check whether the dataset has the correct shape or not. This is necessary because the network needs to know which input shape to expect. The input layer in \textit{Keras} is a tensor which is passed to the first hidden layer. If that input layer does not correspond with the shape of each element in the dataset, the network will not be able to execute. In the case where "Conv2D" layers are used in a \textit{Keras} framework, an input array needs to have the following structure:
 \newline
 \newline
 (height, width, channels)
@@ -213,7 +216,7 @@ An \ac{ann} is a computing system which is vaguely based on the same principle a
 \newline
 \subsection{Single- and multi-layer neural network}
 In 1943 McCulloch \& Pitts designed a much simplified version of biological neurons \cite{mcculloch_pitts}. With their design, they are widely known as the inventors of the first \ac{ann}. Their ideas of a threshold in the activation function and combining many basic units in order to increase computational power are still being used today.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/mcculloch_and_pitts.png}
     \caption{Illustrates the McCulloch \& Pitts design of a simplified neuron \cite{website:mcCulloch_img}}
@@ -273,14 +276,14 @@ In the case where all inputs are zero, the weights will have no effect since the
 \end{equation}
 \subsection{Backpropagation in multi-layer neural networks}
 When learning in a single-layer neural network, it is possible to gain knowledge about which weight is correct and which is not, as described with the learning rule. In multi-layer perceptron there is at least one hidden layer between the input and the output. Hence, it is impossible to know which weights are correct, and which activations being correct for the neurons in the hidden layer. Without knowing which weight or activation is correct, it is impossible to learn the weights or train the network. The problem of not being able to train a multi-layer neural network was solved in 1986 with an algorithm called backpropagation \cite{Rumelhart:1986:LIR:104279.104293}.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/forward_prop.png}
     \caption{The forward pass in backpropagation \cite{website:inf_4490_mlp}}
     \label{fig:forward_step}
 \end{figure}
 The backpropagation algorithm consists of two main steps. The first is the forward pass, which has the following structure illustrated in \cref{fig:forward_step}. After the input layer has received its inputs, the activations of the hidden nodes in the middle layer is calculated. Lastly the activations of the output nodes in the last layer are calculated. 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/backward_prop.png}
     \caption{The backward pass in backpropagation \cite{website:inf_4490_mlp}}
@@ -301,7 +304,7 @@ It differentiates the sum-of squares error in \cref{eq:sum_of_error}, showed wit
 \end{aligned}
 \end{equation}
 Even though gradient descent algorithm is a good method for finding the minimum value, it has a potential risk of getting stuck in a local minimum as visualized in \cref{fig:gradient_descent}.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/gradient_descent.png}
     \caption{Gradient descent \cite{website:inf_4490_mlp}}
@@ -323,7 +326,7 @@ The sigmoid function was a historically often used activation function. It is ma
 \end{aligned}
 \end{equation}
 The function transforms the input numbers into a range between 0-1 as shown in \cref{fig:sigmoid}. This means large negative numbers become 0, while large positive numbers become 1.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/sigmoid_function.png}
     \caption{Sigmoid activation function \cite{website:cs231n_activation_functions}}
@@ -356,7 +359,7 @@ f(x) = max(0,x)
 \end{equation}
 The ReLu function is described mathematically in two ways in this thesis, both being illustrated in \cref{eq:reLu} and \cref{eq:reLu_2} for a better understanding of the function.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{bilder/relu_activation.png}
     \caption{Relu activation function \cite{website:cs231n_activation_functions}}
@@ -464,7 +467,7 @@ This small region is a hyperparameter, and is called the receptive field of the 
 \subsection{Pooling layer}
 Another method to reduce parameters is to add a max pool layer. Similarly to the convolution layer it contains a filter ($F$) and stride ($S$). 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/max_pooling.png}
     \caption{Max pooling \cite{website:cs231n}}
@@ -476,7 +479,7 @@ But as seen in \cref{fig:max_pooling}, the filter takes the max value in each fr
 \section{Generating the ground truth labels}
 There exist several good programs for generating labels for datasets, all with different benefits and shortcomings. The program used in this thesis is a free program, which offer offline annotation. It is called \textit{"labelme"}, and it can be installed directly from GitHub \cite{website:labelme}. The program is easy to learn and contains annotation examples in the GitHub folder. \textit{Labelme} has a clean programmed \ac{gui} regarding the working space, which is illustrated in \cref{fig:annotate}. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}{.6\textwidth}
 \includegraphics[width=0.7\textwidth]{bilder/annotating.png}
@@ -500,7 +503,7 @@ Transfer learning applies already learned knowledge from saved weights and appli
 \section{Related works}
 \subsection{U-net}
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/u_net.png}
     \caption{The structure of the U-Net \cite{website:u_net}}
@@ -522,7 +525,7 @@ $ labelme_json_to_dataset <input_file.json> -o <output_folder>
 
 When the first line is executed, the \ac{gui} for \textit{labelme} shows up in an external window. From there it is possible to start drawing the annotation by pressing the \textit{"Create Polygons"}. \Cref{fig:polygon} illustrates a finished drawn polygon. After the polygons are drawn and the save button is pressed, the second line is ready to be executed. This command will take all the polygon positions saved in the \textit{.json} file and convert the ground truth into the final \textit{.png} format. The second command will also make a directory which consist of the original image, the ground truth superimposed on the original image, and the ground truth image. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \begin{subfigure}{.6\textwidth}
 \includegraphics[width=.75\linewidth]{bilder/labelme_gui.png}
 \captionof{figure}{The \ac{gui} for labelme}
@@ -537,7 +540,7 @@ When the first line is executed, the \ac{gui} for \textit{labelme} shows up in a
 \caption{The labelme \ac{gui}}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \begin{subfigure}{.6\textwidth}
 \includegraphics[width=.6\linewidth]{bilder/label_method.png}
 \captionof{figure}{}
@@ -713,7 +716,7 @@ model.summary()
 
 The U-Net with its skipping connection features is already briefly described in the related work section. When implementing the network, the choice of loss and optimizer are set to be the same as for the sequential network. The implementation in this thesis loosely based on the U-Net will further be referenced to as the residual network.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/u-net_architecture_method.png}
     \caption{The U-Net architecture illustrated with skip connections \cite{website:u-net_method}}
@@ -722,7 +725,7 @@ The U-Net with its skipping connection features is already briefly described in 
 
 When testing the performance in the residual network, it proved to be able to provide quite accurate predictions from few training samples. Gaining accurate predictions with few training images are the main priorities when implementing the network architecture. Having it successfully implemented will save a lot of time because it is sufficient to only manually annotate a few images. To have accurate predictions means the network performs well, and can be able to provide better results in the form of good predictions. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/layers_features.png}
     \caption{The features extracted from different layers in \ac{cnn} \cite{Francois_Deep_learning_with_python}}
@@ -755,13 +758,12 @@ As seen in the code snippet above, the model retrieves the saved weights from th
 
 \subsection{Tensorboard}
 A handy way to gain control over the training, in order to tweak parameters and control the models accuracy, is to use Tensorboard. Tensorboard is a visual tool developed by TensorFlow providing full overview of the training, while training. It is easy to set up in the terminal.
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/tensorboard_anaconda_prompt.PNG}
     \caption{Initializing Tensorboard from terminal}
     \label{fig:tensorboard_anaconda_prompt}
 \end{figure}
-\newline
 As illustrated in \cref{fig:tensorboard_anaconda_prompt} Tensorboard is up and running with the following command: 
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
@@ -769,7 +771,7 @@ tensorboard --logdir=<log>
 \end{minted}
 Where all you need to enter is the address to the log folder the algorithm provides. 
 \newline
-When using Tensorboard with Keras, it is necessary to use \textit{callbacks} in the code. As stated by the Keras documentation on their website:
+When using Tensorboard with \textit{Keras}, it is necessary to use \textit{callbacks} in the code. As stated by the \textit{Keras} documentation on their website:
 \newline
 \newline
 \textit{"A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training. You can pass a list of callbacks (as the keyword argument callbacks) to the .fit() method of the Sequential or Model classes. The relevant methods of the callbacks will then be called at each stage of the training."}\cite{website:Keras_doc}. 
@@ -794,7 +796,7 @@ Using callbacks it is possible to decide which information/process to include an
 \label{fig:accuracy_loss}
 \end{figure}
 Two standard graphs used to check the quality of the \ac{dl} model is \textit{"accuracy"} and \textit{"loss"}, which are found under the tab \textit{"SCALARS"}. 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{bilder/overfitting_underfitting.png}
     \caption{Underfitting, perfect sampling and overfitting \cite{website:overfitting_underfitting}}
@@ -862,7 +864,10 @@ This thesis uses three datasets. Two of them contains only raw images, while one
 \newline
 \newline
 \textit{"The Freiburg Forest dataset was collected using our Viona autonomous mobile robot platform equipped with cameras for capturing multi-spectral and multi-modal images. The dataset may be used for evaluation of different perception algorithms for segmentation, detection, classification, etc. All scenes were recorded at 20 Hz with a camera resolution of 1024x768 pixels. The data was collected on three different days to have enough variability in lighting conditions as shadows and sun angles play a crucial role in the quality of acquired images. The robot traversed about 4.7 km each day. We provide manually annotated pixel-wise ground truth segmentation masks for 6 classes: Obstacle, Trail, Sky, Grass, Vegetation, and Void."} \cite{website:deepscene_freiburg_forest_website}. 
-As described in the website, the dataset consists of six classes. Since this thesis wants to investigate a two class problem containing road and background, the classes other than road will be masked as background. 
+\newline
+\newline
+As described in the website, the dataset consists of six classes. Since this thesis wants to investigate a two class problem containing road and background, the classes other than road will be masked as background.
+
 \begin{table}[H]
 \centering
 \begin{tabular}{lllll}
@@ -875,7 +880,7 @@ Custom 2 dataset  & \quad 147  & \quad 1472 + 404  & \quad 17    \\\hline
 \caption{Dataset structures}
 \label{table:dataset}
 \end{table}
-The second dataset is named Custom 1, and the last is titled Custom 2. As earlier stated these are two datasets originally consisting of only raw images without ground truths. This thesis wants to investigate if there is an opportunity to automatically predict the annotations to these images given only a few manually annotated ground truths. The task of manually annotate lots of pictures is both time-consuming and repetitive, and having this task automated by a network would be an advantage. The few images which are manually annotated in these two datasets are the ones in the training and validation sets respectively. The dataset structure is illustrated in \cref{table:dataset}. In the table, it is possible to see explicitly the numbers of images in each directory. One can notice the amount of training images is significantly higher than in both the custom made datasets. This means there is a higher probability that the \textit{Freiburg Forest} dataset will provide a more generalized network than with any of the two custom made datasets, even though the residual network is known to provide good results with few training samples \cite{website:u_net_article}. As discussed earlier, this thesis investigates if there is possible to retrieve many automatically annotations from few training samples. The experimentation will consist of using the more generalized features gained from the \textit{Freiburg Forest} dataset combined with the residual network implementation. This is done in order to hopefully retrieve a certain percentage of automatically made annotations, with decent accuracy. The process is partly described above in the transfer learning section in this chapter.
+The second dataset is named \textit{Custom 1}, and the last is titled \textit{Custom 2}. As earlier stated these are two datasets originally consisting of only raw images without ground truths. This thesis wants to investigate if there is an opportunity to automatically predict the annotations to these images given only a few manually annotated ground truths. The task of manually annotate lots of pictures is both time-consuming and repetitive, and having this task automated by a network would be an advantage. The few images which are manually annotated in these two datasets are the ones in the training and validation sets respectively. The dataset structure is illustrated in \cref{table:dataset}. In the table, it is possible to see explicitly the numbers of images in each directory. One can notice the amount of training images is significantly higher than in both the custom made datasets. This means there is a higher probability that the \textit{Freiburg Forest} dataset will provide a more generalized network than with any of the two custom made datasets, even though the residual network is known to provide good results with few training samples \cite{website:u_net_article}. As discussed earlier, this thesis investigates if there is possible to retrieve many automatically annotations from few training samples. The experimentation will consist of using the more generalized features gained from the \textit{Freiburg Forest} dataset combined with the residual network implementation. This is done in order to hopefully retrieve a certain percentage of automatically made annotations, with decent accuracy. The process is partly described above in the transfer learning section in this chapter.
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -884,22 +889,22 @@ The second dataset is named Custom 1, and the last is titled Custom 2. As earlie
 \endminipage\hfill
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth, height=3.5cm]{bilder/custom_1.png}
-  \caption{An image from the Custom 1 dataset}\label{fig:awesome_image2}
+  \caption{An image from the \textit{Custom 1} dataset}\label{fig:awesome_image2}
 \endminipage\hfill
 \minipage{0.32\textwidth}%
   \includegraphics[width=\linewidth, height=3.5cm]{bilder/custom_2.png}
-  \caption{An image from the Custom 2 dataset}\label{fig:awesome_image3}
+  \caption{An image from the \textit{Custom 2} dataset}\label{fig:awesome_image3}
 \endminipage
 \end{figure}
 
-To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. The Custom 1 dataset is an off-road dataset contains 439 images. The scene consists of similar images like the one illustrated in \cref{fig:awesome_image2}. The 45 manually annotated training- and validation images are chosen as every 10'th image ranging from start to end in the dataset. This means that small fractions from the full sequence may be included in the training set. This way of choosing training images is not a normal method in \ac{dl}, but is used since the goal of this thesis is to mostly predict highly correlated data. The cost of choosing training data like this may reduce some of the network's generalization capability. The hypothesis is that since the data is very correlated, the network will still be able to predict the test images with satisfactorily high accuracy. 
+To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. The \textit{Custom 1} dataset is an off-road dataset contains 439 images. The scene consists of similar images like the one illustrated in \cref{fig:awesome_image2}. The 45 manually annotated training- and validation images are chosen as every 10'th image ranging from start to end in the dataset. This means that small fractions from the full sequence may be included in the training set. This way of choosing training images is not a normal method in \ac{dl}, but is used since the goal of this thesis is to mostly predict highly correlated data. The cost of choosing training data like this may reduce some of the network's generalization capability. The hypothesis is that since the data is very correlated, the network will still be able to predict the test images with satisfactorily high accuracy. 
 \newline
 \newline
-The last dataset used in the thesis is Custom 2. This dataset consists of 2040 images in total. It contains 164 manually annotated training- and validation images that are chosen every 10'th image ranging from start until number 1630 in the dataset. An example image from Custom 2 is illustrated in \cref{fig:awesome_image3}. The difference from Custom 1 apart from having a slightly different type of scene, consists of a second test set containing 404 images. This test set is taken from the last sequence in the dataset and nothing of its sequence has been included in either the training or the validation set. This is done in order to check if the network is able to generalize well on completely new unseen data, which in theory should be completely uncorrelated from the images in the training set.
+The last dataset used in the thesis is \textit{Custom 2}. This dataset consists of 2040 images in total. It contains 164 manually annotated training- and validation images that are chosen every 10'th image ranging from start until number 1630 in the dataset. An example image from \textit{Custom 2} is illustrated in \cref{fig:awesome_image3}. The difference from \textit{Custom 1} apart from having a slightly different type of scene, consists of a second test set containing 404 images. This test set is taken from the last sequence in the dataset and nothing of its sequence has been included in either the training or the validation set. This is done in order to check if the network is able to generalize well on completely new unseen data, which in theory should be completely uncorrelated from the images in the training set.
 
 The datasets need to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in \cref{fig:dataset_structure}. This structure is equal for all three datasets used in this thesis with one exception. The \textit{Freiburg Forest} dataset does also include ground truth images for the test set.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{bilder/dataset_structure.PNG}
     \caption{This thesis dataset structure}
@@ -920,7 +925,7 @@ Where \textit{x\_train} and \textit{y\_train} refers to the training images and 
 
 \subsection{Training}
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{ll}
 \hline
@@ -938,7 +943,7 @@ Operating system & Windows 10  \\ \hline
 The computer used for the training has the following system specifications described in \cref{table:system_spec}.
 When the training is executed the different runs consists of a set of common parameters which are described in \cref{table:hyperparameters}. 
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{ll}
 \hline
@@ -956,15 +961,15 @@ Output layer activation & Sigmoid \\ \hline
 \label{table:hyperparameters}
 \end{table}
 
-All the training cycles run both the sequential and the residual network in order to compare the two different networks in the end. The first two runs are with the \textit{Freiburg Forest} dataset. After the training runs the best weights are saved as h5 files ready for transfer learning. The next step is to load the weights, and fine-tune them for both the Custom 1 and Custom 2 dataset respectively. After the fine-tuning is finished, the final weights need to be saved, and the networks are prepared for the prediction of unseen data. 
+All the training cycles run both the sequential and the residual network in order to compare the two different networks in the end. The first two runs are with the \textit{Freiburg Forest} dataset. After the training runs the best weights are saved as h5 files ready for transfer learning. The next step is to load the weights, and fine-tune them for both the \textit{Custom 1} and \textit{Custom 2} dataset respectively. After the fine-tuning is finished, the final weights need to be saved, and the networks are prepared for the prediction of unseen data. 
 
 \chapter{Results} 
 This chapter will cover the results provided by the two networks implemented. Starting with an indication of how the quantitative results could be, before presenting the visual qualitative results in the form of predicted images next to the original images, inclusive x- and y-axis for visual comparing possibilities. \todo{skriv om til slutt, så det passer}
 
-\section{Results from the training runs}
-This section will provide the accuracy and loss results from both the training- and the validation set. The presentation of these training results will be divided into three parts, covering each dataset at a time. 
+\section{Accuracy and loss results from the training}
+This section will provide the accuracy and loss results from both the training- and the validation set. The presentation of these training results will be divided into three parts, covering each dataset at a time. Each figure presented will show through its y-axis the accuracy in the left graph, and loss in the right graph. The x-axis represents the number of epochs \cite{website:epoch} in all graphs.  
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -983,9 +988,9 @@ This section will provide the accuracy and loss results from both the training- 
 \label{fig:freiburg_residual_result}
 \end{figure}
 
-The \textit{Freiburg Forest} dataset is the first dataset which the two networks are trained on. As presented in \cref{table:dataset} this dataset consists of 230 images split into 207 training images and 23 validation images. The training results from the residual network are visualized in \cref{fig:freiburg_residual_result}. Where \textit{acc} (accuracy) and \textit{loss} in \cref{fig:freiburg_residual_acc_result} belongs to the training images, and \textit{val\_acc} (validation accuracy) and \textit{val\_loss} (validation loss) in the \cref{fig:freiburg_residual_val_acc_result} to the validation images. The rest of the training results is presented in the same structure. The graphs in \cref{fig:freiburg_residual_acc_result} contains a high accuracy and a low loss, which is desirable. The same can be said about the validation accuracy and the validation loss in \cref{fig:freiburg_residual_val_acc_result}, which means the training did not do any overfitting. The x-axis in the graphs represents the number of epochs, and summarized is this a successful training for the residual network from epoch 0 to epoch 50.
+The \textit{Freiburg Forest} dataset is the first dataset which the two networks are trained on. As presented in \cref{table:dataset} this dataset consists of 230 images split into 207 training images and 23 validation images. The training results from the residual network are visualized in \cref{fig:freiburg_residual_result}. Where \textit{acc} (accuracy) and \textit{loss} in \cref{fig:freiburg_residual_acc_result} belongs to the training images, and \textit{val\_acc} (validation accuracy) and \textit{val\_loss} (validation loss) in the \cref{fig:freiburg_residual_val_acc_result} to the validation images. The rest of the training results is presented in the same structure. The graphs in \cref{fig:freiburg_residual_acc_result} contains a high accuracy and a low loss, which is desirable. The same can be said about the validation accuracy and the validation loss in \cref{fig:freiburg_residual_val_acc_result}, which means the training did not do any overfitting. Summarized is this a successful training for the residual network from epoch 0 to epoch 50.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1006,7 +1011,7 @@ The \textit{Freiburg Forest} dataset is the first dataset which the two networks
 
 As illustrated in \cref{fig:freiburg_sequential_result} the sequential network follows almost the same lines as the residual networks graph, meaning this training is also considered successful. The epochs in this graph stretch from 0-160, and as seen in the validation loss around epoch 100, the curve is starting to ascent. This indicates the start of a possible overfitting, because the training loss starts descending on approximately the same time. Therefore must the training be stopped, and the weights saved before that epoch. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1021,13 +1026,13 @@ As illustrated in \cref{fig:freiburg_sequential_result} the sequential network f
 \caption{Validation accuracy and validation loss}
 \label{fig:custom_1_residual_val_acc_result}
 \end{subfigure}
-\caption{The training set results from the residual network, trained on the Custom 1 dataset}
+\caption{The training set results from the residual network, trained on the \textit{Custom 1} dataset}
 \label{fig:custom_1_residual_result}
 \end{figure}
 
-The next dataset the two networks uses in their training is the Custom 1 dataset. The \cref{table:dataset} shows that this dataset consists of 40 training images, 5 validation images and 394 test images. Before each training starts, the weights saved from the previous run on the \textit{Freiburg Forest} dataset are loaded into the current network. Then the most layers until the last few are frozen as described under the transfer learning section, and the network starts the training by fine-tuning the last layers weights. As seen in \cref{fig:custom_1_residual_acc_result} this training provides an accuracy which converges close to 100\%, and a low loss converging close to 0\%. The validation loss in \cref{fig:freiburg_residual_val_acc_result} is a little spiky, it is converging around 10\% and the training loss in \cref{fig:freiburg_residual_acc_result} converge as well. This does in other words not look like an overfitting. 
+The next dataset the two networks uses in their training is the \textit{Custom 1} dataset. The \cref{table:dataset} shows that this dataset consists of 40 training images, 5 validation images and 394 test images. Before each training starts, the weights saved from the previous run on the \textit{Freiburg Forest} dataset are loaded into the current network. Then the most layers until the last few are frozen as described under the transfer learning section, and the network starts the training by fine-tuning the last layers weights. As seen in \cref{fig:custom_1_residual_acc_result} this training provides an accuracy which converges close to 100\%, and a low loss converging close to 0\%. The validation loss in \cref{fig:custom_1_residual_val_acc_result} is a little spiky, but converge around 10\%. The training loss in \cref{fig:custom_1_residual_acc_result} converge as well at approximately 0\% . In other words this training does not look like a potential overfitting. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1042,15 +1047,13 @@ The next dataset the two networks uses in their training is the Custom 1 dataset
 \caption{Validation accuracy and validation loss}
 \label{fig:custom_1_sequential_val_acc_result}
 \end{subfigure}
-\caption{The training set results from the sequential network, trained on the Custom 1 dataset}
+\caption{The training set results from the sequential network, trained on the \textit{Custom 1} dataset}
 \label{fig:custom_1_sequential_result}
 \end{figure}
 
+The training results in \cref{fig:custom_1_sequential_result} are not as smooth as in \cref{fig:custom_1_residual_result}. The curves are a little bit more spiky in general in this particular training. Despite the tendency to spiky graphs, no major overfitting is observed during this training of the sequential network. 
 
-
-
-
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1065,11 +1068,13 @@ The next dataset the two networks uses in their training is the Custom 1 dataset
 \caption{Validation accuracy and validation loss}
 \label{fig:custom_2_residual_val_acc_result}
 \end{subfigure}
-\caption{The training set results from the residual network, trained on the Custom 2 dataset}
+\caption{The training set results from the residual network, trained on the \textit{Custom 2} dataset}
 \label{fig:custom_2_residual_result}
 \end{figure}
 
-\begin{figure}[ht]
+The residual networks training with the \textit{Custom 2} dataset is also considered successful. The graphs in \cref{fig:custom_2_residual_acc_result} and \cref{fig:custom_2_residual_val_acc_result} illustrates a high accuracy in both training and validation images. The loss converges at around 10 \% in the training images, and approximately 15 \% in the validation pictures, and no overfitting is observed. This training result is slightly worse than in the residual networks training with the \textit{Custom 1} dataset, but the \textit{Custom 2} dataset consists of more images in both the training and the validation set.
+
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1084,25 +1089,30 @@ The next dataset the two networks uses in their training is the Custom 1 dataset
 \caption{Validation accuracy and validation loss}
 \label{fig:custom_2_sequential_val_acc_result}
 \end{subfigure}
-\caption{The training set results from the sequential network, trained on the Custom 2 dataset}
+\caption{The training set results from the sequential network, trained on the \textit{Custom 2} dataset}
 \label{fig:custom_2_sequential_result}
 \end{figure}
 
-\clearpage
+The last training is the sequential network with the \textit{Custom 2} dataset, illustrated in \cref{fig:custom_2_sequential_result}. This training is quite similar to the previous one except the accuracy is slightly lower, and the loss is barely higher.
 
 \section{Quantitative results}
+This section will provide the quantitative results from the three datasets. The result from the \textit{Freiburg Forest} dataset will provide the quantitative result from all of the test images from the dataset. As earlier described, a test image is an image which the networks has never seen before. The results from \textit{Custom 1} and \textit{Custom 2} will only be an indication of the quantitative results. The reason for that is the lack of ground truths in the 2270 test images in total, coming from the two datasets. To be able to make an indication, 5 uncorrelated images from \textit{Custom 1} dataset, and 10 uncorrelated images from \textit{Custom 2} dataset are manually annotated as ground truths. Then the accuracy, the \ac{iou} for both classes and the \ac{miou} are calculated for each test set. The results are further presented in \cref{table:freiburg}, \cref{table:custom_1}, \cref{table:custom_2} and \cref{table:custom_2_2}.
 
 \begin{equation}\label{eq:accuracy}
 \begin{aligned}
-Acc = \frac{TP + TN}{TP + TN + FP + FN}
+Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
 \end{aligned}
 \end{equation}
+
+The accuracy is described mathematically in \cref{eq:accuracy}. Where $TP$, $TN$, $FP$ and $FN$ stands for true positive, true negative, false positive and false negative respectively. This measurement has a potential weakness in some segmentation problems. If for example one of the classes in a two-class problem, is much larger than the other class, the accuracy might turn out to be higher than it should be. The reason is that both classes are in the equation, and if the much larger class does a good classification while the other class does not, the accuracy result will still be high. To prevent this potential problem, the \ac{iou} metric is included in the tables. 
 
 \begin{equation}\label{eq:iou}
 \begin{aligned}
 IoU = \frac{TP}{TP + FP + FN}
 \end{aligned}
 \end{equation}
+
+The general equation for \ac{iou} is illustrated in \cref{eq:iou}. Opposite to the accuracy metric, the \ac{iou} only includes one of the two true classifications in a two-class problem. This means as briefly described above that this metric might illustrate each class with a more accurate accuracy.
 
 \begin{equation}\label{eq:confusion_matrix}
 \begin{aligned}
@@ -1113,25 +1123,31 @@ IoU = \frac{TP}{TP + FP + FN}
 \end{aligned}
 \end{equation}
 
+\Cref{eq:confusion_matrix} illustrates the confusion matrix for the two-class problem. Where $c_{11}$ is the true positive, $c_{12}$ is the false positive, $c_{21}$ is the false negative and $c_{22}$ is the true negative. In this thesis, the true positive of the confusion matrix is when both the prediction and the ground truth agrees that the pixel is the road. The true negative is when both the prediction and the ground truth agrees that the pixel is the background. This means the correct classifications from the road and the background will be showed in the diagonal of the matrix respectively ($c_{11}$ and $c_{22}$).
+
 \begin{equation}\label{eq:iou_1}
 \begin{aligned}
-IoU_1 = \frac{c_{11}}{c_{11} + c_{12} + c_{21}}
+IoU_{road} = \frac{c_{11}}{c_{11} + c_{12} + c_{21}}
 \end{aligned}
 \end{equation}
 
 \begin{equation}\label{eq:iou_2}
 \begin{aligned}
-IoU_2 = \frac{c_{22}}{c_{22} + c_{21} + c_{12}}
+IoU_{background} = \frac{c_{22}}{c_{22} + c_{21} + c_{12}}
 \end{aligned}
 \end{equation}
+
+\Cref{eq:iou_1} and \cref{eq:iou_2} is described with the values taken from the confusion matrix which makes the equations easier to understand for those which are more familiar with reading results from confusion matrices.  
 
 \begin{equation}\label{eq:miou}
 \begin{aligned}
-mIoU = \frac{IoU_1 + IoU_2}{2}
+mIoU = \frac{IoU_{road} + IoU_{background}}{2}
 \end{aligned}
 \end{equation}
 
-\begin{table}[ht]
+The last metric used in this thesis is the \ac{miou}. As described in \cref{eq:miou} it takes the mean of both the \ac{iou} equations. 
+
+\begin{table}[H]
 \centering
 \begin{tabular}{lllll}
 \hline
@@ -1143,7 +1159,9 @@ Sequential network & \quad 89.4 \% & \quad 47\% & \quad 89\% & 67.9\%  \\ \hline
 \label{table:freiburg}
 \end{table}
 
-\begin{table}[ht]
+The first quantitative results presented in this thesis provide the results from what the two networks managed to predict from the test images with the \textit{Freiburg Forest} dataset. The results is presented in \cref{table:freiburg}.
+
+\begin{table}[H]
 \centering
 \begin{tabular}{lllll}
 \hline
@@ -1151,11 +1169,11 @@ Sequential network & \quad 89.4 \% & \quad 47\% & \quad 89\% & 67.9\%  \\ \hline
 Residual network & \quad 97.7\% & \quad 92.5\% & \quad  96.6\%  &  94.5\%  \\
 Sequential network & \quad 98\% & \quad 93.6\% & \quad 97.1\% & 95.3\% \\ \hline
 \end{tabular}
-\caption{The test set result from the Custom 1 dataset}
+\caption{The test set result from the \textit{Custom 1} dataset}
 \label{table:custom_1}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{lllll}
 \hline
@@ -1163,11 +1181,11 @@ Sequential network & \quad 98\% & \quad 93.6\% & \quad 97.1\% & 95.3\% \\ \hline
 Residual network & \quad 94.1\% & \quad  77.7\% & \quad 92.7\%  &  85.3\%  \\
 Sequential network & \quad 94\% & \quad 77.4\% & \quad 92.6\% & 85\% \\ \hline
 \end{tabular}
-\caption{The test set result from the Custom 2 dataset}
+\caption{The test set result from the \textit{Custom 2} dataset}
 \label{table:custom_2}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{lllll}
 \hline
@@ -1175,7 +1193,7 @@ Sequential network & \quad 94\% & \quad 77.4\% & \quad 92.6\% & 85\% \\ \hline
 Residual network & \quad 90.5\% & \quad  65.2\% & \quad 88.6\%  &  76.9\%  \\
 Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \end{tabular}
-\caption{The second test set result from the Custom 2 dataset}
+\caption{The second test set result from the \textit{Custom 2} dataset}
 \label{table:custom_2_2}
 \end{table}
 
@@ -1183,7 +1201,7 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \section{Qualitative results}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1201,7 +1219,7 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \caption{A test set prediction from the \textit{Freiburg Forest} dataset}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1216,11 +1234,11 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \caption{Sequential network}
 \label{fig:custom_1_seq}
 \end{subfigure}
-\caption{A test set prediction from the Custom 1 dataset}
+\caption{A test set prediction from the \textit{Custom 1} dataset}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1235,10 +1253,10 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \caption{Sequential network}
 \label{fig:custom_2_seq}
 \end{subfigure}
-\caption{A test set prediction from the Custom 2 dataset (The first test set with 1472 images)}
+\caption{A test set prediction from the \textit{Custom 2} dataset (The first test set with 1472 images)}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1253,10 +1271,10 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \caption{Sequential network}
 \label{fig:custom_2_2_seq}
 \end{subfigure}
-\caption{A test set prediction from the Custom 2 dataset (The second test set with 404 images)}
+\caption{A test set prediction from the \textit{Custom 2} dataset (The second test set with 404 images)}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{subfigure}[b]{\textwidth}
 \centering
@@ -1271,7 +1289,7 @@ Sequential network & \quad 91\% & \quad 66.3\% & \quad 89.3\% & 77.7\% \\ \hline
 \caption{Sequential network}
 \label{fig:custom_2_poor_seq}
 \end{subfigure}
-\caption{A poor test set prediction from the Custom 2 dataset (The first test set with 1472 images)}
+\caption{A poor test set prediction from the \textit{Custom 2} dataset (The first test set with 1472 images)}
 \end{figure}
 
 \chapter{Discussion}
