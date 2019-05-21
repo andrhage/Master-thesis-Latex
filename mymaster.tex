@@ -115,7 +115,7 @@ This section will provide an introduction to the thesis starting with the motiva
 \section{Motivation}
 An \ac{ugv} needs several different sensor inputs to understand the entire scene in front of itself, and further provide its software with the necessary information to make the right decisions where to drive or not. One of these sensors can be in the form of a \ac{rgb}-camera mounted on the vehicle.
 
-This thesis will take several raw datasets from such a camera, and investigate if it is possible to predict the ground truth in the images by classifying each pixel in the image as either road or background. A raw dataset will in this context refer to a dataset containing only images without any ground truth providing the correct answers to the classifications.
+This thesis will take several raw datasets from a \ac{rgb}-camera, and investigate if it is possible to predict the ground truth in the images by classifying each pixel in the image as either road or background. A raw dataset will in this context refer to a dataset containing only images without any ground truth providing the correct answers to the classifications.
 
 \section{Problem formulation}
 Convolutional neural networks (described in \cref{cnn}) are nowadays able to perform object detection with an accuracy similar to the human level \cite{website:cnn}. Performing that well, the \ac{cnn} is a robust choice of a network for image-based data. Most of the \acp{cnn} has the same thing in common; They train with supervised learning on large datasets, containing many ground truth images. However, in some cases, the dataset at hand may consist of only raw images without any ground truth. To manually label a dataset, can be a time-consuming task, and to automate this task would save both time and costs. The problem formulation in this thesis consists therefore of the following sentence:
@@ -136,7 +136,7 @@ The implementation of the first network (the residual) in the thesis is loosely 
 \end{figure}
 The U-Net was initially a \ac{cnn} meant for biomedical image segmentation. The main features in the network consists of its \textit{"Skipping connections"} marked with grey arrows as \textit{"copy and crop"} in \cref{fig:u_net}. Imagine the \textit{"U-shape"} being split at the shortest grey arrow in the bottom, the part to the left would then be the contraction part, while the part to the right would be the expansion part. The \textit{"Skipping connections"} concatenates the features from the contraction part with the corresponding up-convolutions in the expansion part. The U-Net architecture made it possible to gain very good results based on few training samples, and that is exactly the type of feature which is desired in this thesis.
 
-This part of the chapter describes the goals in the thesis, which are as follows:
+This part of the section describes the goals in the thesis, which are as follows:
 \begin{itemize}
     \item \textbf{Perform a literature review of existing \acp{cnn} and choose a robust network to implement}
     \item \textbf{Implement a very basic \ac{cnn} in addition, to use as baseline}
@@ -543,9 +543,9 @@ When the polygon is drawn, another script is run, and the complete annotation en
 \section{Transfer learning}
 Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem the network was designed for, because it may transfer essential knowledge from for example a well made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
 
-\chapter{Method}
+\chapter{Method}\label{method}
 \section{Implementation}
-This chapter will cover the implementation of the program in the thesis and discuss the choices of methods. It will initially describe how the ground truth is made. Then cover which framework is used, before describing both implementations of \ac{cnn}, with pros and cons. Furthermore the advantage of using Tensorboard will be discussed. The mid section in this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise. The last part of this section will cover the experiments done in this thesis, in the form of describing the structure of the datasets and the training configuration.
+This chapter will cover the implementation of the program in the thesis and discuss the choices of methods. It will initially describe how the ground truth from the training images is made. Then cover which framework is used, before describing both implementations of \ac{cnn}, with pros and cons. Furthermore the advantage of using Tensorboard will be discussed. The mid section in this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise. The last part of this section will cover the experiments done in this thesis, in the form of describing the structure of the datasets and the training configuration.
 \subsection{Annotation the training set}
 Before the work with the network can start, there must exist a prepared dataset. As supervised learning is the used method, some of the images needs ground truth in order for the algorithm to maintain a reliable loss function. Only ten percent of the images are manually annotated. This is due to the intention of this thesis to automatically predict the test images ground truth with as little manually annotated images in the training set as possible. The images picked out for manual annotation starts from image number 1 in the dataset, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
 
@@ -1363,11 +1363,13 @@ The next two predictions come from the \textit{Custom 1} dataset. Also here, the
 \label{fig:custom_2_poor}
 \end{figure}
 
-These two predictions illustrated in \cref{fig:custom_2_poor} are examples of a challenging scene for the networks. The scene is from a U-turn with the vehicle, and there is not a structured line in the road as it consists of frequently small areas with grass. The accuracy of the prediction in these particular scenes is, therefore, more reduced than in the rest of the datasets. The difference between the residual and the sequential network is also here noticeable. Once again the residual network shows slightly better results.
+These two predictions illustrated in \cref{fig:custom_2_poor} are examples of a challenging scene for the networks. The scene is from a U-turn made by the vehicle, and there is not a structured line in the road as it consists of frequently small areas with grass. The accuracy of the prediction in these particular scenes is, therefore, more reduced than in the rest of the datasets. The difference between the residual and the sequential network is also here noticeable. Once again the residual network shows slightly better results.
 
 
-\chapter{Discussion}\label{discussion}
-This chapter will first examine the quantitative and then the qualitative results presented in the thesis. Then providing an analyze of the use of transfer learning and discuss challenging scenes from the images. The last part will discuss the quality of the manually annotated images and the generating of the training and validation sets. The chapter will answer the goals described in the introduction which was: 
+\chapter{Discussion and conclusion}\label{discussion}
+This chapter will first examine the quantitative and then the qualitative results presented in the thesis. The next section will provide an analyze of the use of transfer learning and discuss challenging scenes from the images. Then the next part will discuss the quality of the manually annotated images and the generating of the training and the validation sets. Lastly, this chapter will conclude the thesis and provide suggestions for further work. 
+
+The chapter will answer the goals which not yet has been answered by \cref{method}. The goals which also are described in the introduction are as follows: 
 \begin{itemize}
     \item \textbf{Perform a literature review of existing \acp{cnn} and choose a robust network to implement}
     \item \textbf{Implement a very basic \ac{cnn} in addition, to use as baseline}
@@ -1382,41 +1384,44 @@ It is necessary to have ground truth in all of the test images, respectively, to
 
 As earlier mentioned, the quantitative results from the \textit{Custom 1} and the \textit{Custom 2} dataset will only be an indication of a quantitative result. The reason for only indicating a quantitative result is due to the time cost of producing manually labeled images, as none are included in the test set. Five uncorrelated images are chosen from the test set to be manually annotated, and the metrics are then calculated in a small script. The results presented in \cref{table:custom_1} describes the two networks quantitative results from the test images in the \textit{Custom 1} dataset. Compared to the \textit{Custom 2} with its 2040 images, the \textit{Custom 1} dataset has only 439 images in total. The quantitative result from \cref{table:custom_1} shows an overall high accuracy from both networks. The high accuracy from both networks is the desired result. As seen in \cref{table:custom_1}, the sequential network has overall slightly higher accuracy than the residual network, and this is not as excepted since the residual network should be the better one. A reason for the slightly better accuracy in the sequential network may be that the images picked out from the test set contained the best predictions from the sequential network, while the best from the residual network was not included. Another theory can be that the $FP$ and the $FN$ values vary between the networks. Low $FP$ and high $FN$ values from the first network, and opposite values in the form of respectively correlated high $FP$ and low $FN$ values in the second network might provide similar \ac{iou} accuracy. $FP$ is the predictions where the network falsely think it is road, and $FN$ is the predictions where the network falsely think it is the background. The most unwanted scenario is where the $FP$ values are too high because it is not desired to have a falsely predicted road where it is no road. The residual network had $FP=156\ pixels$ and $FN=994\ pixels$, while the sequential network had $FP=534\ pixels$ and $FN=439\ pixels$ in the \textit{Custom 1} dataset. The mean values from the actual road are $TP=14828\ pixels$, while the mean actual background values are $TN=34215\ pixels$. Put in context, the values from $FP$ are low compared to $TP$, which means there is only a tiny fraction of the image, which is falsely predicted as the road. Since the $FP$ values from the residual network are lower than from the sequential network, it may indicate that the results from the residual network are better, despite the slightly higher accuracy in \cref{table:custom_1} from the sequential network. 
 
-The two last indications of quantitative results is presented in \cref{table:custom_2} and \cref{table:custom_2_2}, and comes from two different test set in the \textit{Custom 2} dataset. The metrics are calculated from ten manually annotated images in the first test set, and five manually labeled images from the second test set, all images without correlation to each other. The results in \cref{table:custom_2} and \cref{table:custom_2} are slightly lower than in \cref{table:custom_1}, but this is as expected since the \textit{Custom 2} dataset consists of totally 2040 images with a more challenging scene. 
+The two last indications of quantitative results is presented in \cref{table:custom_2} and \cref{table:custom_2_2}, and comes from two different test set in the \textit{Custom 2} dataset. The metrics are calculated from ten manually annotated images in the first test set, and five manually labeled images from the second test set, all images without correlation to each other. The results in \cref{table:custom_2} and \cref{table:custom_2} are slightly lower than in \cref{table:custom_1}, but this is as expected since the \textit{Custom 2} dataset consists of totally 2040 images with occasionally a more challenging scene. 
 
-As seen in the quantitative results from \cref{table:freiburg}, the residual network was clearly better than the sequential network. If it had been ground truth for all test images in the \textit{Custom 1} and the \textit{Custom 1} dataset, may the likelihood exist for seeing the same pattern in the networks predictions from these datasets as well.
-
-
+As seen in the quantitative results from \cref{table:freiburg}, the residual network was clearly better than the sequential network. If it had been ground truth for all test images in the \textit{Custom 1} and the \textit{Custom 1} dataset, may the likelihood exist for seeing the same pattern in the networks quantitative results from these datasets as well. The reason for anticipate this outcome is supported further in the qualitative results presented, where it is illustrated that the predictions from the sequential network are poorer than the residual networks predictions in more challenging scenes. 
 
 \section{Qualitative results}
-The most expedient results to interpret in this thesis are the qualitative results, since they provides an clear explicit illustration of the quality of the predictions from the networks. 
-
-\todo{skriv om hvorfor jeg tror at det sekvensielle nettet gjør det bedre på de kvantitative resultatene på custom 1 og 2. (Fordi det er så få bilder som er plukket ut og falske negativer ikke er straffet så hardt i metrikkene. Det sekvensielle nettet underpredikerer vei, mens det U-nettet predikerer mer presist, som gjør at U-nettet står i fare for å predikere litt mer falske positiver som blir straffet av IoU metrikken. Når bildene sammenlignes med de kvalitative resulatene, ser man at til tross for litt større risiko for falske positiver predikerer u-net vei bedre)
-
-Jeg tror at det sekvensielle nettverket gjør det like godt på de kvantitative resultatene fordi de bildene som er plukket ut er relativt like. Hadde alle bildene vært med, antar jeg at vi ville sett en korelasjon til resultatet fra freiburg datasettet. Det tror jeg videre er på grunn av at det residuale nettet er jevnt over mer robust, mens det sekvensielle gjør en veldig dårlig prediksjon når den først gjør en dårlig pred }
-
+The most expedient results to interpret in this thesis are the qualitative results, since they provides an clear explicit illustration of the quality of the predictions from the networks. As there may be several reasons for the quantitative results to provide a falsely high accuracy in some occasions, the qualitative results presented as images with predicted ground truth gives a better understanding if the prediction fulfills the users requirements. As illustrated in \cref{fig:custom_1_result}, the residual network does overall better predictions than the sequential network, and similar examples of the same outcome will be illustrated in the appendix under \cref{appendix_1}. Providing overall better predictions than the sequential network, the residual network is the most robust network in this thesis. Its predictions has high accuracy in the most scenes in the \textit{Custom 1} and \textit{Custom 2} datasets testing images.        
 
 \section{Transfer learning}
-Analyze the result with the transfer learning
+Before implementing the transfer learning from the networks training on the \textit{Freiburg Forest} dataset, the predictions from both networks was a little inadequate on the two custom datasets. These predictions missed a little bit more of the road areas close to the trenches. The features the two networks learned from the \textit{Freiburg Forest} datasets 207 training images from a similar environment as in the \textit{Custom 1} and \textit{Custom 2} dataset, helped improved the overall accuracy in the predictions. For that reason transfer learning from a similar dataset may be considered a good idea, and it proved to give slightly more generalized networks in this thesis.  
 
 \section{Challenging scenes}
-\todo{Two class semantic segmentation:
-This will only provide a two class semantic segmentation problem, which is not as robust to objects appearing in the road (humans, cars, etc.)}
+The \textit{Custom 1} and \textit{Custom 2} dataset contains several images with a challenging scene for the semantic segmentation problem in this thesis. The first one is presented in \cref{fig:custom_1_result_car}, where a car arrives at the top left position in the image. Since this thesis only handles a two-class problem, it was uncertain how the networks would react to a car in the scene. \Cref{fig:custom_1_result_car} shows that the residual network managed to get a good prediction, while the sequential network predicted the image with slightly lower accuracy.
 
-\section{Methods used in the thesis/ Robustness}
-\subsection{The generation of manually annotated images (er kvaliteten bra nok)}
-\subsection{Generate the training and validation set}
+Another demanding scene is presented in \cref{fig:custom_2_result}, where the road consists of shadows. In traditional \ac{ml} problems, a scene like this may cause a poorer prediction due to the color change from the shadows, but both the residual and the sequential network managed to predict a fairly good ground truth for the image. The residual network has also here a slightly more accurate prediction.
+
+The last type of challenging scene which was presented in the result chapter was \cref{fig:custom_2_poor}. The image illustrates an U-turn made by the vehicle were the road is partly filled with grass. This type of environment proved to be the most demanding for both networks. Even though the residual network had the best prediction of the two networks, it was not a particularly accurate road prediction. Some of the reasons for this poor prediction may be the lack of either a similar image including ground truth in the training set, or the weak lines in the road due to the grass. 
+
+Even though the result chapter illustrates some images from challenging scenes with variable accuracy on the predictions, did the two network provide overall good results in the most predictions as will be illustrated in \cref{appendix}. These examples shows that the residual network is slightly more robust than the sequential network in both the more challenging scenes and the normal scenes. A method which may increase the robustness and accuracy in all scenes even more is implementing several classes. If there would be classes for the most usual objects which arrives in the datasets scene, this could help the networks considerably to predict more accurate when these objects arrive. It will require more work on the manually annotation part in the images from the training and validation set, but it is likely to result in greater predictions in scenes with these objects. 
+
+\section{The few manually annotated images from the \textit{Custom 1} and \textit{Custom 2} datasets}
+As illustrated in \cref{table:dataset} the \textit{Custom 1} dataset consists of 45 manually annotated images from the training and validation set, while the \textit{Custom 2} dataset consists of 164 images. 
+
+
+er kvaliteten bra nok?
+
+\section{Generate the training and validation set}
 \todo{snakk om hvorfor de er plukket ut med mellomrom fra start til slutt av datasettet med unntak av siste del på custom 2 (404 testbilder)}
 
-
-\chapter{Conclusion and further work}
 \section{Conclusion}
 \subsection{The performance of the two networks}
 Perform a literature review of existing CNNs and choose a robust network to implement
 \section{Further work}
 
 \begin{appendices}
-\chapter{Image sequence from the predictions in each dataset}
+\chapter{Image sequences from the predictions in each dataset}\label{appendix}
+\section{Predictions from the \textit{Freiburg Forest} dataset}\label{appendix_freiburg}
+\section{Predictions from the \textit{Custom 1} dataset}\label{appendix_1}
+\section{Predictions from the \textit{Custom 2} dataset}\label{appendix_2}
 \todo{sett inn bildesekvenser av kvalitative prediksjoner}
 \end{appendices}
 
