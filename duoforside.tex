@@ -105,9 +105,9 @@
     \textcopyright~\arabic{duo@cur@year} \duo@author\\[\baselineskip]
     \leavevmode\duo@title\\[\baselineskip]
     \url{http://www.duo.uio.no/}
-    \ifthenelse{\equal{\duo@printer}{}}{}
-      {\\[\baselineskip] \csname duo@printertitle@\duo@lang \endcsname:
-        \duo@printer}
+    %\ifthenelse{\equal{\duo@printer}{}}{}
+    %  {\\[\baselineskip] \csname duo@printertitle@\duo@lang \endcsname:
+    %    \duo@printer}
   \end{titlepage}
 }
 
@@ -133,7 +133,7 @@
 \newcommand{\duo@uio@bm}{Universitetet i Oslo}
 \newcommand{\duo@uio@nn}{Universitetet i Oslo}
 
-\newcommand{\duo@fac@eng}{Faculty of mathematics and natural sciences}
+\newcommand{\duo@fac@eng}{Faculty of Mathematics and Natural Sciences}
 \newcommand{\duo@fac@bm}{Det matematisk-naturvitenskapelige fakultet}
 \newcommand{\duo@fac@nn}{Det matematisk-naturvitenskaplege fakultet}
 
@@ -144,7 +144,7 @@
 \def \duo@image {}
 \providecommand{\duo@kind}{}
 \def \duo@opt {}
-\def \duo@printer {Reprosentralen, \csname duo@uio@\duo@lang \endcsname}
+%\def \duo@printer {Reprosentralen, \csname duo@uio@\duo@lang \endcsname}
 \providecommand{\duo@program}{}
 \def \duo@sp {60}
 \def \duo@title {\@title}

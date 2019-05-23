@@ -18,10 +18,10 @@
 
 %% Adjustments:
 
-\addtolength{\topmargin}{-3\baselineskip}
-\addtolength{\textheight}{3\baselineskip}
-%\addtolength{\topmargin}{-2\baselineskip}
-%\addtolength{\textheight}{4\baselineskip}
+%\addtolength{\topmargin}{-3\baselineskip}
+%\addtolength{\textheight}{3\baselineskip}
+\addtolength{\topmargin}{-2\baselineskip}
+\addtolength{\textheight}{4\baselineskip}
 \addtolength{\evensidemargin}{-5mm}  % Compensate for binding
 \addtolength{\oddsidemargin}{5mm}
 

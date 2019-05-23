@@ -29,8 +29,6 @@
 \usepackage{csquotes}
 \usepackage[section]{placeins}
 
-
-
 %\graphicspath{ {Images/} } 
 %\setlength{\parskip}{1em}
 %\setlength{\parindent}{0em}
@@ -62,14 +60,27 @@
 
 \begin{document}
 
-\duoforside[dept={Department of Technology Systems},   %% ... or your department
-  program={Cybernetics},  %% ... or your programme
+\duoforside[dept={Department of Physics},   %% ... or your department
+  program={Electronics and Computer Technology Program option: Cybernetics},  %% ... or your programme
   short]                                        %% ... or long
 
 \frontmatter{}
 \chapter*{Abstract}                   %% ... or Sammendrag or Samandrag
+For an autonomous vehicle to interpret and understand the scene in front of itself, it relies on several types of different sensors. A camera may be one of these sensors, and through implementing a \acf{cnn} it is possible to extract all the necessary features from the images. To be able to extract the desired features, the network needs ground truth for some images to train itself with a supervised learning method.
+
+This thesis seeks to investigate the opportunity to partly automate the process of generating ground truth for all images in a terrain-based scene. To generate ground truth for a single image may take from two minutes to over an hour depending on the scene and the number of classes. The ground truth does in this context consist of two classes in the form of road and background. Two datasets without ground truth containing 439 and 2040 images are used in this project, 45 and 164 images respectively are manually labeled and act as ground truth for the training set in each dataset. The network's mission is further to predict the ground truth for the remaining 2270 images automatically after it has executed the training.
+
+The residual network implemented in this thesis manages to some extent to provide most of the images with somewhat close to an accepted ground truth. The exceptions are the most demanding scenes where objects arrive in the scene. This problem may be solved by adding more classes to the objects with the highest probability for arriving in the scene. The residual network does, therefore, lack some robustness to predict well in all types of scenes. 
+
 \chapter*{Sammendrag}
+For at et autonomt kjøretøy skal kunne tolke og forstå miljøet foran seg selv, trenger den hjelp av flere typer forskjellige sensorer. Et kamera kan være en slik sensor, og gjennom implementering av et konvolusjonelt nevralt nettverk er det mulig å trekke ut alle nødvendige egenskaper fra bildene. For å trekke ut de ønskede egenskapene, trenger nettverket fasiten fra noen av bildene, så det kan trene seg opp gjennom ledet-læring.
+
+Denne avhandlingen ønsker å undersøke muligheten til å delvis automatisere prosessen med å generere fasiten for alle bildene i et terrengbasert miljø. Å generere fasiten til ett enkelt bilde kan ta alt fra to minutter til over en time avhengig av antall klasser og hvordan scenen ser ut. Fasiten i denne oppgaven består av to klasser i form av vei og bakgrunn. Det er brukt to datasett uten fasit i denne oppgaven, hvor det første inneholder 439 bilder og det andre 2040 bilder. Videre er det generert fasit manuelt til 45 bilder fra det første datasettet og til 164 bilder fra det andre datasettet, hvor disse bildene er plassert i treningssettet. Nettverkets oppgave er dermed å forutsi fasiten til de resterende 2270 bildene automatisk etter det har utført treningen.   
+
+Det nettverket med best resultat i denne oppgaven, greier til en viss grad å forutse en tolkning som kan aksepteres som en slags fasit til de fleste bildene. Unntakende er de mest krevende miljøene hvor det ankommer forskjellig objekter i scenen. Dette problemet kan løses ved å legge til flere klasser i form av de objektene som har størst sannsynlighet for å dukke opp i scenen. Det beste nettverket i avhandlingen mangler med andre ord noe robusthet for å kunne forutse fasiten til bildene i samtlige typer miljø. 
+
 \chapter*{Preface}
+
 
 \tableofcontents{}
 \listoffigures{}
@@ -95,8 +106,8 @@
 \begin{acronym}
         \acro{ugv}[UGV]{unmanned ground vehicle}
         \acro{ai}[AI]{artificial intelligence}
-        \acro{ann}[ANN]{artificial neural networks}
-        \acro{cnn}[CNN]{convolutional neural networks}
+        \acro{ann}[ANN]{artificial neural network}
+        \acro{cnn}[CNN]{convolutional neural network}
         \acro{fcn}[FCN]{fully convolutional network}
         \acro{dl}[DL]{deep learning}
         \acro{ml}[ML]{machine learning}
@@ -111,17 +122,18 @@
 
 \mainmatter{}
 \chapter{Introduction}
+\todo{Legg til hva tidligere forskning har oppnådd(I introduksjonen skal du plassere deg i fagfeltet og vise at du har kjennskap til tidligere forskning. Introduksjonen skal gjøre rede for hva vi vet og hva vi ikke vet om feltet.)}
 This section will provide an introduction to the thesis starting with the motivation, before covering the problem formulation and describing the goals of the thesis. Lastly, the thesis outline is explained. 
 \section{Motivation}
 An \ac{ugv} needs several different sensor inputs to understand the entire scene in front of itself, and further provide its software with the necessary information to make the right decisions where to drive or not. One of these sensors can be in the form of a \ac{rgb}-camera mounted on the vehicle.
 
-This thesis will take several raw datasets from a \ac{rgb}-camera, and investigate if it is possible to predict the ground truth in the images by classifying each pixel in the image as either road or background. A raw dataset will in this context refer to a dataset containing only images without any ground truth providing the correct answers to the classifications.
+This thesis will take two raw terrain datasets from a \ac{rgb}-camera, and investigate if it is possible to predict the ground truth in the images by classifying each pixel in the image as either road or background. A raw dataset will in this context refer to a dataset containing only images without any ground truth providing the correct answers to the classifications.
 
 \section{Problem formulation}
 Convolutional neural networks (described in \cref{cnn}) are nowadays able to perform object detection with an accuracy similar to the human level \cite{website:cnn}. Performing that well, the \ac{cnn} is a robust choice of a network for image-based data. Most of the \acp{cnn} has the same thing in common; They train with supervised learning on large datasets, containing many ground truth images. However, in some cases, the dataset at hand may consist of only raw images without any ground truth. To manually label a dataset, can be a time-consuming task, and to automate this task would save both time and costs. The problem formulation in this thesis consists therefore of the following sentence:
 \begin{itemize}
 \centering
-  \item[] \textbf{Will the use of \acp{cnn} provide useful predictions in a raw terrain-image dataset, given only a few manually annotated images?} 
+  \item[] \textbf{Will the use of \acp{cnn} provide useful test set predictions in a raw terrain-image dataset, given only a few manually annotated images?} 
 \end{itemize}
 
 Two different \acp{cnn} will be implemented in order to automate the task of labeling the datasets. This thesis will investigate if the predictions made by the networks can be used as ground truth for the images in the datasets. Unlike in most other datasets, this problem formulation seeks to only use a few manually labeled images in the training set. Even though most \acp{cnn} use large datasets with many annotated images in the training set, François Chollet argues in his book \textit{"Deep Learning with Python"} that \ac{dl} can be applicable to fairly small datasets as well \cite{Francois_Deep_learning_with_python}. 
@@ -156,16 +168,13 @@ This part of the section describes the goals in the thesis, which are as follows
     Covers the necessary background theory and the related work
     \item \textbf{Chapter 3:}
     \newline
-    Covers the method chapter and its experiments
+    Describes the method used and the experiments done
     \item \textbf{Chapter 4:}
     \newline
     Presents the training results, the quantitative results, and the qualitative results
     \item \textbf{Chapter 5:}
     \newline
-    Covers the discussion
-    \item \textbf{Chapter 6:}
-    \newline
-    Concludes the thesis
+    Covers the discussion, concludes the thesis and present suggestions for further work
 \end{itemize}
 
 
@@ -178,7 +187,7 @@ This chapter will initially provide a short overview of the basics of \ac{ai}, \
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{bilder/AI_ML_DL.png}
-    \caption{The provisional timeline for AI, ML, and DL \cite{website:AI}}
+    \caption{A provisional timeline for AI, ML, and DL \cite{website:AI}}
     \label{fig:AI}
 \end{figure}
 
@@ -209,7 +218,7 @@ Supervised learning is the most commonly used technique in \ac{dl} \cite{Francoi
 \ac{dl} has become increasingly more popular during the last few years. One of the reasons for this increased popularity is \acp{dl} ability to provide higher accuracy when trained with large amounts of data. Even though \ac{dl} is usually known for predicting good results from large datasets, it does also contain methods for providing good results from networks trained with smaller datasets as well. As is the case in this thesis. This benefit over traditional \ac{ml} methods alone would be enough to consider taking \ac{dl} as preferred method.
 
 Another argument for employing \ac{dl} over traditional methods is the features extraction from images. While the traditional algorithms needs to manually implement different computer vision techniques in order to extract the desired features before classification, this is not the case with \ac{dl}. With the use of convolution layers from \ac{cnn} the features are extracted automatically from the layers.
-The first layer will detect and learn small edges. Then the second layer will learn larger patterns made from the features from the first layer, and this concept will repeat itself in the further layers. The patterns learned are translation-invariant, which means it can recognize the learned pattern if it appears anywhere else in the image. This advantage is exclusively for the \ac{cnn}, and makes the networks able to generalize better with less training samples than other networks  \cite{Francois_Deep_learning_with_python}.
+The first layer will detect and learn small edges. Then the second layer will learn larger patterns made from the features from the first layer, and this concept will repeat itself in the further layers. The patterns learned are translation-invariant, which means it can recognize the learned pattern if it appears anywhere else in the image. This advantage are exclusively for the \acp{cnn}, and makes the networks able to generalize better with less training samples than for example a densely-connected network \cite{Francois_Deep_learning_with_python}.
 
 \section{Computer vision}
 Computer vision is a field whose main purpose is to make machines able to interpret and understand features from images or video. In other words, "Teaching computers how to see" \cite{website:maskinsyn-intro}. This section will only go through a small number of computer vision concepts, as they are used in the thesis.
@@ -264,7 +273,7 @@ Another method is to flip the images in either vertical or horizontal order. Eve
 \subsubsection{Color changes}
 The idea behind color changes is to make the the model more robust and generalized for new unseen data. Since the geometry in the images are the same after applying color changes, is it not necessary to do any operation on the ground truth images.
 \section{Artificial neural networks}
-Most of the theory in this section is based on the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"} \cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"} \cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
+To provide the necessary understanding of how the networks implemented in this thesis works, this section starts by explaining the fundamental pieces of \ac{ann} before diving deeper into \ac{cnn} in \cref{cnn}. Most of the theory in this section is based on the Stanford University course \textit{"CS231n: Convolutional Neural Networks for Visual Recognition"} \cite{website:cs231n}, and from the course \textit{"INF4490 – Biologically Inspired Computing"} \cite{website:inf_4490_slp}\cite{website:inf_4490_mlp} at University of Oslo.
 
 An \ac{ann} is a computing system which is vaguely based on the same principle as biological neurons in a human brain. It has the ability to learn different tasks and data representations. To fully understand the concept, the basics of a neural network is divided into different parts and further described in this section.
 
@@ -543,11 +552,13 @@ When the polygon is drawn, another script is run, and the complete annotation en
 \section{Transfer learning}
 Transfer learning applies already learned knowledge from saved weights and applies it to a new problem with a new dataset. It is sometimes referred to as using a pre-trained network. Using a pre-trained network is usually a highly efficient way to gain better results when using small datasets. The spatial features learned by the pre-trained network might prove useful for the original problem the network was designed for, because it may transfer essential knowledge from for example a well made dataset. The results of implementing transfer learning will in most cases provide a much higher accuracy to the original problem, in contrary to only train on a small dataset \cite{Francois_Deep_learning_with_python}. The implementation of transfer learning is therefore used in this thesis due to the very small number of annotated images available for the training set. 
 
+\section{Related work}
+
 \chapter{Method}\label{method}
 \section{Implementation}
 This chapter will cover the implementation of the program in the thesis and discuss the choices of methods. It will initially describe how the ground truth from the training images is made. Then cover which framework is used, before describing both implementations of \ac{cnn}, with pros and cons. Furthermore the advantage of using Tensorboard will be discussed. The mid section in this chapter will cover predictions made from the network, and a few computer vision techniques used in order to maintain a clean output with minimal noise. The last part of this section will cover the experiments done in this thesis, in the form of describing the structure of the datasets and the training configuration.
-\subsection{Annotation the training set}
-Before the work with the network can start, there must exist a prepared dataset. As supervised learning is the used method, some of the images needs ground truth in order for the algorithm to maintain a reliable loss function. Only ten percent of the images are manually annotated. This is due to the intention of this thesis to automatically predict the test images ground truth with as little manually annotated images in the training set as possible. The images picked out for manual annotation starts from image number 1 in the dataset, and continues in an iterative manner every 10'th image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
+\subsection{Annotating the training set}
+Before the work with the network can start, there must exist a prepared dataset. As supervised learning is the used method, some of the images needs ground truth in order for the algorithm to maintain a reliable loss function. Only ten percent of the images are manually annotated. This is due to the intention of this thesis to automatically predict the test images ground truth with as little manually annotated images in the training set as possible. The images picked out for manual annotation starts from image number one in the dataset, and continues in an iterative manner every tenth image. The following commands is used in the annotating program \textit{labelme} in order to start and convert the annotation from \textit{.json} to \textit{.png} file format:   
 
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{bash}
 $ labelme <input_file.png> -O <output_file.json>
@@ -853,7 +864,8 @@ By observing that the loss function steadily decreases into a smooth curve indic
 
 Another tab in Tensorboard called \textit{"GRAPHS"} shows the current networks architecture. Being able to see all the layers, optimizer function and connections, helps the user see the whole network in a visualized perspective. There is possible to rename each layer in the model according to the user's own preference. 
 \section{Predictions}
-A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of artifacts several techniques from computer vision can be applied. 
+A prediction in this context is when the networks in this thesis produce a qualified guess of what value each pixel in the image shall be assigned, from either one of the two classes. This is the basis for what will become the automatically annotated images. After the network has updated its internal state satisfactorily, the training can stop, and it is ready to be fed new images it has never seen before. The network will then predict an output given the input of the new data, which will use the finished trained internal state of the network to predict. The predictions with sufficiently good results will in the end become the automatically annotated images this thesis tries to produce. When all the predictions are made, they will in the most cases contain some adverse features like different types of noise or choppy edges in the classification. To avoid these types of artifacts several techniques from computer vision can be applied.
+
 \subsection{Thresholding}
 The first tool used is called thresholding. It removed the predicted pixels in the image which has a value below the given threshold. When the networks predicts pixel values, this happens in the range between 0-1. The thresholding will convert that fuzzy logic to values which are either 0 or 1. Where class 0 is background and class 1 is road.
 \begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
@@ -872,7 +884,10 @@ np.zeros_like(prediction))
 \end{aligned}
 \end{equation}
 
-What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.  
+What the code snippet above does, is to filter all values where $x_i$ are the predicted values, and assign them to either 0 or 1. All values over 0.65 are assigned to 1 and all values up to 0.65 are assigned to 0. This is described in \cref{eq:thresholding}. The thresholding will therefore remove some noise and assign values up to the threshold as background instead of road.
+
+\subsection{Morphological operations}
+\todo{Legg til en paragraf med morfologiske operasjoner}
 \subsection{Connected component analysis}
 The next operation used in order to remove larger sections of noise predicted in the image is called connected component analysis. When implemented in this thesis it removes all sections in the images which contains less than 5000 pixels. This means in the most cases that all of the remaining noise in the image will be removed. The connected component analysis has one disadvantage which is when the road predicted is less than the threshold value of 5000 pixels. Then the whole prediction will consists of only background. This only happens in a very limited amount of the images. The reason for setting the pixel threshold to 5000 became clear after testing different values. Lower values did not remove all the noise in the image, while much larger values could remove the correct predicted road. 
 \subsection{Binary hole filling}
@@ -888,7 +903,7 @@ The operation is described in the Scipy-documentation and reads as follows:
 
 \section{Experiments}
 This last part of the method chapter will cover the experiments done in this thesis. In the form of describing the structure of the datasets, and the choices made regarding choosing the number of images in the train-, test- and validation sets. Further this last part of the section will go through the training configurations chosen during training.  
-\subsection{Datasets}
+\subsection{Datasets}\label{datasets}
 This thesis uses three datasets. Two of them contains only raw images, while one of them has existing ground truth. The one with existing ground truth is the \textit{Freiburg Forest} dataset briefly described above. This is a public dataset, and suits this thesis due to its off-road environment. As described in their website:
 \newline
 \newline
@@ -926,9 +941,9 @@ The second dataset is named \textit{Custom 1}, and the last is titled \textit{Cu
 \endminipage
 \end{figure}
 
-To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. The \textit{Custom 1} dataset is an off-road dataset contains 439 images. The scene consists of similar images like the one illustrated in \cref{fig:awesome_image2}. The 45 manually annotated training- and validation images are chosen as every 10'th image ranging from start to end in the dataset. This means that small fractions from the full sequence may be included in the training set. This way of choosing training images is not a normal method in \ac{dl}, but is used since the goal of this thesis is to mostly predict highly correlated data. The cost of choosing training data like this may reduce some of the network's generalization capability. The hypothesis is that since the data is very correlated, the network will still be able to predict the test images with satisfactorily high accuracy. 
+To get a visual understanding of which type of scene is included in each dataset an example image from each dataset is provided in \cref{fig:awesome_image1}, \cref{fig:awesome_image2}, and \cref{fig:awesome_image2}. It is possible to see some similarities between all datasets, hence understand why the \textit{Freiburg Forest} dataset is used as the dataset for the transfer learning. The \textit{Custom 1} dataset is an off-road dataset contains 439 images. The scene consists of similar images like the one illustrated in \cref{fig:awesome_image2}. The 45 manually annotated training- and validation images are chosen as every tenth image ranging from start to end in the dataset. This means that small fractions from the full sequence may be included in the training set. This way of choosing training images is not a normal method in \ac{dl}, but is used since the goal of this thesis is to mostly predict highly correlated data. The cost of choosing training data like this may reduce some of the network's generalization capability. The hypothesis is that since the data is very correlated, the network will still be able to predict the test images with satisfactorily high accuracy. 
 
-The last dataset used in the thesis is \textit{Custom 2}. This dataset consists of 2040 images in total. It contains 164 manually annotated training- and validation images that are chosen every 10'th image ranging from start until number 1630 in the dataset. An example image from \textit{Custom 2} is illustrated in \cref{fig:awesome_image3}. The difference from \textit{Custom 1} apart from having a slightly different type of scene, consists of a second test set containing 404 images. This test set is taken from the last sequence in the dataset and nothing of its sequence has been included in either the training or the validation set. This is done in order to check if the network is able to generalize well on completely new unseen data, which in theory should be completely uncorrelated from the images in the training set.
+The last dataset used in the thesis is \textit{Custom 2}. This dataset consists of 2040 images in total. It contains 164 manually annotated training- and validation images that are chosen every tenth image ranging from start until number 1636 in the dataset. An example image from \textit{Custom 2} is illustrated in \cref{fig:awesome_image3}. The difference from \textit{Custom 1} apart from having a slightly different type of scene, consists of a second test set containing 404 images. This test set is taken from the last sequence in the dataset and nothing of its sequence has been included in either the training or the validation set. This is done in order to check if the network is able to generalize well on completely new unseen data, which in theory should be completely uncorrelated from the images in the training set.
 
 The datasets need to be structured in order to gain control over which data to use when training, or when testing. The structure used in this thesis is illustrated in \cref{fig:dataset_structure}. This structure is equal for all three datasets with one exception. The \textit{Freiburg Forest} dataset does also include ground truth images for the test set.
 
@@ -990,7 +1005,7 @@ Output layer activation & Sigmoid \\ \hline
 
 All the training cycles run both the sequential and the residual network in order to compare the two different networks in the end. The first two runs are with the \textit{Freiburg Forest} dataset. After the training runs the best weights are saved as h5 files ready for transfer learning. The next step is to load the weights, and fine-tune them for both the \textit{Custom 1} and \textit{Custom 2} dataset respectively. After the fine-tuning is finished, the final weights need to be saved, and the networks are prepared for the prediction of unseen data. 
 
-\chapter{Results} 
+\chapter{Results}\label{result} 
 This chapter will cover the results provided by the two networks implemented. Starting with the training results, before presenting the quantitative results from the \textit{Freiburg Forest} dataset, and an indication of how the quantitative results could be in the \textit{Custom 1} and \textit{Custom 2} datasets. The last part of this chapter presents the qualitative results for some predictions in the form of visual presentation of the predicted images next to the original images.
 
 \section{Accuracy and loss results from the training}
@@ -1386,36 +1401,47 @@ As earlier mentioned, the quantitative results from the \textit{Custom 1} and th
 
 The two last indications of quantitative results is presented in \cref{table:custom_2} and \cref{table:custom_2_2}, and comes from two different test set in the \textit{Custom 2} dataset. The metrics are calculated from ten manually annotated images in the first test set, and five manually labeled images from the second test set, all images without correlation to each other. The results in \cref{table:custom_2} and \cref{table:custom_2} are slightly lower than in \cref{table:custom_1}, but this is as expected since the \textit{Custom 2} dataset consists of totally 2040 images with occasionally a more challenging scene. 
 
-As seen in the quantitative results from \cref{table:freiburg}, the residual network was clearly better than the sequential network. If it had been ground truth for all test images in the \textit{Custom 1} and the \textit{Custom 1} dataset, may the likelihood exist for seeing the same pattern in the networks quantitative results from these datasets as well. The reason for anticipate this outcome is supported further in the qualitative results presented, where it is illustrated that the predictions from the sequential network are poorer than the residual networks predictions in more challenging scenes. 
+As seen in the quantitative results from \cref{table:freiburg}, the residual network was better than the sequential network. If it had been ground truth for all test images in the \textit{Custom 1} and the \textit{Custom 1} dataset, may the likelihood exist for seeing the same pattern in the networks quantitative results from these datasets as well. The reason to anticipate this outcome is supported further in the qualitative results presented, where it is illustrated that the predictions from the sequential network are poorer than the residual network's predictions in more challenging scenes. 
 
 \section{Qualitative results}
-The most expedient results to interpret in this thesis are the qualitative results, since they provides an clear explicit illustration of the quality of the predictions from the networks. As there may be several reasons for the quantitative results to provide a falsely high accuracy in some occasions, the qualitative results presented as images with predicted ground truth gives a better understanding if the prediction fulfills the users requirements. As illustrated in \cref{fig:custom_1_result}, the residual network does overall better predictions than the sequential network, and similar examples of the same outcome will be illustrated in the appendix under \cref{appendix_1}. Providing overall better predictions than the sequential network, the residual network is the most robust network in this thesis. Its predictions has high accuracy in the most scenes in the \textit{Custom 1} and \textit{Custom 2} datasets testing images.        
+The most expedient results to interpret in this thesis are the qualitative results since they provide a clear, explicit illustration of the quality of the predictions from the networks. As there may be several reasons for the quantitative results to provide falsely high accuracy in some occasions, the qualitative results presented as images with predicted ground truth gives a better understanding if the prediction fulfills the users' requirements. As illustrated in \cref{fig:custom_1_result}, the residual network makes overall better predictions than the sequential network, and similar examples of the same outcome will be illustrated in the appendix under \cref{appendix_1}. Providing overall better predictions than the sequential network, the residual network is the most robust network in this thesis. Its predictions have high accuracy in the most scenes in the \textit{Custom 1} and \textit{Custom 2} datasets testing images.        
 
 \section{Transfer learning}
-Before implementing the transfer learning from the networks training on the \textit{Freiburg Forest} dataset, the predictions from both networks was a little inadequate on the two custom datasets. These predictions missed a little bit more of the road areas close to the trenches. The features the two networks learned from the \textit{Freiburg Forest} datasets 207 training images from a similar environment as in the \textit{Custom 1} and \textit{Custom 2} dataset, helped improved the overall accuracy in the predictions. For that reason transfer learning from a similar dataset may be considered a good idea, and it proved to give slightly more generalized networks in this thesis.  
+Before implementing the transfer learning from the networks training on the \textit{Freiburg Forest} dataset, the predictions from both networks were a little inadequate on the two custom datasets. These predictions missed a little bit more of the road areas close to the trenches. The features the two networks learned from the \textit{Freiburg Forest} datasets 207 training images from a similar environment as in the \textit{Custom 1} and \textit{Custom 2} dataset, helped improved the overall accuracy in the predictions. For that reason, transfer learning from a similar dataset may be considered a good idea, and it proved to give slightly more generalized networks in this thesis.  
 
 \section{Challenging scenes}
 The \textit{Custom 1} and \textit{Custom 2} dataset contains several images with a challenging scene for the semantic segmentation problem in this thesis. The first one is presented in \cref{fig:custom_1_result_car}, where a car arrives at the top left position in the image. Since this thesis only handles a two-class problem, it was uncertain how the networks would react to a car in the scene. \Cref{fig:custom_1_result_car} shows that the residual network managed to get a good prediction, while the sequential network predicted the image with slightly lower accuracy.
 
-Another demanding scene is presented in \cref{fig:custom_2_result}, where the road consists of shadows. In traditional \ac{ml} problems, a scene like this may cause a poorer prediction due to the color change from the shadows, but both the residual and the sequential network managed to predict a fairly good ground truth for the image. The residual network has also here a slightly more accurate prediction.
+Another demanding scene is presented in \cref{fig:custom_2_result}, where the road consists of shadows. In traditional \ac{ml} problems, a scene like this may cause a poorer prediction due to the color change from the shadows, but both the residual and the sequential network managed to predict a reasonably good ground truth for the image. The residual network also has here a slightly more accurate prediction.
 
-The last type of challenging scene which was presented in the result chapter was \cref{fig:custom_2_poor}. The image illustrates an U-turn made by the vehicle were the road is partly filled with grass. This type of environment proved to be the most demanding for both networks. Even though the residual network had the best prediction of the two networks, it was not a particularly accurate road prediction. Some of the reasons for this poor prediction may be the lack of either a similar image including ground truth in the training set, or the weak lines in the road due to the grass. 
+The last type of challenging scene which was presented in the result chapter was \cref{fig:custom_2_poor}. The image illustrates a U-turn made by the vehicle were the road is partly filled with grass. This type of environment proved to be the most demanding for both networks. Even though the residual network had the best prediction of the two networks, it was not a particularly accurate road prediction. Some of the reasons for this poor prediction may be the lack of either a similar image, including ground truth in the training set or the weak lines in the road due to the grass in the scene. 
 
-Even though the result chapter illustrates some images from challenging scenes with variable accuracy on the predictions, did the two network provide overall good results in the most predictions as will be illustrated in \cref{appendix}. These examples shows that the residual network is slightly more robust than the sequential network in both the more challenging scenes and the normal scenes. A method which may increase the robustness and accuracy in all scenes even more is implementing several classes. If there would be classes for the most usual objects which arrives in the datasets scene, this could help the networks considerably to predict more accurate when these objects arrive. It will require more work on the manually annotation part in the images from the training and validation set, but it is likely to result in greater predictions in scenes with these objects. 
+Even though the result chapter illustrates some images from challenging scenes with variable accuracy on the predictions, did the two networks provide overall good results in the most predictions as will be illustrated in \cref{appendix}. These examples show that the residual network is slightly more robust than the sequential network in both the more challenging scenes and the ordinary scenes. A method which may increase the robustness and accuracy in all scenes, even more, is implementing several classes. If there would be classes for the most common objects which arrive in the datasets scene, this could help the networks considerably to predict more accurate when these objects arrive. It will require more work on the manual annotation part in the images from the training and validation set, but it is likely to result in better predictions in scenes with these objects. 
 
 \section{The few manually annotated images from the \textit{Custom 1} and \textit{Custom 2} datasets}
-As illustrated in \cref{table:dataset} the \textit{Custom 1} dataset consists of 45 manually annotated images from the training and validation set, while the \textit{Custom 2} dataset consists of 164 images. 
+As illustrated in \cref{table:dataset} the \textit{Custom 1} dataset consists of 45 manually annotated images from the training and validation set, while the \textit{Custom 2} dataset consists of 164 images. That makes the total number of manually labeled images used for training and validation, 209 images. These are the images that are used to train the two networks, and further potentially automatically produce ground truth for up to 2270 test images from the two datasets. To have these manually annotated images labeled correctly is therefore essential to have the highest chance of successful predictions. The average time spent on manually label each of these training and validation images is around two minutes, which implies that some of the annotations might have the opportunity for improvement. Since the result from the residual network's predictions has decent accuracy, it suggests that the manually labeled images are to some extent accurate enough.          
 
+\section{Generating the training and validation set}
+Since the two custom datasets only contain raw images initially, each dataset needs to be split into a training, a validation and a test set. The dataset structure is briefly described in \cref{datasets}, and the training set is the first one which is generated. Depending on the networks goals, it is several ways to generate the training set. In this thesis, the goal is to make the network predict the ground truth for the test images, therefore it makes sense that the training images are from almost similar scenes as the test set images. This is why every tenth image ranging from the beginning to the end of the dataset (in the \textit{Custom 1} and the \textit{Custom 2} datasets) is chosen as the training set. The remaining images in both datasets are chosen to be in the test set. The validation set is generated by taking ten percent of the images from the training set. Having a training set which is slightly correlated to the test images may increase the chances for better predictions in the two custom datasets. \Cref{fig:custom_1_result}, \cref{fig:custom_1_result_car}, \cref{fig:custom_2_result} and \cref{fig:custom_2_poor} are examples of predictions from test sets which is slightly correlated to the training set. All these result with the exception of the \cref{fig:custom_2_poor} are considered decent predictions from the residual network, and slightly poorer but still okay predictions from the sequential network. These results indicates that generating a training set this way works if the goal is to find the ground truth in a test set with slightly correlated images to the training set. 
 
-er kvaliteten bra nok?
-
-\section{Generate the training and validation set}
-\todo{snakk om hvorfor de er plukket ut med mellomrom fra start til slutt av datasettet med unntak av siste del på custom 2 (404 testbilder)}
+There is however generated a second test set in the \textit{Custom 2} dataset consisting of 404 images, which are split from the dataset before the training set was created. Having the second test set split before the training set was generated means it may be completely uncorrelated from the training images. The reason this second test set is created is to check if the networks are generalized and can perform well on completely uncorrelated data. A result from this test set is presented in \cref{fig:custom_2_result_404} and the prediction from the residual network is surprisingly decent, considering that the test set is entirely uncorrelated with the training set.         
 
 \section{Conclusion}
-\subsection{The performance of the two networks}
-Perform a literature review of existing CNNs and choose a robust network to implement
-\section{Further work}
+Supervised learning with \acp{cnn} is a powerful tool for gaining desired features from images. To apply supervised learning to, for example, a semantic segmentation problem, the dataset needs ground truth for the images. Providing the dataset with ground truth is a time-consuming task, and many raw datasets do not include any ground truth for the images at all. This thesis has two raw datasets with terrain-images and seeks to partly automate the task of producing the ground truth for almost all of these images. The idea is to manually label just a few of the raw images, and use the networks for producing the remaining labels to the images. The problem formulation in this thesis described in the introduction is, therefore:
+\begin{itemize}
+\centering
+  \item[] \textbf{Will the use of \acp{cnn} provide useful test set predictions in a raw terrain-image dataset, given only a few manually annotated images?} 
+\end{itemize}
+In this thesis, two networks are implemented which purpose is to make the road and background predictions from the test set as detailed so they can be used as ground truth for these images, with only a few images for the network to train on. If the networks manage to do this, potentially an enormous amount of time can be saved instead of manually annotate all the images in the dataset. 
+
+After testing the two networks, and presenting some of the prediction results in \cref{result} and \cref{appendix}, it can be concluded that most of the residual network's predictions can be used as ground truth for the test images in some extent. This means that predictions from the test images with the exceptions of the most demanding scenes can, to some degree, be used as ground truth. The best predictions would be as good as the manually labeled ones, while the remaining predictions would be close to as good, also here except the predictions from the most demanding scenes. The residual network managed to perform consistently better than the sequential network, which was implemented as a baseline. Even though the sequential network managed to deliver similar or slightly better results in the indication of quantitative results, the qualitative results revealed that the residual network proved to be more accurate and robust. The work in this thesis will hopefully be useful to other projects which wish to automate the task of producing ground truth to the images in their raw dataset.
+
+\subsection{Further work}
+The suggestions in this section are ideas that have appeared along the way in the late part of the thesis, which, unfortunately, has not been checked out due to the lack of time. Even though the residual network managed to provide many useful predictions, there is always room for improvement. The first suggestion for improving the predictions and making the networks more robust would be to add more classes in the annotated images. As earlier described, including other classes, which have a high probability for arriving in the scene, can contribute to making the networks more robust in these challenging scenes. It will take a little bit more time to annotate each image used for training manually, but may be worth the extra time. To use slightly more time in general on each manual annotation can also be a good idea, to make sure the ground truth for the training images is 100\% accurate.
+
+Another task would be to perform more tweaking of the hyperparameters such as the number of epochs during training, the momentum, resizing the images, test other optimizers than adam, the learning rate, and the regularization. Testing out different hyperparameters can be a repetitive task, but may provide increasingly better results instantaneously, which is rewarding.   
+
+The last suggestion for further work is to check out if the implementation of an active learning algorithm would be able to improve the results even more. The idea would be to use the stream-based selective sampling method. This method takes each unlabeled image and predicts each one at a time, while the algorithm evaluates the informativeness of each image against their query parameter. Further, the user can decide whether to keep or reject the predictions and rerun the process with the accepted predictions added to the training set.
 
 \begin{appendices}
 \chapter{Image sequences from the predictions in each dataset}\label{appendix}
